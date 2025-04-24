@@ -14,6 +14,23 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+agent:
+  env:
+    AGENT_ID: ""
+    AGENT_PROFILE: kubernetes
+    AGENT_TOKEN: ""
+    AGENT_TOKEN: ""
+    CLUSTER_NAME: ""
+    COFIDE_CONNECT_TRUST_DOMAIN: ""
+    COFIDE_CONNECT_URL: ""
+    ENDPOINT_ID: ""
+    FEDERATION_ENDPOINT_ENABLED: true
+    MANAGEMENT_ZONE: false
+    OIDC_ENDPOINT_ENABLED: true
+    ORG_SLUG: ""
+    TRUST_DOMAIN: ""
+    TRUST_ZONE: ""
+
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
 # This is to override the chart name.
