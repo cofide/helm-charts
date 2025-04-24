@@ -32,7 +32,7 @@ spec:
         - name: {{ .Chart.Name }}
           envFrom:
           - configMapRef:
-              name: cofide-agent-env
+              name: cofide-agent
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
