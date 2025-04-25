@@ -2,7 +2,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: configmap-updater
-  namespace: cofide
+  namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups: [""]
     resources: ["configmaps"]
@@ -18,11 +18,11 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: configmap-updater-binding
-  namespace: cofide
+  namespace: {{ .Release.Namespace }}
 subjects:
   - kind: ServiceAccount
     name: cofide-agent
-    namespace: cofide
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: configmap-updater
@@ -56,7 +56,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: cofide-agent
-    namespace: cofide
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: cofide-agent-cluster-role
@@ -69,7 +69,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: cofide-agent
-    namespace: cofide
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: registry-manager-role
