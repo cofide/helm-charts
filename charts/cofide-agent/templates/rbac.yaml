@@ -1,7 +1,7 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: configmap-updater
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups: [""]
@@ -17,21 +17,21 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: configmap-updater-binding
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
 subjects:
   - kind: ServiceAccount
-    name: cofide-agent
+    name: {{ include "cofide-agent.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: configmap-updater
+  name: {{ .Release.Name }}
   apiGroup: "rbac.authorization.k8s.io"
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: cofide-agent-cluster-role
+  name: {{ .Release.Name }}
 rules:
   - apiGroups: [""]
     resources: ["services"]
@@ -52,26 +52,25 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: cofide-agent-cluster-role-binding
+  name: {{ .Release.Name }}
 subjects:
   - kind: ServiceAccount
-    name: cofide-agent
+    name: {{ include "cofide-agent.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: cofide-agent-cluster-role
+  name: {{ .Release.Name }}
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: cofide-agent-federated-service-cluster-role-binding
+  name: {{ printf "%s-federated-services" .Release.Name }}
 subjects:
   - kind: ServiceAccount
-    name: cofide-agent
+    name: {{ include "cofide-agent.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: registry-manager-role
   apiGroup: rbac.authorization.k8s.io
-
