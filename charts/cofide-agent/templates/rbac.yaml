@@ -1,0 +1,77 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: configmap-updater
+  namespace: cofide
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["cofide-agent"]
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+      - "update"
+      - "patch"
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: configmap-updater-binding
+  namespace: cofide
+subjects:
+  - kind: ServiceAccount
+    name: cofide-agent
+    namespace: cofide
+roleRef:
+  kind: Role
+  name: configmap-updater
+  apiGroup: "rbac.authorization.k8s.io"
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cofide-agent-cluster-role
+rules:
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+  - apiGroups: ["networking.istio.io"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: ["security.istio.io"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["*"]
+    verbs: ["*"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cofide-agent-cluster-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: cofide-agent
+    namespace: cofide
+roleRef:
+  kind: ClusterRole
+  name: cofide-agent-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cofide-agent-federated-service-cluster-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: cofide-agent
+    namespace: cofide
+roleRef:
+  kind: ClusterRole
+  name: registry-manager-role
+  apiGroup: rbac.authorization.k8s.io
+
