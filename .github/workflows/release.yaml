@@ -1,19 +1,14 @@
-name: Publish Helm Chart to ECR
-
+name: publish-helm-chart
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'charts/**'  # Only trigger if Helm charts change
-  workflow_dispatch: # Useful for CI development and ad-hoc runs
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     env:
       AWS_REGION: eu-west-1
       AWS_ACCOUNT_ID: 010438484483
