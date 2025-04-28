@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'charts/**'  # Only trigger if Helm charts change
+  workflow_dispatch: # Useful for CI development and ad-hoc runs
 
 jobs:
   publish:
