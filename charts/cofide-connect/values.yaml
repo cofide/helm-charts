@@ -8,13 +8,28 @@ replicaCount: 1
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
   registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
-  repository: cofide/cofide-connect-api
+  repository: cofide/connect-api
   pullPolicy: Always
   tag: ""
 
 connect:
   env:
-    KEY: "VALUE"
+    CONNECT_TRUST_DOMAIN: ""
+    VALKEY_ADDRESS: ""
+    INSECURE_SERVER_ADDRESS: ":51106"
+    SPIFFE_ENDPOINT_SOCKET: "unix:///spiffe-workload-api/spire-agent.sock"
+    AWS_REGION: ""
+    IAM_ROLE_ARN: ""
+    S3_TRUST_BUNDLE_STORE_BUCKET: ""
+    OIDC_PROVIDER_AUDIENCE: ""
+    ENVIRONMENT_TYPE: "DEVELOPMENT"
+    CONNECT_TRUST_BUNDLE_STORE_URL: ""
+    TELEMETRY_ENABLED: false
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector-opentelemetry-collector.otel-collector.svc.cluster.local:4317
+    OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    OTEL_METRIC_EXPORT_INTERVAL: 60000
+    OTEL_SERVICE_NAME: connect
+
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []

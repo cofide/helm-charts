@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cofide-connect
+data:
+{{- range $key, $value := .Values.connect.env }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+
