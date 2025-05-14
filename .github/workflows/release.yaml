@@ -32,6 +32,7 @@ jobs:
       - name: Package Helm chart
         run: |
           helm package charts/cofide-agent --destination packaged
+          helm package charts/cofide-connect --destination packaged
       - name: Push Helm chart to ECR
         run: |
           CHART_FILE=$(ls packaged/*.tgz)
