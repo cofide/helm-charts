@@ -1,0 +1,34 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Name }}
+rules:
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterfederatedtrustdomains"]
+    verbs: ["*"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterfederatedtrustdomains/finalizers"]
+    verbs: ["update"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterfederatedtrustdomains/status"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterspiffeids"]
+    verbs: ["*"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterspiffeids/finalizers"]
+    verbs: ["update"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterspiffeids/status"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterstaticentries"]
+    verbs: ["*"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterstaticentries/finalizers"]
+    verbs: ["update"]
+  - apiGroups: ["spire.spiffe.io"]
+    resources: ["clusterstaticentries/status"]
+    verbs: ["get", "patch", "update"]
+
+
