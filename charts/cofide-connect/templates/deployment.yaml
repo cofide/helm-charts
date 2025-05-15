@@ -53,10 +53,53 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.volumes }}
+        - name: envoy-sidecar
+          image: "envoyproxy/envoy:v1.33-latest"
+          command: ["envoy"]
+          args:
+            - -c
+            - /etc/envoy/envoy.yaml
+            - --service-node
+            - ${POD_NAME}
+            - --service-cluster
+            - ${POD_NAMESPACE}
+          ports:
+            - name: https
+              containerPort: 8443
+            - name: admin
+              containerPort: 9901
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+            - name: envoy-tls
+              mountPath: /etc/envoy/tls
+              readOnly: true
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: spiffe-workload-api
+          csi:
+            driver: "csi.spiffe.io"
+            readOnly: true
+        - name: envoy-config
+          configMap:
+            name: connect-api-envoy-config
+        - name: envoy-tls
+          secret:
+            secretName: envoy-tls
+        - name: sqlite-data
+          hostPath:
+            path: /app/data
+            type: DirectoryOrCreate
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
