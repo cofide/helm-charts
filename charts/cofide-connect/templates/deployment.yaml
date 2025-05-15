@@ -49,10 +49,11 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+            - name: sqlite-data
+              mountPath: "/app/data"
         - name: envoy-sidecar
           image: "envoyproxy/envoy:v1.33-latest"
           command: ["envoy"]

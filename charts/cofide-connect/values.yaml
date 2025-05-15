@@ -15,17 +15,17 @@ image:
 connect:
   env:
     CONNECT_TRUST_DOMAIN: ""
-    VALKEY_ADDRESS: ""
+    VALKEY_ADDRESS: "valkey.connect.svc.cluster.local:6379"
     INSECURE_SERVER_ADDRESS: ":51106"
     SPIFFE_ENDPOINT_SOCKET: "unix:///spiffe-workload-api/spire-agent.sock"
     AWS_REGION: ""
     IAM_ROLE_ARN: ""
-    S3_TRUST_BUNDLE_STORE_BUCKET: ""
+    S3_TRUST_BUNDLE_STORE_BUCKET: "connect-endpoints-20250107113902047100000002"
     OIDC_PROVIDER_AUDIENCE: ""
     ENVIRONMENT_TYPE: "DEVELOPMENT"
     CONNECT_TRUST_BUNDLE_STORE_URL: ""
     TELEMETRY_ENABLED: false
-    OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector-opentelemetry-collector.otel-collector.svc.cluster.local:4317
+    OTEL_EXPORTER_OTLP_ENDPOINT: ""
     OTEL_EXPORTER_OTLP_PROTOCOL: grpc
     OTEL_METRIC_EXPORT_INTERVAL: 60000
     OTEL_SERVICE_NAME: connect
