@@ -94,7 +94,7 @@ spec:
             name: connect-api-envoy-config
         - name: envoy-tls
           secret:
-            secretName: {{ .Values.connect.auth.envoy_tls_secret_name }}
+            secretName: {{ .Values.connect.tlsSecretName }}
         - name: sqlite-data
           hostPath:
             path: /app/data
