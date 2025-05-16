@@ -9,7 +9,7 @@ data:
       id: connect-api-envoy-proxy
       cluster: cluster
       metadata:
-        spiffe_id: spiffe://{{ .Values.connect.env.CONNECT_TRUST_DOMAIN }}/ns/connect/sa/{{ .Chart.Name }}
+        spiffe_id: spiffe://{{ .Values.connect.trustDomain }}/ns/{{ .Release.Namespace }}/sa/{{ include "cofide-connect.serviceAccountName" . }}
     static_resources:
       listeners:
         - name: listener_0
@@ -37,7 +37,7 @@ data:
                     alpn_protocols:
                       - h2
                     tls_certificate_sds_secret_configs:
-                      - name: spiffe://{{ .Values.connect.env.CONNECT_TRUST_DOMAIN }}/ns/connect/sa/{{ .Chart.Name }}
+                      - name: spiffe://{{ .Values.connect.trustDomain }}/ns/{{ .Release.Namespace }}/sa/{{ include "cofide-connect.serviceAccountName" . }}
                         sds_config:
                           resource_api_version: V3
                           api_config_source:
@@ -202,7 +202,7 @@ data:
                     alpn_protocols:
                       - h2
                     tls_certificate_sds_secret_configs:
-                      - name: spiffe://{{ .Values.connect.env.CONNECT_TRUST_DOMAIN }}/ns/connect/sa/{{ .Chart.Name }}
+                      - name: spiffe://{{ .Values.connect.trustDomain }}/ns/{{ .Release.Namespace }}/sa/{{ include "cofide-connect.serviceAccountName" . }}
                         sds_config:
                           resource_api_version: V3
                           api_config_source:
