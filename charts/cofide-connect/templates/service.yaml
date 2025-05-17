@@ -4,6 +4,7 @@ metadata:
   name: {{ include "cofide-connect.fullname" . }}
   labels:
     {{- include "cofide-connect.labels" . | nindent 4 }}
+  app: {{ .Release.Name }}
 spec:
   type: LoadBalancer
   ports:
@@ -11,3 +12,5 @@ spec:
       protocol: TCP
       port: 8443
       targetPort: 8443
+  selector:
+    app: {{ .Release.Name }}

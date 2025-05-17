@@ -27,7 +27,7 @@ data:
                 application_protocols:
                   - h2
                 server_names:
-                  - xds.cofide.security
+                  - xds.{{ .Values.connect.urlBase }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:
@@ -89,7 +89,7 @@ data:
                 application_protocols:
                   - h2
                 server_names:
-                  - connect.cofide.security
+                  - connect.{{ .Values.connect.urlBase }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:
@@ -120,7 +120,7 @@ data:
                               '@type': type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy
                               allow_origin_string_match:
                                 - exact: http://localhost:5173
-                                - exact: https://app.cofide.security:8443
+                                - exact: https://app.{{ .Values.connect.urlBase }}:8443
                               allow_methods: POST,GET
                               allow_headers: Authorization, Content-Type, Connect-Protocol-Version, Connect-Timeout-Ms, X-User-Agent
                               allow_credentials: true
@@ -143,12 +143,12 @@ data:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
                           providers:
                             ory-oauth:
-                              issuer: {{ .Values.connect.auth.issuer }}
+                              issuer: https://{{ .Values.connect.auth.issuer }}
                               audiences:
-                                - https://connect.cofide.security
+                                - https://connect.{{ .Values.connect.urlBase }}
                               remote_jwks:
                                 http_uri:
-                                  uri: {{ .Values.connect.auth.remoteJWKS }}
+                                  uri: https://{{ .Values.connect.auth.remoteJWKS }}
                                   cluster: jwks_cluster
                                   timeout: 30s
                               claim_to_headers:
@@ -192,7 +192,7 @@ data:
                 application_protocols:
                   - h2
                 server_names:
-                  - connect-agent.cofide.security
+                  - connect-agent.{{ .Values.connect.urlBase }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:

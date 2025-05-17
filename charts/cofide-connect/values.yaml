@@ -13,7 +13,8 @@ image:
   tag: ""
 
 connect:
-  trustDomain: "" 
+  trustDomain: ""
+  urlBase: ""
   env:
     VALKEY_ADDRESS: "valkey.connect.svc.cluster.local:6379"
     INSECURE_SERVER_ADDRESS: ":51106"

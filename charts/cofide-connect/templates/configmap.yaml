@@ -6,4 +6,5 @@ data:
 {{- range $key, $value := .Values.connect.env }}
   {{ $key }}: {{ $value | quote }}
 {{- end }}
+  CONNECT_TRUST_DOMAIN: {{ .Values.connect.trustDomain }}
 
