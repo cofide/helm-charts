@@ -220,10 +220,6 @@ data:
                           - san_type: URI
                             matcher:
                               safe_regex:
-                                regex: spiffe://[^/]*/app/workload-controller
-                          - san_type: URI
-                            matcher:
-                              safe_regex:
                                 regex: spiffe://[^/]*/spire/server
                       validation_context_sds_secret_config:
                         name: ALL
