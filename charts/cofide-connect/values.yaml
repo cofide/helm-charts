@@ -31,6 +31,9 @@ connect:
     OTEL_METRIC_EXPORT_INTERVAL: 60000
     OTEL_SERVICE_NAME: connect
 
+dashboard:
+  allowedOrigins: []
+
 envoy:
   image: "envoyproxy/envoy:v1.33-latest"
   auth:

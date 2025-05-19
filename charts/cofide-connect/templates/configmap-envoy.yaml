@@ -118,9 +118,12 @@ data:
                           typed_per_filter_config:
                             envoy.filters.http.cors:
                               '@type': type.googleapis.com/envoy.extensions.filters.http.cors.v3.CorsPolicy
+                              {{- with .Values.dashboard.allowedOrigins }}
                               allow_origin_string_match:
-                                - exact: http://localhost:5173
-                                - exact: https://app.{{ .Values.connect.urlBase }}:8443
+                              {{- range . }}
+                                - exact: {{ . }}
+                              {{- end }}
+                              {{- end }}
                               allow_methods: POST,GET
                               allow_headers: Authorization, Content-Type, Connect-Protocol-Version, Connect-Timeout-Ms, X-User-Agent
                               allow_credentials: true
