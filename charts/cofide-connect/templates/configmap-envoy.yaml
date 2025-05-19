@@ -157,6 +157,7 @@ data:
                           rules:
                             - match:
                                 prefix: /proto.connect.trust_zone_service.v1alpha1.TrustZoneService/RegisterAgent
+                              # No _user_ authentication is required as this is the agent registering
                               requires: {}
                             - match:
                                 prefix: /proto.connect
