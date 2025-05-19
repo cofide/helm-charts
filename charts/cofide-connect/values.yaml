@@ -30,9 +30,12 @@ connect:
     OTEL_EXPORTER_OTLP_PROTOCOL: grpc
     OTEL_METRIC_EXPORT_INTERVAL: 60000
     OTEL_SERVICE_NAME: connect
-  tlsSecretName: ""
+
+envoy:
+  image: "envoyproxy/envoy:v1.33-latest"
   auth:
     issuer: ""
+    tlsSecretName: ""
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []

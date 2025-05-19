@@ -53,7 +53,7 @@ spec:
             - name: sqlite-data
               mountPath: "/app/data"
         - name: envoy-sidecar
-          image: "envoyproxy/envoy:v1.33-latest"
+          image: {{ .Values.connect.envoy.image }}
           command: ["envoy"]
           args:
             - -c
@@ -94,7 +94,7 @@ spec:
             name: connect-api-envoy-config
         - name: envoy-tls
           secret:
-            secretName: {{ .Values.connect.tlsSecretName }}
+            secretName: {{ .Values.envoy.auth.tlsSecretName }}
         - name: sqlite-data
           hostPath:
             path: /app/data
