@@ -73,10 +73,6 @@ securityContext: {}
 
 resources: {}
 
-volumes: []
-
-volumeMounts: []
-
 nodeSelector: {}
 
 tolerations: []
