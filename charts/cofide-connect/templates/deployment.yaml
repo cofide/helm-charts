@@ -65,6 +65,8 @@ spec:
           ports:
             - name: https
               containerPort: 8443
+            - name: admin
+              containerPort: 9901 
           volumeMounts:
             - name: envoy-config
               mountPath: /etc/envoy
