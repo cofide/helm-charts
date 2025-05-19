@@ -1,0 +1,36 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ .Values.webhook.configName | default (include "spiffe-webhook.fullname" .) }}
+  annotations:
+    # cert-manager.io/inject-ca-from: <namespace>/<certificate-name>
+    # This annotation tells cert-manager to inject the CA bundle from the specified Certificate
+    cert-manager.io/inject-ca-from: "{{ .Values.namespace | default .Release.Namespace }}/{{ .Values.certManager.certificateName }}"
+  labels:
+    {{- include "spiffe-webhook.labels" . | nindent 4 }}
+webhooks:
+- name: {{ .Values.webhook.entryName }} # e.g., mpod.kb.io
+  admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      namespace: {{ .Values.namespace | default .Release.Namespace }}
+      name: {{ include "spiffe-webhook.fullname" . }} # Name of the Service defined in service.yaml
+      port: {{ .Values.service.port }} # Port number of the Service
+      path: "{{ .Values.webhook.path }}" # Path for the webhook endpoint (e.g., "/inject")
+    # caBundle will be automatically injected by cert-manager due to the annotation above
+  failurePolicy: {{ .Values.webhook.failurePolicy }}
+  rules:
+  - apiGroups:
+    - "" # Core API group
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+  sideEffects: None # Indicates that the webhook has no side effects on other resources
+  # namespaceSelector: {} # Can be added to restrict which namespaces this webhook applies to
+  # objectSelector: {} # Can be added to restrict which objects this webhook applies to based on labels
+  # timeoutSeconds: 10 # How long the API server should wait for the webhook to respond
