@@ -8,7 +8,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ .Release.Name }}
       {{- include "cofide-connect.selectorLabels" . | nindent 6 }}
   template:
     metadata:

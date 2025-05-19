@@ -8,7 +8,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "cofide-connect.labels" . | nindent 4 }}
-  app: {{ .Release.Name }}
+  app.kubernetes.io/name: {{ .Release.Name }}
 spec:
   type: LoadBalancer
   ports:
