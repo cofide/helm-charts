@@ -53,7 +53,7 @@ spec:
             - name: sqlite-data
               mountPath: "/app/data"
         - name: envoy-sidecar
-          image: {{ .Values.connect.envoy.image }}
+          image: {{ .Values.envoy.image }}
           command: ["envoy"]
           args:
             - -c
