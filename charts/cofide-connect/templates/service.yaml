@@ -17,4 +17,4 @@ spec:
       port: 8443
       targetPort: 8443
   selector:
-    app: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ .Release.Name }}
