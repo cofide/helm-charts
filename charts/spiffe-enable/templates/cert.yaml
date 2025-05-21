@@ -9,11 +9,8 @@ spec:
   secretName: {{ .Values.certManager.secretName }}
   dnsNames:
     {{- range .Values.certManager.dnsNames }}
-    - {{ tpl . $ }} # Use tpl to render template strings from values.yaml
+    - {{ tpl . $ }}
     {{- end }}
   issuerRef:
     name: {{ .Values.certManager.issuerName }}
     kind: {{ .Values.certManager.issuerKind }}
-  # commonName: can be set if needed, often derived from the first DNS name
-  # duration: 2160h # 90d
-  # renewBefore: 360h # 15d
