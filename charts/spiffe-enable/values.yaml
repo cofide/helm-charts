@@ -45,7 +45,7 @@ webhook:
   # Name for the MutatingWebhookConfiguration resource itself
   configName: "spiffe-enable-webhook"
   # Name for the entry in the webhooks list inside MutatingWebhookConfiguration
-  entryName: "mpod.kb.io"
+  entryName: "spiffe-enable.cofide.io"
   failurePolicy: Fail
   # Port the application inside the container listens on for webhook requests
   containerPort: 9443

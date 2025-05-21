@@ -9,7 +9,7 @@ metadata:
   labels:
     {{- include "spiffe-webhook.labels" . | nindent 4 }}
 webhooks:
-- name: {{ .Values.webhook.entryName }} # e.g., mpod.kb.io
+- name: {{ .Values.webhook.entryName }}
   admissionReviewVersions:
   - v1
   clientConfig:
@@ -31,6 +31,6 @@ webhooks:
     resources:
     - pods
   sideEffects: None # Indicates that the webhook has no side effects on other resources
-  # namespaceSelector: {} # Can be added to restrict which namespaces this webhook applies to
-  # objectSelector: {} # Can be added to restrict which objects this webhook applies to based on labels
-  # timeoutSeconds: 10 # How long the API server should wait for the webhook to respond
+  namespaceSelector: # Restricts the namespaces this webhook applies to
+    matchLabels:
+      spiffe.cofide.io/enabled: "true"
