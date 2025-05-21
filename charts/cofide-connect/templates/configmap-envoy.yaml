@@ -146,7 +146,7 @@ data:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
                           providers:
                             ory-oauth:
-                              issuer: {{ .Values.envoy.auth.issuer }}
+                              issuer: https://{{ .Values.envoy.auth.issuer }}
                               audiences:
                                 - https://connect.{{ .Values.connect.urlBase }}
                               remote_jwks:

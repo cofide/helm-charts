@@ -8,8 +8,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Release.Name }}
-      {{- include "cofide-connect.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ include "cofide-connect.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -17,11 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app.kubernetes.io/name: {{ .Release.Name }}
-        {{- include "cofide-connect.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        app.kubernetes.io/name: {{ include "cofide-connect.name" . }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
