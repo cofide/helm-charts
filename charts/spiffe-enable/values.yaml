@@ -6,9 +6,10 @@ createNamespace: true
 replicaCount: 1
 
 image:
-  repository: 010438484483.dkr.ecr.eu-west-1.amazonaws.com/cofide/spiffe-enable
+  registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
+  repository: cofide/spiffe-enable
   pullPolicy: Always
-  tag: "v0.1.0-alpha"
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
