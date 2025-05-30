@@ -51,7 +51,7 @@ data:
                           - san_type: URI
                             matcher:
                               safe_regex:
-                                regex: spiffe://[^/]*/ns/cofide/sa/cofide-agent
+                                regex: spiffe://[^/]*/ns/cofide/sa/(cofide-agent|cofide-observer)
                       validation_context_sds_secret_config:
                         name: ALL
                         sds_config:
@@ -225,6 +225,10 @@ data:
                             matcher:
                               safe_regex:
                                 regex: spiffe://[^/]*/spire/server
+                          - san_type: URI
+                            matcher:
+                              safe_regex:
+                                regex: spiffe://[^/]*/ns/cofide/sa/cofide-observer
                       validation_context_sds_secret_config:
                         name: ALL
                         sds_config:
