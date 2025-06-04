@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "spiffe-webhook.fullname" . }}
+  name: {{ include "spiffe-enable.fullname" . }}
   namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
-    {{- include "spiffe-webhook.labels" . | nindent 4 }}
+    {{- include "spiffe-enable.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "spiffe-webhook.selectorLabels" . | nindent 6 }}
+      {{- include "spiffe-enable.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -17,13 +17,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "spiffe-webhook.selectorLabels" . | nindent 8 }}
+        {{- include "spiffe-enable.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "spiffe-webhook.serviceAccountName" . }}
+      serviceAccountName: {{ include "spiffe-enable.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:

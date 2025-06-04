@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "spiffe-webhook.name" -}}
+{{- define "spiffe-enable.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "spiffe-webhook.fullname" -}}
+{{- define "spiffe-enable.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "spiffe-webhook.chart" -}}
+{{- define "spiffe-enable.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "spiffe-webhook.labels" -}}
-helm.sh/chart: {{ include "spiffe-webhook.chart" . }}
-{{ include "spiffe-webhook.selectorLabels" . }}
+{{- define "spiffe-enable.labels" -}}
+helm.sh/chart: {{ include "spiffe-enable.chart" . }}
+{{ include "spiffe-enable.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -48,18 +48,18 @@ Selector labels.
 These are used to identify the pods for the Service and Deployment.
 The 'app' label is derived from webhook.appName to match original manifests.
 */}}
-{{- define "spiffe-webhook.selectorLabels" -}}
-app: {{ .Values.webhook.appName | default (include "spiffe-webhook.name" .) }}
-app.kubernetes.io/name: {{ include "spiffe-webhook.name" . }}
+{{- define "spiffe-enable.selectorLabels" -}}
+app: {{ .Values.webhook.appName | default (include "spiffe-enable.name" .) }}
+app.kubernetes.io/name: {{ include "spiffe-enable.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "spiffe-webhook.serviceAccountName" -}}
+{{- define "spiffe-enable.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-{{- default (include "spiffe-webhook.fullname" .) .Values.serviceAccount.name -}}
+{{- default (include "spiffe-enable.fullname" .) .Values.serviceAccount.name -}}
 {{- else -}}
 {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}

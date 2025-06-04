@@ -16,7 +16,7 @@ serviceAccount:
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template, e.g., <release-name>-spiffe-webhook
+  # If not set and create is true, a name is generated using the fullname template, e.g., <release-name>-spiffe-enable
   name: ""
 
 podAnnotations: {}
@@ -72,7 +72,7 @@ certManager:
   # The `tpl` function will be used in the template to render these.
   dnsNames:
     # Default: <service-fullname>.<namespace>.svc
-    # e.g., myrelease-spiffe-webhook.cofide.svc
-    - "{{ include \"spiffe-webhook.fullname\" . }}.{{ .Values.namespace | default .Release.Namespace }}.svc"
+    # e.g., myrelease-spiffe-enable.cofide.svc
+    - "{{ include \"spiffe-enable.fullname\" . }}.{{ .Values.namespace | default .Release.Namespace }}.svc"
     # You can add more static or templated DNS names if needed
     # - "spiffe-enable-webhook.{{ .Values.namespace | default .Release.Namespace }}.svc.cluster.local"
