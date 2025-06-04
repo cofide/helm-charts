@@ -193,8 +193,6 @@ data:
                               requested_server_name: '%REQUESTED_SERVER_NAME%'
             - name: connect_agent_api
               filter_chain_match:
-                application_protocols:
-                  - h2
                 server_names:
                   - connect-agent.{{ .Values.connect.urlBase }}
               transport_socket:
@@ -262,7 +260,6 @@ data:
                           routes:
                             - match:
                                 prefix: /proto.connect
-                                grpc: {}
                               route:
                                 cluster: connect_service
                     http_filters:
