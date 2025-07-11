@@ -9,7 +9,7 @@ data:
   {{ $key }}: {{ $value | quote }}
 {{- end }}
 {{- end }}
---
+---
 
 {{- $existingConfigMap := lookup "v1" "ConfigMap" .Release.Namespace "cofide-agent-state" }}
 {{- if not $existingConfigMap }}
