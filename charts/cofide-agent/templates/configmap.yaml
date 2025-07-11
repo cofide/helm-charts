@@ -1,3 +1,5 @@
+{{- $existingConfigMap := lookup "v1" "ConfigMap" .Release.Namespace "cofide-agent" }}
+{{- if not $existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,10 +8,13 @@ data:
 {{- range $key, $value := .Values.agent.env }}
   {{ $key }}: {{ $value | quote }}
 {{- end }}
-
+{{- end }}
 --
 
+{{- $existingConfigMap := lookup "v1" "ConfigMap" .Release.Namespace "cofide-agent-state" }}
+{{- if not $existingConfigMap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cofide-agent-state
+{{- end }}
