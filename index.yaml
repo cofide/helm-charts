@@ -3,6 +3,19 @@ entries:
   cofide-agent:
   - apiVersion: v2
     appVersion: v0.27.0
+    created: "2025-07-11T12:36:00.618685599Z"
+    description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
+    digest: eda5bd9c1d21b01c3648c110052cfddf259b7cf7b0db57e36991b032ae6da88c
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-agent
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.3.0/cofide-agent-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: v0.27.0
     created: "2025-07-04T11:09:22.325304014Z"
     description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
     digest: 8cf8a0dad25ed324732c4691a3649ef24c298fcb05f0ac718767f82b5414f382
@@ -133,4 +146,4 @@ entries:
     urls:
     - https://github.com/cofide/helm-charts/releases/download/spiffe-enable-0.1.0/spiffe-enable-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-07T19:43:13.66722836Z"
+generated: "2025-07-11T12:36:00.618710425Z"
