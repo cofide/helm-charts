@@ -11,8 +11,6 @@ rules:
       - "get"
       - "list"
       - "watch"
-      - "update"
-      - "patch"
   - apiGroups: [""]
     resources: ["configmaps"]
     resourceNames: ["cofide-agent-state"]
