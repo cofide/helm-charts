@@ -6,7 +6,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["configmaps"]
-    resourceNames: ["cofide-agent-config"]
+    resourceNames: ["cofide-agent"]
     verbs:
       - "get"
       - "list"
