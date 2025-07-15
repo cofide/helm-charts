@@ -90,6 +90,19 @@ entries:
     version: 0.1.1
   cofide-observer:
   - apiVersion: v2
+    appVersion: v0.3.0
+    created: "2025-07-15T13:35:28.330692948Z"
+    description: Helm chart to deploy Cofide Observer
+    digest: c3b71da773f67abd873081631603c8724c479509f0cd1f6d4eeb623b8cfe7972
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-observer
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-observer-0.3.0/cofide-observer-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: v0.2.0
     created: "2025-07-04T11:09:22.841817872Z"
     description: Helm chart to deploy Cofide Observer
@@ -146,4 +159,4 @@ entries:
     urls:
     - https://github.com/cofide/helm-charts/releases/download/spiffe-enable-0.1.0/spiffe-enable-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-11T12:36:00.618710425Z"
+generated: "2025-07-15T13:35:28.330726151Z"
