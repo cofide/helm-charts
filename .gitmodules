@@ -1,0 +1,3 @@
+[submodule "charts/spire"]
+	path = charts/spire
+	url = https://github.com/spiffe/helm-charts-hardened.git
