@@ -1,3 +1,3 @@
 [submodule "charts/spire"]
 	path = charts/spire
-	url = https://github.com/spiffe/helm-charts-hardened.git
+	url = https://github.com/cofide/spire-helm-charts-hardened.git
