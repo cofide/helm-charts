@@ -1,0 +1,25 @@
+# This workflow runs on demand or when triggered by a repository dispatch API call.
+# It aggregates Helm indexes for local and remote Helm charts into a single index.yaml,
+# then publishes the index to GitHub pages in the local repository.
+name: Aggregate Helm Indexes
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - charts-updated
+concurrency:
+  # Prevent concurrent runs of this and the release workflow which could lead
+  # to a race over the index content.
+  group: helm-index
+jobs:
+  aggregate:
+    name: Aggregate Helm Indexes
+    runs-on: ubuntu-latest
+    steps:
+      # Use a GitHub Action from the main branch here. This allows it to
+      # package a script and operate on the gh-pages branch which does not have
+      # the .github directory.
+      - name: Aggregate Helm Indexes
+        uses: cofide/helm-charts/.github/actions/aggregate-indexes@main
+        with:
+          repository: ${{ github.event.client_payload.repository }}
