@@ -1,0 +1,57 @@
+name: "Aggregate Helm Indexes"
+description: >
+  Aggregate Helm indexes for local and remote Helm charts into a single index.yaml,
+  then publish the index to GitHub pages in the local repository.
+author: "Cofide"
+inputs:
+  repository:
+    description: "The repository that triggered the change"
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        fetch-depth: 1
+
+    - name: Download remote index files
+      shell: bash
+      run: |
+        mkdir -p temp-indexes
+
+        # Download index from Cofide SPIRE Helm charts
+        curl --fail -L -o temp-indexes/spiffe-helm-charts-hardened-index.yaml \
+          https://cofide.github.io/spiffe-helm-charts-hardened/index.yaml
+
+    - name: Install ruamel.yaml
+      shell: bash
+      run: |
+        pip install ruamel.yaml
+
+    - name: Merge remote indexes with local
+      shell: bash
+      run: |
+        python3 ${{ github.action_path }}/merge_indexes.py
+
+    - name: Show changes to index.yaml
+      shell: bash
+      run: |
+        git diff
+
+    - name: Commit and push updated index
+      shell: bash
+      run: |
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+        git add index.yaml
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update aggregated helm index
+
+        Repository: ${{ inputs.repository }}"
+          git push
+        fi
