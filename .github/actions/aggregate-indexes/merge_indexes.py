@@ -44,8 +44,11 @@ for index_file in Path('temp-indexes').glob('*-index.yaml'):
                 for version in versions:
                     version_num = version.get('version')
                     if version_num not in existing_versions:
-                        print(f"Adding chart {chart_name} version {version_num} to index")
-                        merged['entries'][chart_name].append(version)
+                        if 'cofide' in str(version_num):
+                            print(f"Adding chart {chart_name} version {version_num} to index")
+                            merged['entries'][chart_name].append(version)
+                        else:
+                            print(f"Skipping non-Cofide version {version_num} for chart {chart_name}")
     except Exception as e:
         print(f"Error processing {index_file}: {e}", file=sys.stderr)
         sys.exit(1)
