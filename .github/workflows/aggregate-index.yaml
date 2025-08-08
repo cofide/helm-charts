@@ -11,6 +11,8 @@ concurrency:
   # Prevent concurrent runs of this and the release workflow which could lead
   # to a race over the index content.
   group: helm-index
+permissions:
+  contents: write
 jobs:
   aggregate:
     name: Aggregate Helm Indexes
