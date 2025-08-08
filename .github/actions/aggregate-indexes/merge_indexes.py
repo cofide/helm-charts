@@ -18,8 +18,8 @@ try:
         merged = yaml.load(f) or {}
     print("Found existing index.yaml")
 except FileNotFoundError:
-    print("No existing index.yaml")
-    merged = {'apiVersion': 'v1', 'entries': {}}
+    print("Error: No existing index.yaml", file=sys.stderr)
+    sys.exit(1)
 
 # Ensure entries dict exists
 if 'entries' not in merged:
@@ -44,10 +44,13 @@ for index_file in Path('temp-indexes').glob('*-index.yaml'):
                 for version in versions:
                     version_num = version.get('version')
                     if version_num not in existing_versions:
-                        print(f"Adding chart {chart_name} version {version_num} to index")
-                        merged['entries'][chart_name].append(version)
+                        if 'cofide' in str(version_num):
+                            print(f"Adding chart {chart_name} version {version_num} to index")
+                            merged['entries'][chart_name].append(version)
+                        else:
+                            print(f"Skipping non-Cofide version {version_num} for chart {chart_name}")
     except Exception as e:
-        print(f"Error processing {index_file}: {e}")
+        print(f"Error processing {index_file}: {e}", file=sys.stderr)
         sys.exit(1)
 
 # Sort versions for each chart (newest first)
