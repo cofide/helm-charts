@@ -69,6 +69,12 @@ spec:
               port:
                 format: int32
                 type: integer
+              tlsMode:
+                description: TLSMode defines the TLS mode for a federated service.
+                enum:
+                - Mtls
+                - IstioMtls
+                type: string
               workloadLabels:
                 additionalProperties:
                   type: string
@@ -81,6 +87,7 @@ spec:
             - workloadLabels
             type: object
           status:
+            description: FederatedServiceStatus defines the observed state of FederatedService
             properties:
               conditions:
                 items:
