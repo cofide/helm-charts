@@ -206,6 +206,19 @@ entries:
     version: 0.1.0
   spiffe-enable:
   - apiVersion: v2
+    appVersion: v0.4.0
+    created: "2025-09-22T17:25:02.675949896Z"
+    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    digest: 47daf9f42615f1242bcc2c34893dc5b558e5adee330db2f54469b44b58493d9d
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: spiffe-enable
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/spiffe-enable-0.1.5/spiffe-enable-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
     appVersion: v0.3.0
     created: "2025-08-18T13:22:10.916340689Z"
     description: Helm chart for the spiffe-enable admission webhook for Kubernetes
@@ -647,4 +660,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2025-09-19T15:19:21.478100983Z"
+generated: "2025-09-22T17:25:02.676013466Z"
