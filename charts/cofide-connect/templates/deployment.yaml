@@ -106,6 +106,18 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- if .Values.opa.enabled }}
+        - name: opa-sidecar
+          image: openpolicyagent/opa:latest
+          args:
+            - "run"
+            - "--server"
+            - "--addr=localhost:8181"
+            - "/policies"
+          volumeMounts:
+            - mountPath: /policies
+              name: opa-policy-volume
+        {{- end }}
       volumes:
         - name: spiffe-workload-api
           csi:
@@ -121,6 +133,11 @@ spec:
           hostPath:
             path: /app/data
             type: DirectoryOrCreate
+        {{- if .Values.opa.enabled }}
+        - name: opa-policy-volume
+          configMap:
+            name: rego-configmap 
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

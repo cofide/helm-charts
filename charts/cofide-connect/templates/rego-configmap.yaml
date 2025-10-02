@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rego-configmap
+data:
+  example.rego: |
+    package authz
+    default allow = false
+    allow if {
+      input.method == "GET"
+    }
