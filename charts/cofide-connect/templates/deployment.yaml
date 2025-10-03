@@ -115,7 +115,8 @@ spec:
             - "--addr=localhost:8181"
             - "/policies"
           volumeMounts:
-            - mountPath: /policies
+            - mountPath: /policies/example.rego
+              subPath: example.rego
               name: opa-policy-volume
         {{- end }}
       volumes:
