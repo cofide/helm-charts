@@ -24,7 +24,6 @@ agent:
     MANAGEMENT_ZONE: false
     OIDC_ENDPOINT_ENABLED: true
     TRUST_DOMAIN: ""
-    DISABLE_IPV6: false
 
 # This is for the Agent's xDS server
 xdsServer:
