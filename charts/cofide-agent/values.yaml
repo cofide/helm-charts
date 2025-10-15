@@ -20,10 +20,10 @@ agent:
     CLUSTER_ID: ""
     COFIDE_CONNECT_TRUST_DOMAIN: ""
     COFIDE_CONNECT_URL: ""
-    ENDPOINT_ID: ""
     MANAGEMENT_ZONE: false
     OIDC_ENDPOINT_ENABLED: true
     TRUST_DOMAIN: ""
+    TRUST_ZONE_ID: ""
 
 # This is for the Agent's xDS server
 xdsServer:
