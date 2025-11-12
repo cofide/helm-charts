@@ -71,6 +71,7 @@ spec:
               mountPath: "/app/data"
         - name: envoy-sidecar
           image: {{ .Values.envoy.image }}
+          imagePullPolicy: {{ .Values.envoy.imagePullPolicy }}
           command: ["envoy"]
           args:
             - -c
