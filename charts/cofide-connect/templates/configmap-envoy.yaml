@@ -148,7 +148,7 @@ data:
                             ory-oauth:
                               issuer: {{ .Values.envoy.auth.issuer }}
                               audiences:
-                                - https://connect.{{ .Values.connect.urlBase }}
+                                {{- include "cofide-connect.envoy.auth.audiences" . | nindent 32 }}
                               remote_jwks:
                                 http_uri:
                                   uri: {{ .Values.envoy.auth.issuer }}/.well-known/jwks.json

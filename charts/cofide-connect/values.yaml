@@ -38,6 +38,8 @@ envoy:
   auth:
     issuer: ""
     tlsSecretName: ""
+    # if empty, defaults to `["https://connect.{{ .Values.connect.urlBase }}"]`
+    audiences: []
   logLevel: "info"
   securityContext: {}
   resources: {}

@@ -60,3 +60,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "cofide-connect.envoy.auth.audiences" -}}
+{{- if gt (len .Values.envoy.auth.audiences) 0 }}
+{{- toYaml .Values.envoy.auth.audiences }}
+{{- else -}}
+- https://connect.{{ .Values.connect.urlBase }}
+{{- end }}
+{{- end }}
