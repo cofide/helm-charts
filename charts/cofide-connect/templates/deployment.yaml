@@ -35,6 +35,11 @@ spec:
           envFrom:
           - configMapRef:
               name: {{ include "cofide-connect.fullname" . }}
+          env:
+          - name: HOST_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: "status.hostIP"
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
