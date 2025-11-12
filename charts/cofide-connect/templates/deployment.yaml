@@ -67,8 +67,10 @@ spec:
           volumeMounts:
             - name: spiffe-workload-api
               mountPath: /spiffe-workload-api
+            {{- if .Values.connect.dev_use_sqlite }}
             - name: sqlite-data
               mountPath: "/app/data"
+            {{- end }}
         - name: envoy-sidecar
           image: {{ .Values.envoy.image }}
           imagePullPolicy: {{ .Values.envoy.imagePullPolicy }}
@@ -123,10 +125,12 @@ spec:
         - name: envoy-tls
           secret:
             secretName: {{ .Values.envoy.auth.tlsSecretName }}
+        {{- if .Values.connect.dev_use_sqlite }}
         - name: sqlite-data
           hostPath:
             path: /app/data
             type: DirectoryOrCreate
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
