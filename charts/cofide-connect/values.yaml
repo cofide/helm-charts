@@ -33,6 +33,7 @@ connect:
 
 envoy:
   image: "envoyproxy/envoy:v1.33-latest"
+  imagePullPolicy: Always
   auth:
     issuer: ""
     tlsSecretName: ""
