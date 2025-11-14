@@ -156,6 +156,7 @@ data:
                               claim_to_headers:
                                 - header_name: x-jwt-claim-sub
                                   claim_name: sub
+                              forward_payload_header: x-jwt-claims
                           rules:
                             - match:
                                 prefix: /proto.connect.trust_zone_service.v1alpha1.TrustZoneService/RegisterAgent
