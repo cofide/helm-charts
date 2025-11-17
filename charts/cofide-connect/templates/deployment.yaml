@@ -82,7 +82,7 @@ spec:
               mountPath: /spiffe-workload-api
             - name: connect-config
               mountPath: /app/config
-            {{- if .Values.connect.dev_use_sqlite }}
+            {{- if (hasPrefix "sqlite" .Values.connect.sqlConnectionString ) }}
             - name: sqlite-data
               mountPath: "/app/data"
             {{- end }}
@@ -146,7 +146,7 @@ spec:
         - name: envoy-tls
           secret:
             secretName: {{ .Values.envoy.auth.tlsSecretName }}
-        {{- if .Values.connect.dev_use_sqlite }}
+        {{- if (hasPrefix "sqlite" .Values.connect.sqlConnectionString ) }}
         - name: sqlite-data
           hostPath:
             path: /app/data
