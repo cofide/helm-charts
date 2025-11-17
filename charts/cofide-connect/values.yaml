@@ -16,7 +16,9 @@ connect:
   urlBase: ""
   allowedOrigins: []
   dev_use_sqlite: false
-  insecureServerAddress: :51106
+  insecureServerAddress:
+    host: ""
+    port: 51106
   adsServerAddress: :18000
   spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
   s3UseOidc: true

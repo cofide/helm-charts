@@ -6,7 +6,7 @@ metadata:
     {{- include "cofide-connect.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    insecure_server_address: {{ .Values.connect.insecureServerAddress }}
+    insecure_server_address: {{ .Values.connect.insecureServerAddress.host }}:{{ .Values.connect.insecureServerAddress.port }}
     ads_server_address: {{ .Values.connect.adsServerAddress }}
     spiffe_endpoint_socket: {{ .Values.connect.spiffeEndpointSocket }}
     aws_region: {{ .Values.connect.awsRegion }}

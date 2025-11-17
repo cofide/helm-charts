@@ -61,14 +61,14 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
             grpc:
-              port: 51106
+              port: {{ .Values.connect.insecureServerAddress.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             failureThreshold: 3
             timeoutSeconds: 5
           readinessProbe:
             grpc:
-              port: 51106
+              port: {{ .Values.connect.insecureServerAddress.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             failureThreshold: 3
