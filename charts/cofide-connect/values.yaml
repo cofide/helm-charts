@@ -13,23 +13,34 @@ image:
   tag: ""
 
 connect:
-  trustDomain: ""
   urlBase: ""
   allowedOrigins: []
   dev_use_sqlite: false
-  env:
-    VALKEY_ADDRESS: "valkey.connect.svc.cluster.local:6379"
-    INSECURE_SERVER_ADDRESS: ":51106"
-    SPIFFE_ENDPOINT_SOCKET: "unix:///spiffe-workload-api/spire-agent.sock"
-    AWS_REGION: ""
-    IAM_ROLE_ARN: ""
-    S3_TRUST_BUNDLE_STORE_BUCKET: ""
-    OIDC_PROVIDER_AUDIENCE: ""
-    CONNECT_TRUST_BUNDLE_STORE_URL: ""
-    TELEMETRY_ENABLED: false
-    OTEL_EXPORTER_OTLP_PROTOCOL: grpc
-    OTEL_METRIC_EXPORT_INTERVAL: 60000
-    OTEL_SERVICE_NAME: connect
+  insecureServerAddress: :51106
+  adsServerAddress: :18000
+  spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
+  s3UseOidc: true
+  awsRegion: ""
+  iamRoleArn: ""
+  oidcProviderAudience: ""
+  s3TrustBundleStoreBucket: ""
+  connectPsatAudience: ""
+  trustDomain: ""
+  valkeyAddress: valkey.connect.svc.cluster.local:6379
+  connectTrustBundleStoreUrl: ""
+  sqlConnectionString: ""
+  sqlRemoteSpiffeId: ""
+  telemetryEnabled: false
+  authzPolicyEngine: "opa"
+  initialRbac:
+    version: 0
+    roleBindings: []
+  # Additional environment variables to pass to connect api binary.
+  # For example:
+  #  extraEnv:
+  #  - name: SOME_VAR
+  #    value: 'some value
+  extraEnv: []
 
 envoy:
   image: "envoyproxy/envoy:v1.33-latest"

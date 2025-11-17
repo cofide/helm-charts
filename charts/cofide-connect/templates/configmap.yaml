@@ -5,8 +5,34 @@ metadata:
   labels:
     {{- include "cofide-connect.labels" . | nindent 4 }}
 data:
-{{- range $key, $value := .Values.connect.env }}
-  {{ $key }}: {{ $value | quote }}
-{{- end }}
-  CONNECT_TRUST_DOMAIN: {{ .Values.connect.trustDomain }}
-
+  config.yaml: |
+    insecure_server_address: {{ .Values.connect.insecureServerAddress }}
+    ads_server_address: {{ .Values.connect.adsServerAddress }}
+    spiffe_endpoint_socket: {{ .Values.connect.spiffeEndpointSocket }}
+    aws_region: {{ .Values.connect.awsRegion }}
+    iam_role_arn: {{ .Values.connect.iamRoleArn }}
+    oidc_provider_audience: {{ .Values.connect.oidcProviderAudience }}
+    s3_trust_bundle_store_bucket: {{ .Values.connect.s3TrustBundleStoreBucket }}
+    connect_psat_audience: {{ .Values.connect.connectPsatAudience }}
+    connect_trust_domain: {{ .Values.connect.trustDomain }}
+    valkey_address: {{ .Values.connect.valkeyAddress }}
+    connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreUrl }}
+    sql_connection_string: {{ .Values.connect.sqlConnectionString }}
+    sql_remote_spiffe_id: {{ .Values.connect.sqlRemoteSpiffeId }}
+    telemetry_enabled: {{ .Values.connect.telemetryEnabled }}
+    authz_policy_engine: {{ .Values.connect.authzPolicyEngine }}
+    initial_rbac:
+      version: {{ .Values.connect.initialRbac.version }}
+      role_bindings: {{- range .Values.connect.initialRbac.roleBindings }}
+        - role_id: {{ .roleID | quote }}
+	        resource_type: {{ .resourceType }}
+	        resource_id: {{ .resourceID | quote }}
+          {{- if (hasKey . "user") }}
+          user:
+            subject: {{ .user.subject | quote }}
+          {{- end }}
+	        {{- if (hasKey . "group") }}
+          group:
+            claim_name: {{ .group.claimName | quote }}
+          {{- end }}
+      {{- end }}
