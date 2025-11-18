@@ -40,7 +40,7 @@ connect:
   # For example:
   #  extraEnv:
   #  - name: SOME_VAR
-  #    value: 'some value
+  #    value: 'some value'
   extraEnv: []
 
 envoy:
