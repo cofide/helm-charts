@@ -25,13 +25,13 @@ data:
       version: {{ .Values.connect.initialRbac.version }}
       role_bindings: {{- range .Values.connect.initialRbac.roleBindings }}
         - role_id: {{ .roleID | quote }}
-	        resource_type: {{ .resourceType }}
-	        resource_id: {{ .resourceID | quote }}
+          resource_type: {{ .resourceType }}
+          resource_id: {{ .resourceID | quote }}
           {{- if (hasKey . "user") }}
           user:
             subject: {{ .user.subject | quote }}
           {{- end }}
-	        {{- if (hasKey . "group") }}
+          {{- if (hasKey . "group") }}
           group:
             claim_name: {{ .group.claimName | quote }}
           {{- end }}
