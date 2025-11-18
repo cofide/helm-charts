@@ -35,6 +35,14 @@ connect:
   authzPolicyEngine: "opa"
   initialRbac:
     version: 0
+    # Initial role bindings to bootstrap the system with.
+    # For example:
+    #  roleBindings:
+    #  - role_id: admin
+    #    resource_type: Cluster
+    #    resource_id: clusterA
+    #    user:
+    #      subject: clusterAadmin@example.com
     roleBindings: []
   # Additional environment variables to pass to connect api binary.
   # For example:
