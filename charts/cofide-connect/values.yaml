@@ -18,22 +18,24 @@ connect:
   insecureServerAddress:
     host: ""
     port: 51106
-  adsServerAddress: :18000
+  adsServerAddress:
+    host: ""
+    port: 18000
   spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
-  s3UseOidc: true
+  s3UseOIDC: true
   awsRegion: ""
-  iamRoleArn: ""
+  iamRoleARN: ""
   oidcProviderAudience: ""
   s3TrustBundleStoreBucket: ""
-  connectPsatAudience: ""
+  connectPSATAudience: ""
   trustDomain: ""
   valkeyAddress: valkey.connect.svc.cluster.local:6379
-  connectTrustBundleStoreUrl: ""
+  connectTrustBundleStoreURL: ""
   sqlConnectionString: ""
-  sqlRemoteSpiffeId: ""
+  sqlRemoteSpiffeID: ""
   telemetryEnabled: false
   authzPolicyEngine: "opa"
-  initialRbac:
+  initialRBAC:
     version: 0
     # Initial role bindings to bootstrap the system with.
     # For example:
