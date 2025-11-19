@@ -88,7 +88,7 @@
           "type": "string",
           "description": "Connection string for the SQL database."
         },
-        "sqlRemoteSpiffeID": {
+        "sqlRemoteSPIFFEID": {
           "type": "string",
           "description": "SPIFFE ID for the remote SQL server."
         },
@@ -229,7 +229,7 @@
         "valkeyAddress",
         "connectTrustBundleStoreURL",
         "sqlConnectionString",
-        "sqlRemoteSpiffeID",
+        "sqlRemoteSPIFFEID",
         "telemetryEnabled",
         "authzPolicyEngine",
         "initialRBAC",

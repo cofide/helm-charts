@@ -32,7 +32,7 @@ connect:
   valkeyAddress: valkey.connect.svc.cluster.local:6379
   connectTrustBundleStoreURL: ""
   sqlConnectionString: ""
-  sqlRemoteSpiffeID: ""
+  sqlRemoteSPIFFEID: ""
   telemetryEnabled: false
   authzPolicyEngine: "opa"
   initialRBAC:

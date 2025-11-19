@@ -18,7 +18,7 @@ data:
     valkey_address: {{ .Values.connect.valkeyAddress }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
     sql_connection_string: {{ .Values.connect.sqlConnectionString }}
-    sql_remote_spiffe_id: {{ .Values.connect.sqlRemoteSpiffeID }}
+    sql_remote_spiffe_id: {{ .Values.connect.sqlRemoteSPIFFEID }}
     telemetry_enabled: {{ .Values.connect.telemetryEnabled }}
     authz_policy_engine: {{ .Values.connect.authzPolicyEngine }}
     initial_rbac:
