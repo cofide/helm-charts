@@ -40,9 +40,9 @@ connect:
     # Initial role bindings to bootstrap the system with.
     # For example:
     #  roleBindings:
-    #  - role_id: admin
-    #    resource_type: Cluster
-    #    resource_id: clusterA
+    #  - roleID: admin
+    #    resourceType: Cluster
+    #    resourceID: clusterA
     #    user:
     #      subject: clusterAadmin@example.com
     roleBindings: []

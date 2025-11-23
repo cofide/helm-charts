@@ -117,20 +117,20 @@
                 "allOf": [
                   {
                     "properties": {
-                      "role_id": {
+                      "roleID": {
                         "type": "string",
                         "description": "ID of the role to bind"
                       },
-                      "resource_type": {
+                      "resourceType": {
                         "type": "string",
                         "description": "Type of resource to bind to"
                       },
-                      "resource_id": {
+                      "resourceID": {
                         "type": "string",
                         "description": "ID of resource to bind to"
                       }
                     },
-                    "required": ["role_id", "resource_type", "resource_id"]
+                    "required": ["roleID", "resourceType", "resourceID"]
                   },
                   {
                     "oneOf": [
