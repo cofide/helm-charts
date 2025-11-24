@@ -9,6 +9,7 @@ data:
     insecure_server_address: {{ .Values.connect.insecureServerAddress.host }}:{{ .Values.connect.insecureServerAddress.port }}
     ads_server_address: {{ .Values.connect.adsServerAddress.host }}:{{ .Values.connect.adsServerAddress.port }}
     spiffe_endpoint_socket: {{ .Values.connect.spiffeEndpointSocket }}
+    s3_use_oidc: {{ .Values.connect.s3UseOIDC | toString }}
     aws_region: {{ .Values.connect.awsRegion }}
     iam_role_arn: {{ .Values.connect.iamRoleARN }}
     oidc_provider_audience: {{ .Values.connect.oidcProviderAudience }}
@@ -19,7 +20,7 @@ data:
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
     sql_connection_string: {{ .Values.connect.sqlConnectionString }}
     sql_remote_spiffe_id: {{ .Values.connect.sqlRemoteSPIFFEID }}
-    telemetry_enabled: {{ .Values.connect.telemetryEnabled }}
+    telemetry_enabled: {{ .Values.connect.telemetryEnabled | toString }}
     authz_policy_engine: {{ .Values.connect.authzPolicyEngine }}
     initial_rbac:
       version: {{ .Values.connect.initialRBAC.version }}
