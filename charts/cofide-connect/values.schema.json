@@ -106,7 +106,7 @@
           "properties": {
             "version": {
               "type": "integer",
-              "description": "Version of the RBAC configuration (bump this to trigger RBAC bootstrap on next restart)."
+              "description": "Version of the initial RBAC configuration (bump this to trigger RBAC bootstrap on next restart, version 0 means it will be ignored)."
             },
             "roleBindings": {
               "type": "array",
