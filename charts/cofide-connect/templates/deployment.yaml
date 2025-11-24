@@ -32,14 +32,27 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Release.Name }}
-          envFrom:
-          - configMapRef:
-              name: {{ include "cofide-connect.fullname" . }}
+          args:
+            - --config-file
+            - /app/config/config.yaml
           env:
           - name: HOST_IP
             valueFrom:
               fieldRef:
                 fieldPath: "status.hostIP"
+          {{- /* Default env vars - overwritten if same name provided in connect.extraEnv. */ -}}
+          {{- $envVars := dict
+              "OTEL_EXPORTER_OTLP_PROTOCOL" (dict "value" "grpc")
+              "OTEL_METRIC_EXPORT_INTERVAL" (dict "value" "60000")
+              "OTEL_SERVICE_NAME" (dict "value" "connect")
+          }}
+          {{- range .Values.connect.extraEnv }}
+            {{- $envVars = set $envVars .name (unset . "name") }}
+          {{- end }}
+          {{- range $key, $env := $envVars }}
+          - name: {{ $key }}
+            {{ toYaml $env | nindent 12 | trim }}
+          {{- end }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
@@ -48,14 +61,14 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
             grpc:
-              port: 51106
+              port: {{ .Values.connect.insecureServerAddress.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             failureThreshold: 3
             timeoutSeconds: 5
           readinessProbe:
             grpc:
-              port: 51106
+              port: {{ .Values.connect.insecureServerAddress.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             failureThreshold: 3
@@ -67,7 +80,9 @@ spec:
           volumeMounts:
             - name: spiffe-workload-api
               mountPath: /spiffe-workload-api
-            {{- if .Values.connect.dev_use_sqlite }}
+            - name: connect-config
+              mountPath: /app/config
+            {{- if (hasPrefix "sqlite" .Values.connect.sqlConnectionString ) }}
             - name: sqlite-data
               mountPath: "/app/data"
             {{- end }}
@@ -115,6 +130,12 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+        - name: connect-config
+          configMap:
+            name: {{ include "cofide-connect.fullname" . }}
+            items:
+              - key: config.yaml
+                path: config.yaml
         - name: spiffe-workload-api
           csi:
             driver: "csi.spiffe.io"
@@ -125,7 +146,7 @@ spec:
         - name: envoy-tls
           secret:
             secretName: {{ .Values.envoy.auth.tlsSecretName }}
-        {{- if .Values.connect.dev_use_sqlite }}
+        {{- if (hasPrefix "sqlite" .Values.connect.sqlConnectionString ) }}
         - name: sqlite-data
           hostPath:
             path: /app/data

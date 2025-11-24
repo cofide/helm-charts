@@ -1,0 +1,241 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Connect Configuration Schema",
+  "type": "object",
+  "properties": {
+    "connect": {
+      "type": "object",
+      "description": "Configuration settings for the Connect service.",
+      "properties": {
+        "urlBase": {
+          "type": "string",
+          "description": "The base URL for the Connect service."
+        },
+        "allowedOrigins": {
+          "type": "array",
+          "description": "List of allowed origins for cross-origin requests.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "insecureServerAddress": {
+          "type": "object",
+          "description": "Address for the insecure Connect server endpoint.",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            }
+          },
+          "required": ["host", "port"]
+        },
+        "adsServerAddress": {
+          "type": "object",
+          "description": "Address for the ADS server endpoint.",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            }
+          },
+          "required": ["host", "port"]
+        },
+        "spiffeEndpointSocket": {
+          "type": "string",
+          "description": "SPIFFE endpoint socket path/URL."
+        },
+        "s3UseOIDC": {
+          "type": "boolean",
+          "description": "Flag to determine if OIDC should be used for S3 access."
+        },
+        "awsRegion": {
+          "type": "string",
+          "description": "AWS region to use for S3."
+        },
+        "iamRoleARN": {
+          "type": "string",
+          "description": "IAM role ARN to assume for AWS access (if s3UseOIDC is true)."
+        },
+        "oidcProviderAudience": {
+          "type": "string",
+          "description": "Identifies an application that is registered with an OIDC provider (if s3UseOIDC is true)."
+        },
+        "s3TrustBundleStoreBucket": {
+          "type": "string",
+          "description": "S3 bucket name for storing trust bundles."
+        },
+        "connectPSATAudience": {
+          "type": "string",
+          "description": "Audience value to expect when using PSATs for Cofide SPIRE."
+        },
+        "trustDomain": {
+          "type": "string",
+          "description": "The trust domain of the Connect trust zone."
+        },
+        "valkeyAddress": {
+          "type": "string",
+          "description": "Address for the Valkey node."
+        },
+        "connectTrustBundleStoreURL": {
+          "type": "string",
+          "description": "URL for the Connect trust bundle store."
+        },
+        "sqlConnectionString": {
+          "type": "string",
+          "description": "Connection string for the SQL database."
+        },
+        "sqlRemoteSPIFFEID": {
+          "type": "string",
+          "description": "SPIFFE ID for the remote SQL server."
+        },
+        "telemetryEnabled": {
+          "type": "boolean",
+          "description": "Flag to enable/disable telemetry."
+        },
+        "authzPolicyEngine": {
+          "type": "string",
+          "description": "The authorization policy engine to use."
+        },
+        "initialRBAC": {
+          "type": "object",
+          "description": "Initial RBAC configuration to bootstrap the system.",
+          "properties": {
+            "version": {
+              "type": "integer",
+              "description": "Version of the initial RBAC configuration (bump this to trigger RBAC bootstrap on next restart, version 0 means it will be ignored)."
+            },
+            "roleBindings": {
+              "type": "array",
+              "description": "List of initial role bindings.",
+              "items": {
+                "type": "object",
+                "description": "A single role binding definition.",
+                "allOf": [
+                  {
+                    "properties": {
+                      "roleID": {
+                        "type": "string",
+                        "description": "ID of the role to bind"
+                      },
+                      "resourceType": {
+                        "type": "string",
+                        "description": "Type of resource to bind to"
+                      },
+                      "resourceID": {
+                        "type": "string",
+                        "description": "ID of resource to bind to"
+                      }
+                    },
+                    "required": ["roleID", "resourceType", "resourceID"]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "description": "User to bind to",
+                            "properties": {
+                              "subject": {
+                                "type": "string",
+                                "description": "JWT subject value to match for binding"
+                              }
+                            },
+                            "required": ["subject"]
+                          }
+                        },
+                        "required": ["user"]
+                      },
+                      {
+                        "properties": {
+                          "group": {
+                            "type": "object",
+                            "description": "Group to bind to",
+                            "properties": {
+                              "claimValue": {
+                                "type": "string",
+                                "description": "Value in JWT groups claim to match for binding"
+                              }
+                            },
+                            "required": ["claimValue"]
+                          }
+                        },
+                        "required": ["group"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": ["version", "roleBindings"]
+        },
+        "extraEnv": {
+          "type": "array",
+          "description": "Additional environment variables to pass to the connect api binary.",
+          "items": {
+            "type": "object",
+            "allOf": [
+              {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Environment variable name"
+                  }
+                },
+                "required": ["name"]
+              }
+            ],
+            "oneOf": [
+              {
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Simple string value to be set as environment variable"
+                  }
+                },
+                "required": ["value"]
+              },
+              {
+                "properties": {
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source of environment value as defined in https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#envvarsource-v1-core"
+                  }
+                },
+                "required": ["valueFrom"]
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "urlBase",
+        "allowedOrigins",
+        "insecureServerAddress",
+        "adsServerAddress",
+        "spiffeEndpointSocket",
+        "s3UseOIDC",
+        "awsRegion",
+        "iamRoleARN",
+        "oidcProviderAudience",
+        "s3TrustBundleStoreBucket",
+        "connectPSATAudience",
+        "trustDomain",
+        "valkeyAddress",
+        "connectTrustBundleStoreURL",
+        "sqlConnectionString",
+        "sqlRemoteSPIFFEID",
+        "telemetryEnabled",
+        "authzPolicyEngine",
+        "initialRBAC",
+        "extraEnv"
+      ]
+    }
+  },
+  "required": ["connect"]
+}
