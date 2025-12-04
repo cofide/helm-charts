@@ -51,8 +51,6 @@ connect:
   valkeyAddress: valkey.connect.svc.cluster.local:6379
   # URL trust bundle store is available at.
   connectTrustBundleStoreURL: ""
-  # If sqlRemoteSPIFFEID is empty mTLS isn't used
-  # sqlConnectionString could contain user creds
   # SQL connection string for SQLite or Postgres database. SQLite should only be used for non-production workloads.
   # A username/password can be included in this connection string to connect to databases that do not support mTLS.
   sqlConnectionString: ""
