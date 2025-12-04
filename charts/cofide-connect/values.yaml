@@ -2,41 +2,68 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/.
 replicaCount: 1
 
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/.
 image:
   registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
   repository: cofide/connect-api
   pullPolicy: Always
+  # Defaults to chart appVersion if not set.
   tag: ""
 
 connect:
+  # Base URL for envoy.
   urlBase: ""
+  # Allowed origins for CORS requests.
   allowedOrigins: []
+  # Host and port the API server listens on internally.
+  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for connect.{{ .Values.connect.urlBase }} and connect-agent.{{ .Values.connect.urlBase }} SNI hostname matches.
+  # Healthchecks are also served on this port.
   insecureServerAddress:
     host: ""
     port: 51106
+  # Host and port the Aggregated Discovery Service listens on internally (used by workload clusters to get federated services).
+  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for xds.{{ .Values.connect.urlBase }} SNI hostname matches.
   adsServerAddress:
     host: ""
     port: 18000
+  # Workload API exposed by in-cluster SPIRE.
   spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
+  # True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment.
   s3UseOIDC: true
+  # Region to set in the AWS config when obtaining credentials through OIDC.
   awsRegion: ""
+  # ARN of AWS role to assume when obtaining credentials through OIDC.
   iamRoleARN: ""
+  # Audience expected by the OIDC provider in AWS.
   oidcProviderAudience: ""
+  # Type of trust bundle store to use. Valid values: s3.
   trustBundleStoreBackend: "s3"
+  # Name of bucket to use as trust bundle store.
   trustBundleStoreBucket: ""
+  # Expected audience from OIDC token from Cofide SPIRE server in workload clusters.
   connectPSATAudience: ""
+  # Trust domain of in-cluster SPIRE server.
   trustDomain: ""
+  # Address of valkey instance (expected to be in-cluster as no auth is used).
   valkeyAddress: valkey.connect.svc.cluster.local:6379
+  # URL trust bundle store is available at.
   connectTrustBundleStoreURL: ""
+  # SQL connection string for SQLite or Postgres database. SQLite should only be used for non-production workloads.
+  # A username/password can be included in this connection string to connect to databases that do not support mTLS.
   sqlConnectionString: ""
+  # For databases that support mTLS this is the SPIFFE ID that Connect will expect to be presented.
   sqlRemoteSPIFFEID: ""
+  # Whether to enable the open telemetry metrics server - exposed on port 4317.
   telemetryEnabled: false
+  # Authz policy engine to use. Valid values: opa, none. "none" disables authz and is not suitable for production.
   authzPolicyEngine: "opa"
+  # Initial RBAC configuration to bootstrap the server with. The initial configuration can be changed later through the API.
   initialRBAC:
+    # Version of the initial RBAC configuration, >= 0. Will not be applied if 0 or at an equal or lower version to the last applied configuration.
+    # Bump this to re-apply the latest initial RBAC configuration, e.g. to get back in if you remove all admin access.
     version: 0
     # Initial role bindings to bootstrap the system with.
     # For example:
@@ -58,9 +85,12 @@ envoy:
   image: "envoyproxy/envoy:v1.33-latest"
   imagePullPolicy: Always
   auth:
+    # Issuer of the IdP in use.
     issuer: ""
+    # Name of secret in the same namespace containing the TLS private key and cert to be used with the domain Connect is exposed on.
+    # This certificate must be valid for connect.{{ .Values.connect.urlBase }}, connect-agent.{{ .Values.connect.urlBase }} and xds.{{ .Values.connect.urlBase }}.
     tlsSecretName: ""
-    # if empty, defaults to `["https://connect.{{ .Values.connect.urlBase }}"]`
+    # Audiences set in tokens from the IdP. If empty, defaults to `["https://connect.{{ .Values.connect.urlBase }}"]`
     audiences: []
   logLevel: "info"
   securityContext: {}
