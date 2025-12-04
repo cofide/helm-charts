@@ -13,7 +13,8 @@ data:
     aws_region: {{ .Values.connect.awsRegion }}
     iam_role_arn: {{ .Values.connect.iamRoleARN }}
     oidc_provider_audience: {{ .Values.connect.oidcProviderAudience }}
-    s3_trust_bundle_store_bucket: {{ .Values.connect.s3TrustBundleStoreBucket }}
+    trust_bundle_store_backend: {{ .Values.connect.trustBundleStoreBackend }}
+    trust_bundle_store_bucket: {{ .Values.connect.trustBundleStoreBucket }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
     valkey_address: {{ .Values.connect.valkeyAddress }}
