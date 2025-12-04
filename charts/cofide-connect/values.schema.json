@@ -64,9 +64,13 @@
           "type": "string",
           "description": "Identifies an application that is registered with an OIDC provider (if s3UseOIDC is true)."
         },
-        "s3TrustBundleStoreBucket": {
+	"trustBundleStoreBackend": {
+	  "type": "string",
+	  "description": "Backend type for trust bundle store. Valid options: s3"
+	},
+        "trustBundleStoreBucket": {
           "type": "string",
-          "description": "S3 bucket name for storing trust bundles."
+          "description": "Bucket name for storing trust bundles."
         },
         "connectPSATAudience": {
           "type": "string",
@@ -223,7 +227,7 @@
         "awsRegion",
         "iamRoleARN",
         "oidcProviderAudience",
-        "s3TrustBundleStoreBucket",
+        "trustBundleStoreBucket",
         "connectPSATAudience",
         "trustDomain",
         "valkeyAddress",
