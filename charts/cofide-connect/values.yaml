@@ -26,7 +26,8 @@ connect:
   awsRegion: ""
   iamRoleARN: ""
   oidcProviderAudience: ""
-  s3TrustBundleStoreBucket: ""
+  trustBundleStoreBackend: "s3"
+  trustBundleStoreBucket: ""
   connectPSATAudience: ""
   trustDomain: ""
   valkeyAddress: valkey.connect.svc.cluster.local:6379
