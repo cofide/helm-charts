@@ -145,8 +145,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.38.0
     created: "2025-12-04T16:19:04.392299861Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 27e0e01eafc9645b6d2aab034b25c6395448efd23f16646554b8cca7eed36ed8
     maintainers:
     - name: Cofide
@@ -159,8 +159,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.38.0
     created: "2025-12-04T13:13:46.410109622Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: cc44ae2ead41a0d712e38c7ea6ab8d96a5098d6d2d95f8da780b01716e533190
     maintainers:
     - name: Cofide
@@ -173,8 +173,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.38.0
     created: "2025-12-02T10:47:38.050953809Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 744fafb7fcc015ef0b6e748b487ef12a6489be9b6d025990460fb2ce02a35ae0
     maintainers:
     - name: Cofide
@@ -187,8 +187,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.36.0
     created: "2025-11-24T15:31:53.014093524Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 37db8a2d3f58c917965d0b731cabb3429bf5b0ce68528f0788301bd5229fe3e6
     maintainers:
     - name: Cofide
@@ -201,8 +201,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.36.0
     created: "2025-11-24T10:53:20.821397623Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: b89c3acc8c4552ab81f3059bda2c6ca64284430e1851f9d6a9e2ce4e75d3b811
     maintainers:
     - name: Cofide
@@ -215,8 +215,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.35.0
     created: "2025-11-14T14:57:47.678609175Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 14d0d8ce260313b839f1965ed8f9ae9ac83d63b4bbc1cd0805c490bf8e0d854a
     maintainers:
     - name: Cofide
@@ -229,8 +229,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.35.0
     created: "2025-11-14T11:28:44.715952462Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 7dfb215c7f096b5b16c394e7a9ccd1fc9796a490bd3045f9d65efbe4dc3c651b
     maintainers:
     - name: Cofide
@@ -243,8 +243,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.35.0
     created: "2025-09-23T13:19:45.117689521Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 3f91500a8050bd6e409eb372f50dc73e45923675723370087bc70cdcfc7b9d14
     maintainers:
     - name: Cofide
@@ -257,8 +257,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.30.2
     created: "2025-08-14T11:58:36.531066866Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: e98b765337a6b2da863ffe30c21ed7118af2c6112ea3e6dc84c52edcd7aaae45
     maintainers:
     - name: Cofide
@@ -271,8 +271,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.27.0
     created: "2025-07-07T19:43:13.667204214Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 2deab88f7b7abbfdc100939cb9a9d9ca6df4389c7090ed80000bb42b4c86c3d3
     maintainers:
     - name: Cofide
@@ -285,8 +285,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.27.0
     created: "2025-07-04T11:09:22.629901686Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 93eecf8754c3ef2c0e333d5030565b1a6542169ee9cef795ad83ad33b463a57d
     maintainers:
     - name: Cofide
@@ -299,8 +299,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.20.0
     created: "2025-06-05T09:19:35.437265932Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 8ac0012118bbba667f19d899c95e9b9e278225cbbdea559d48eaad90d9a20b22
     name: cofide-connect
     type: application
@@ -310,8 +310,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.20.0
     created: "2025-05-24T14:25:06.319416012Z"
-    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
-      cluster
+    description: A Helm chart to deploy the Cofide Connect server to a 
+      Kubernetes cluster
     digest: 719fdf845e879e0f6e765028ed19543482ed7020a982abcfddde73717e250160
     name: cofide-connect
     type: application
@@ -372,7 +372,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.5.0
     created: "2025-12-02T10:47:38.257832646Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 0962d4d2a0b448dd3e366fc0a55ea5297faa8feeb874a75f0074616afde43ef3
     maintainers:
     - name: Cofide
@@ -385,7 +386,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.4.0
     created: "2025-09-22T17:25:02.675949896Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 47daf9f42615f1242bcc2c34893dc5b558e5adee330db2f54469b44b58493d9d
     maintainers:
     - name: Cofide
@@ -398,7 +400,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.3.0
     created: "2025-08-18T13:22:10.916340689Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 63df7dd5b177e1ae5be8cc620f1346c664282bd9f37a853ae1c8ce113e6a9cbe
     maintainers:
     - name: Cofide
@@ -411,7 +414,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.2.4
     created: "2025-08-14T11:58:36.705885066Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 59258dceb27237d148f3d54e924fe47355c9a2b410321ea2927f1f031f36079e
     maintainers:
     - name: Cofide
@@ -424,7 +428,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.2.2
     created: "2025-07-04T11:09:23.088292174Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 91ed1754df80e0e05dd0c73a3cd2895e4d54645787c09e48df2d98b95be24fc9
     maintainers:
     - name: Cofide
@@ -437,7 +442,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.2.2
     created: "2025-06-19T08:45:31.853732806Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 13c5f368d981de663475aa196b2d554f3c301338547abf3b1d397274ea3d257a
     name: spiffe-enable
     type: application
@@ -447,7 +453,8 @@ entries:
   - apiVersion: v2
     appVersion: v0.2.1
     created: "2025-06-06T12:44:38.9013996Z"
-    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    description: Helm chart for the spiffe-enable admission webhook for 
+      Kubernetes
     digest: 27773179b51febed61bb39f736e55e8d21e22216336df25a9362135bb6e55852
     name: spiffe-enable
     type: application
@@ -466,9 +473,11 @@ entries:
       name: step-certificates
       repository: https://smallstep.github.io/helm-charts/
       version: 1.27.4
-    description: sshd signed host certificates using SPIFFE for trust and step CA
+    description: sshd signed host certificates using SPIFFE for trust and step 
+      CA
     digest: f47e1d2d19461d0bb3b05ec5da0b520c5db297b16c3eb9b6535aafdc8f7b99ce
-    home: https://github.com/spiffe/helm-charts-hardened/tree/main/charts/spiffe-step-ssh
+    home: 
+      https://github.com/spiffe/helm-charts-hardened/tree/main/charts/spiffe-step-ssh
     icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
     keywords:
     - spiffe
@@ -486,6 +495,55 @@ entries:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spiffe-step-ssh-0.1.0/spiffe-step-ssh-0.1.0.tgz
     version: 0.1.0
   spire:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/license: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.12.4
+    created: "2025-12-05T10:57:56.914195942Z"
+    dependencies:
+    - name: spire-lib
+      repository: file://./charts/spire-lib
+      version: 0.1.0
+    - condition: spire-server.enabled
+      name: spire-server
+      repository: file://./charts/spire-server
+      version: 0.1.0
+    - condition: spire-agent.enabled
+      name: spire-agent
+      repository: file://./charts/spire-agent
+      version: 0.1.0
+    - condition: spiffe-csi-driver.enabled
+      name: spiffe-csi-driver
+      repository: file://./charts/spiffe-csi-driver
+      version: 0.1.0
+    - condition: spiffe-oidc-discovery-provider.enabled
+      name: spiffe-oidc-discovery-provider
+      repository: file://./charts/spiffe-oidc-discovery-provider
+      version: 0.1.0
+    description: 'A Helm chart for deploying the complete Cofide SPIRE stack including:
+      spire-server, spire-agent, spiffe-csi-driver, and spiffe-oidc-discovery-provider. '
+    digest: 30a9dc6dfa7e3d8c834802adb781fe4be0b1164622a592f5d977803e7a1a209c
+    home: 
+      https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
+    icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
+    keywords:
+    - spiffe
+    - spire
+    - spire-server
+    - spire-agent
+    - oidc
+    kubeVersion: '>=1.21.0-0'
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: spire
+    sources:
+    - https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
+    type: application
+    urls:
+    - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-0.26.0-cofide.5/spire-0.26.0-cofide.5.tgz
+    version: 0.26.0-cofide.5
   - annotations:
       artifacthub.io/category: security
       artifacthub.io/license: Apache-2.0
@@ -515,7 +573,8 @@ entries:
     description: 'A Helm chart for deploying the complete Cofide SPIRE stack including:
       spire-server, spire-agent, spiffe-csi-driver, and spiffe-oidc-discovery-provider. '
     digest: fcf4d4833716e963a1eae6daaa239bb789695dd4934bcbf6303bdca7d8bd84a7
-    home: https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
+    home: 
+      https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
     icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
     keywords:
     - spiffe
@@ -563,7 +622,8 @@ entries:
     description: 'A Helm chart for deploying the complete Cofide SPIRE stack including:
       spire-server, spire-agent, spiffe-csi-driver, and spiffe-oidc-discovery-provider. '
     digest: 623f8da09a8059dfb7d0c6715d38e5ab6c72eb76ce3b59efbb1363cebb9ba73e
-    home: https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
+    home: 
+      https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
     icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
     keywords:
     - spiffe
@@ -611,7 +671,8 @@ entries:
     description: 'A Helm chart for deploying the complete Cofide SPIRE stack including:
       spire-server, spire-agent, spiffe-csi-driver, and spiffe-oidc-discovery-provider. '
     digest: 725f266cbeffbb5dc93f3310e52bd44e514bf2bc4a4e742d0e806dc7def19c85
-    home: https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
+    home: 
+      https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
     icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
     keywords:
     - spiffe
@@ -659,7 +720,8 @@ entries:
     description: 'A Helm chart for deploying the complete Cofide SPIRE stack including:
       spire-server, spire-agent, spiffe-csi-driver, and spiffe-oidc-discovery-provider. '
     digest: 9877739a5e79cdfa4669e0b36c1e5e2358bfed1d494446ee8a953b6b1d8fd119
-    home: https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
+    home: 
+      https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire
     icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
     keywords:
     - spiffe
@@ -766,7 +828,8 @@ entries:
     created: "2025-08-14T10:45:17.426829853Z"
     description: 'A Helm chart for deploying the Spire CRDS '
     digest: 7644591653403f60031c215cdabec5647f6f8e7603f297a27f3e08d1c4e60b50
-    home: https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire-crds
+    home: 
+      https://github.com/cofide/spiffe-helm-charts-hardened/tree/main/charts/spire-crds
     icon: https://spiffe.io/img/logos/spire/icon/color/spire-icon-color.png
     keywords:
     - spire-crds
