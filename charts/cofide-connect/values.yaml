@@ -47,8 +47,6 @@ connect:
   connectPSATAudience: ""
   # Trust domain of in-cluster SPIRE server.
   trustDomain: ""
-  # Address of valkey instance (expected to be in-cluster as no auth is used).
-  valkeyAddress: valkey.connect.svc.cluster.local:6379
   # URL trust bundle store is available at.
   connectTrustBundleStoreURL: ""
   # SQL connection string for SQLite or Postgres database. SQLite should only be used for non-production workloads.

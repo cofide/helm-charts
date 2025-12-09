@@ -17,7 +17,6 @@ data:
     trust_bundle_store_bucket: {{ .Values.connect.trustBundleStoreBucket }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
-    valkey_address: {{ .Values.connect.valkeyAddress }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
     sql_connection_string: {{ .Values.connect.sqlConnectionString }}
     sql_remote_spiffe_id: {{ .Values.connect.sqlRemoteSPIFFEID }}
