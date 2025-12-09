@@ -81,10 +81,6 @@
           "type": "string",
           "description": "The trust domain of the Connect trust zone."
         },
-        "valkeyAddress": {
-          "type": "string",
-          "description": "Address for the Valkey node."
-        },
         "connectTrustBundleStoreURL": {
           "type": "string",
           "description": "URL for the Connect trust bundle store."
@@ -231,7 +227,6 @@
         "trustBundleStoreBucket",
         "connectPSATAudience",
         "trustDomain",
-        "valkeyAddress",
         "connectTrustBundleStoreURL",
         "sqlConnectionString",
         "sqlRemoteSPIFFEID",
