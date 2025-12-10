@@ -48,30 +48,100 @@
           "type": "string",
           "description": "SPIFFE endpoint socket path/URL."
         },
-        "s3UseOIDC": {
-          "type": "boolean",
-          "description": "Flag to determine if OIDC should be used for S3 access."
-        },
-        "awsRegion": {
-          "type": "string",
-          "description": "AWS region to use for S3."
-        },
-        "iamRoleARN": {
-          "type": "string",
-          "description": "IAM role ARN to assume for AWS access (if s3UseOIDC is true)."
-        },
-        "oidcProviderAudience": {
-          "type": "string",
-          "description": "Identifies an application that is registered with an OIDC provider (if s3UseOIDC is true)."
-        },
-	"trustBundleStoreBackend": {
-	  "type": "string",
-	  "description": "Backend type for trust bundle store.",
-	  "enum": ["s3"]
-	},
-        "trustBundleStoreBucket": {
-          "type": "string",
-          "description": "Bucket name for storing trust bundles."
+        "trustBundleStoreBackend": {
+          "type": "object",
+          "description": "Configuration of the trust bundle store backend to use. Only one backend may be enabled.",
+          "anyOf": [
+            {
+              "properties": {
+                "s3": {
+                  "type": "object",
+                  "description": "Configuration for S3 trust bundle store backend.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "True to enable the S3 backend."
+                    },
+                    "bucket": {
+                      "type": "string",
+                      "description": "Name of bucket to use as trust bundle store."
+                    },
+                    "oidc": {
+                      "type": "object",
+                      "description": "Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "description": "True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment."
+                        },
+                        "awsRegion": {
+                          "type": "string",
+                          "description": "Region to set in the AWS config when obtaining credentials through OIDC."
+                        },
+                        "iamRoleARN": {
+                          "type": "string",
+                          "description": "ARN of AWS role to assume when obtaining credentials through OIDC."
+                        },
+                        "audience": {
+                          "type": "string",
+                          "description": "Audience expected by the OIDC provider in AWS."
+                        }
+                      },
+                      "required": [
+                        "enabled",
+                        "awsRegion",
+                        "iamRoleARN",
+                        "audience"
+                      ]
+                    }
+                  },
+                  "required": ["enabled", "bucket", "oidc"]
+                }
+              }
+            },
+            {
+              "properties": {
+                "gcs": {
+                  "type": "object",
+                  "description": "Configuration for GCS trust bundle store backend.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "True to enable the GCS backend."
+                    },
+                    "bucket": {
+                      "type": "string",
+                      "description": "Name of bucket to use as trust bundle store."
+                    },
+                    "oidc": {
+                      "type": "object",
+                      "description": "Configuration to use OIDC to access GCS, exchanging the Connect server's SVID for GCP credentials.",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "description": "True to use OIDC with the server's SVID to get temporary credentials to access GCS using OIDC, otherwise the GCP credentials will be sourced from the environment."
+                        },
+                        "workloadIdentityProvider": {
+                          "type": "string",
+                          "description": "Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC. Must be in the form projects/PROJECT_ID/locations/global/workloadIdentityPools/WORKLOAD_IDENTITY_POOL_NAME/providers/WORKLOAD_IDENTITY_PROVIDER_NAME."
+                        },
+                        "audience": {
+                          "type": "string",
+                          "description": "Audience expected by the OIDC provider in GCP."
+                        }
+                      },
+                      "required": [
+                        "enabled",
+                        "workloadIdentityProvider",
+                        "audience"
+                      ]
+                    }
+                  },
+                  "required": ["enabled", "bucket", "oidc"]
+                }
+              }
+            }
+          ]
         },
         "connectPSATAudience": {
           "type": "string",
@@ -220,11 +290,7 @@
         "insecureServerAddress",
         "adsServerAddress",
         "spiffeEndpointSocket",
-        "s3UseOIDC",
-        "awsRegion",
-        "iamRoleARN",
-        "oidcProviderAudience",
-        "trustBundleStoreBucket",
+        "trustBundleStoreBackend",
         "connectPSATAudience",
         "trustDomain",
         "connectTrustBundleStoreURL",

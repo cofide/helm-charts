@@ -31,18 +31,39 @@ connect:
     port: 18000
   # Workload API exposed by in-cluster SPIRE.
   spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
-  # True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment.
-  s3UseOIDC: true
-  # Region to set in the AWS config when obtaining credentials through OIDC.
-  awsRegion: ""
-  # ARN of AWS role to assume when obtaining credentials through OIDC.
-  iamRoleARN: ""
-  # Audience expected by the OIDC provider in AWS.
-  oidcProviderAudience: ""
-  # Type of trust bundle store to use. Valid values: s3.
-  trustBundleStoreBackend: "s3"
-  # Name of bucket to use as trust bundle store.
-  trustBundleStoreBucket: ""
+  # Configuration of the trust bundle store backend to use. Only one backend may be enabled.
+  trustBundleStoreBackend:
+    # Configuration for S3 trust bundle store backend.
+    s3:
+      # True to enable the S3 backend.
+      enabled: true
+      # Name of bucket to use as trust bundle store.
+      bucket: ""
+      # Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.
+      oidc:
+        # True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment.
+        enabled: true
+        # Region to set in the AWS config when obtaining credentials through OIDC.
+        awsRegion: ""
+        # ARN of AWS role to assume when obtaining credentials through OIDC.
+        iamRoleARN: ""
+        # Audience expected by the OIDC provider in AWS.
+        audience: ""
+    # Configuration for GCS trust bundle store backend.
+    gcs:
+      # True to enable the GCS backend.
+      enabled: false
+      # Name of bucket to use as trust bundle store.
+      bucket: ""
+      # Configuration to use OIDC to access GCS, exchanging the Connect server's SVID for GCP credentials.
+      oidc:
+        # True to use OIDC with the server's SVID to get temporary credentials to access GCS using OIDC, otherwise the GCP credentials will be sourced from the environment.
+        enabled: true
+        # Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC.
+        # Must be in the form projects/PROJECT_ID/locations/global/workloadIdentityPools/WORKLOAD_IDENTITY_POOL_NAME/providers/WORKLOAD_IDENTITY_PROVIDER_NAME.
+        workloadIdentityProvider: ""
+        # Audience expected by the OIDC provider in GCP.
+        audience: ""
   # Expected audience from OIDC token from Cofide SPIRE server in workload clusters.
   connectPSATAudience: ""
   # Trust domain of in-cluster SPIRE server.

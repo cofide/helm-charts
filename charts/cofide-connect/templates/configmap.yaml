@@ -9,12 +9,30 @@ data:
     insecure_server_address: {{ .Values.connect.insecureServerAddress.host }}:{{ .Values.connect.insecureServerAddress.port }}
     ads_server_address: {{ .Values.connect.adsServerAddress.host }}:{{ .Values.connect.adsServerAddress.port }}
     spiffe_endpoint_socket: {{ .Values.connect.spiffeEndpointSocket }}
-    s3_use_oidc: {{ .Values.connect.s3UseOIDC | toString }}
-    aws_region: {{ .Values.connect.awsRegion }}
-    iam_role_arn: {{ .Values.connect.iamRoleARN }}
-    oidc_provider_audience: {{ .Values.connect.oidcProviderAudience }}
-    trust_bundle_store_backend: {{ .Values.connect.trustBundleStoreBackend }}
-    trust_bundle_store_bucket: {{ .Values.connect.trustBundleStoreBucket }}
+    trust_bundle_store_backend:
+      {{- with .Values.connect.trustBundleStoreBackend.s3 }}
+      s3:
+        enabled: {{ .enabled }}
+        bucket: {{ .bucket }}
+        {{- with .oidc }}
+        oidc:
+          enabled: {{ .enabled }}
+          aws_region: {{ .awsRegion }}
+          iam_role_arn: {{ .iamRoleARN }}
+          audience: {{ .audience }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.connect.trustBundleStoreBackend.gcs }}
+      gcs:
+        enabled: {{ .enabled }}
+        bucket: {{ .bucket }}
+        {{- with .oidc }}
+        oidc:
+          enabled: {{ .enabled }}
+          workload_identity_provider: {{ .workloadIdentityProvider }}
+          audience: {{ .audience }}
+        {{- end }}
+      {{- end }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
