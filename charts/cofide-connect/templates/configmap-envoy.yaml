@@ -150,7 +150,7 @@ data:
                                 {{- include "cofide-connect.envoy.auth.audiences" . | nindent 32 }}
                               remote_jwks:
                                 http_uri:
-                                  uri: {{ .Values.envoy.auth.issuer }}/.well-known/jwks.json
+                                  uri: {{ .Values.envoy.auth.jwksUri }}
                                   cluster: jwks_cluster
                                   timeout: 30s
                               claim_to_headers:
@@ -325,17 +325,23 @@ data:
                   - endpoint:
                       address:
                         socket_address:
-                          address: {{ (urlParse .Values.envoy.auth.issuer).host }}
+                          address: {{ (urlParse .Values.envoy.auth.jwksUri).host }}
+                          {{- if eq (urlParse .Values.envoy.auth.jwksUri).scheme "https" }}
                           port_value: 443
+                          {{- else }}
+                          port_value: 80
+                          {{- end }}
+          {{- if eq (urlParse .Values.envoy.auth.jwksUri).scheme "https" }}
           transport_socket:
             name: envoy.transport_sockets.tls
             typed_config:
               '@type': type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
-              sni: {{ (urlParse .Values.envoy.auth.issuer).host }}
+              sni: {{ (urlParse .Values.envoy.auth.jwksUri).host }}
               common_tls_context:
                 tls_params:
                   tls_minimum_protocol_version: TLSv1_3
                   tls_maximum_protocol_version: TLSv1_3
+          {{- end }}
     admin:
       access_log_path: /dev/stdout
       address:

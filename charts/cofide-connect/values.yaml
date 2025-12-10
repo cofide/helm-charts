@@ -106,6 +106,8 @@ envoy:
   auth:
     # Issuer of the IdP in use.
     issuer: ""
+    # JWKS URI of the IdP in use. Only http and https schemes are supported. Setting custom port is not supported.
+    jwksUri: ""
     # Name of secret in the same namespace containing the TLS private key and cert to be used with the domain Connect is exposed on.
     # This certificate must be valid for connect.{{ .Values.connect.urlBase }}, connect-agent.{{ .Values.connect.urlBase }} and xds.{{ .Values.connect.urlBase }}.
     tlsSecretName: ""
