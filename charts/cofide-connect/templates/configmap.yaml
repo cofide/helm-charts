@@ -33,6 +33,19 @@ data:
           audience: {{ .audience }}
         {{- end }}
       {{- end }}
+    datastore:
+      {{- with .Values.connect.datastore.cloudsql }}
+      cloudsql:
+        enabled: {{ .enabled }}
+        instance: {{ .instance }}
+        database_name: {{ .databaseName }}
+        {{- with .oidc }}
+        oidc:
+          workload_identity_provider: {{ .workloadIdentityProvider }}
+          audience: {{ .audience }}
+          service_account_name: {{ .serviceAccountName }}
+        {{- end }}
+      {{- end }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}

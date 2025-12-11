@@ -64,6 +64,25 @@ connect:
         workloadIdentityProvider: ""
         # Audience expected by the OIDC provider in GCP.
         audience: ""
+  # Configuration of the datastore used by Connect
+  datastore:
+    cloudsql:
+      # True to enable Google CloudSQL as the datastore
+      enabled: false
+      # CloudSQL database instance to use
+      # Format project_name:region:instance_name
+      instance: ""
+      # Name of the Connect database
+      databaseName: "connect-db"
+      # Configuration to use OIDC to access Google CloudSQL, exchanging server's SVID for a SA impersonation token 
+      oidc:
+        # Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC.
+        # Must be in the form projects/PROJECT_ID/locations/global/workloadIdentityPools/WORKLOAD_IDENTITY_POOL_NAME/providers/WORKLOAD_IDENTITY_PROVIDER_NAME.
+        workloadIdentityProvider: ""
+        # Audience expected by the OIDC provider in GCP
+        audience: ""
+        # Name of service account with access privileges to the Connect database in CloudSQL
+        serviceAccountName: ""
   # Expected audience from OIDC token from Cofide SPIRE server in workload clusters.
   connectPSATAudience: ""
   # Trust domain of in-cluster SPIRE server.
