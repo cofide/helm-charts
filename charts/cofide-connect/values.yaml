@@ -66,7 +66,7 @@ connect:
         audience: ""
   # Configuration of the datastore used by Connect
   datastore:
-    cloudsql:
+    cloudSQL:
       # True to enable Google CloudSQL as the datastore
       enabled: false
       # CloudSQL database instance to use
