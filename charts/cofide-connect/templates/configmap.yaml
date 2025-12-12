@@ -37,13 +37,13 @@ data:
       {{- with .Values.connect.datastore.cloudsql }}
       cloudsql:
         enabled: {{ .enabled }}
-        instance: {{ .instance }}
-        database_name: {{ .databaseName }}
+        instance: {{ .instance | quote }}
+        database_name: {{ .databaseName | quote }}
         {{- with .oidc }}
         oidc:
-          workload_identity_provider: {{ .workloadIdentityProvider }}
-          audience: {{ .audience }}
-          service_account_name: {{ .serviceAccountName }}
+          workload_identity_provider: {{ .workloadIdentityProvider | quote }}
+          audience: {{ .audience | quote }}
+          service_account_name: {{ .serviceAccountName | quote }}
         {{- end }}
       {{- end }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
