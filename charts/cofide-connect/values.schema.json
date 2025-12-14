@@ -157,7 +157,7 @@
                 },
                 "instance": {
                   "type": "string",
-                  "description": "CloudSQL database instance. Format: project_name:region:instance_name",
+                  "description": "CloudSQL database instance. Format: project_name:region:instance_name"
                 },
                 "databaseName": {
                   "type": "string",
@@ -170,7 +170,7 @@
                   "properties": {
                     "workloadIdentityProvider": {
                       "type": "string",
-                      "description": "Fully qualified identifier of GCP workload identity provider.",
+                      "description": "Fully qualified identifier of GCP workload identity provider."
                     },
                     "audience": {
                       "type": "string",
