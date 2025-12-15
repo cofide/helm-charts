@@ -33,9 +33,8 @@ data:
           audience: {{ .audience }}
         {{- end }}
       {{- end }}
-    {{- if eq (.enabled | toString) "true" }} 
     datastore:
-      {{- with .Values.connect.datastore.cloudsql }}
+      {{- with .Values.connect.datastore.cloudSQL }}
       cloudsql:
         enabled: {{ .enabled }}
         instance: {{ .instance | quote }}
@@ -47,7 +46,6 @@ data:
           service_account_name: {{ .serviceAccountName | quote }}
         {{- end }}
       {{- end }}
-    {{- end }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
