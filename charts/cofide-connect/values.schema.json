@@ -143,6 +143,49 @@
             }
           ]
         },
+	"datastore": {
+	  "type": "object",
+	  "description": "Configuration of the datastore used by Connect",
+	  "properties": {
+	    "cloudSQL": {
+	      "type": "object",
+	      "description": "Google CloudSQL configuration",
+	      "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "True to enable Google CloudSQL as the datastore"
+                },
+                "instance": {
+                  "type": "string",
+                  "description": "CloudSQL database instance. Format: project_name:region:instance_name"
+                },
+                "databaseName": {
+                  "type": "string",
+                  "description": "Name of the Connect database",
+                  "minLength": 1
+                },
+	        "oidc": {
+                  "type": "object",
+                  "description": "Configuration to use OIDC to access Google CloudSQL",
+                  "properties": {
+                    "workloadIdentityProvider": {
+                      "type": "string",
+                      "description": "Fully qualified identifier of GCP workload identity provider."
+                    },
+                    "audience": {
+                      "type": "string",
+                      "description": "Audience expected by the OIDC provider in GCP"
+                    },
+                    "serviceAccountName": {
+                      "type": "string",
+                      "description": "Name of service account with access privileges to the Connect database"
+                    }
+                  }
+	        }
+	      }
+	    }
+          }
+	},
         "connectPSATAudience": {
           "type": "string",
           "description": "Audience value to expect when using PSATs for Cofide SPIRE."
