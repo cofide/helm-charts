@@ -66,6 +66,14 @@ connect:
         audience: ""
   # Configuration of the datastore used by Connect
   datastore:
+    sqlConnectionString:
+      # True to enable using a SQL connection string to connect to the datastore
+      enabled: true
+      # SQL connection string for SQLite or Postgres database. SQLite should only be used for non-production workloads.
+      # A username/password can be included in this connection string to connect to databases that do not support mTLS.
+      connectionString: ""
+      # For databases that support mTLS this is the SPIFFE ID that Connect will expect to be presented
+      remoteSPIFFEID: ""
     cloudSQL:
       # True to enable Google CloudSQL as the datastore
       enabled: false
@@ -89,11 +97,6 @@ connect:
   trustDomain: ""
   # URL trust bundle store is available at.
   connectTrustBundleStoreURL: ""
-  # SQL connection string for SQLite or Postgres database. SQLite should only be used for non-production workloads.
-  # A username/password can be included in this connection string to connect to databases that do not support mTLS.
-  sqlConnectionString: ""
-  # For databases that support mTLS this is the SPIFFE ID that Connect will expect to be presented.
-  sqlRemoteSPIFFEID: ""
   # Whether to enable the open telemetry metrics server - exposed on port 4317.
   telemetryEnabled: false
   # Authz policy engine to use. Valid values: opa, none. "none" disables authz and is not suitable for production.

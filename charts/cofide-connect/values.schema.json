@@ -143,14 +143,33 @@
             }
           ]
         },
-	"datastore": {
-	  "type": "object",
-	  "description": "Configuration of the datastore used by Connect",
-	  "properties": {
-	    "cloudSQL": {
-	      "type": "object",
-	      "description": "Google CloudSQL configuration",
-	      "properties": {
+        "datastore": {
+          "type": "object",
+          "description": "Configuration of the datastore used by Connect",
+          "properties": {
+            "sqlConnectionString": {
+              "type": "object",
+              "description": "SQL connection string configuration",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "True to enable SQL connection string datastore connection"
+                },
+                "connectionString": {
+                  "type": "string",
+                  "description": "Connection string for the SQL database."
+                },
+                "remoteSPIFFEID": {
+                  "type": "string",
+                  "description": "SPIFFE ID for the remote SQL server."
+                }
+              },
+              "required": ["enabled", "connectionString", "remoteSPIFFEID"]
+            },
+            "cloudSQL": {
+              "type": "object",
+              "description": "Google CloudSQL configuration",
+              "properties": {
                 "enabled": {
                   "type": "boolean",
                   "description": "True to enable Google CloudSQL as the datastore"
@@ -164,7 +183,7 @@
                   "description": "Name of the Connect database",
                   "minLength": 1
                 },
-	        "oidc": {
+                "oidc": {
                   "type": "object",
                   "description": "Configuration to use OIDC to access Google CloudSQL",
                   "properties": {
@@ -180,12 +199,15 @@
                       "type": "string",
                       "description": "Name of service account with access privileges to the Connect database"
                     }
-                  }
-	        }
-	      }
-	    }
-          }
-	},
+                  },
+                  "required": ["workloadIdentityProvider", "audience", "serviceAccountName"]
+                }
+              },
+              "required": ["enabled", "instance", "databaseName", "oidc"]
+            }
+          },
+          "required": ["sqlConnectionString", "cloudSQL"]
+        },
         "connectPSATAudience": {
           "type": "string",
           "description": "Audience value to expect when using PSATs for Cofide SPIRE."
@@ -197,14 +219,6 @@
         "connectTrustBundleStoreURL": {
           "type": "string",
           "description": "URL for the Connect trust bundle store."
-        },
-        "sqlConnectionString": {
-          "type": "string",
-          "description": "Connection string for the SQL database."
-        },
-        "sqlRemoteSPIFFEID": {
-          "type": "string",
-          "description": "SPIFFE ID for the remote SQL server."
         },
         "telemetryEnabled": {
           "type": "boolean",
@@ -334,11 +348,10 @@
         "adsServerAddress",
         "spiffeEndpointSocket",
         "trustBundleStoreBackend",
+        "datastore",
         "connectPSATAudience",
         "trustDomain",
         "connectTrustBundleStoreURL",
-        "sqlConnectionString",
-        "sqlRemoteSPIFFEID",
         "telemetryEnabled",
         "authzPolicyEngine",
         "initialRBAC",
