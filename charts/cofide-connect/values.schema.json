@@ -183,6 +183,10 @@
                   "description": "Name of the Connect database",
                   "minLength": 1
                 },
+                "pscEnabled": {
+                  "type": "boolean",
+                  "description": "Whether to use Private Service Connect to connect to the CloudSQL instance"
+                },
                 "oidc": {
                   "type": "object",
                   "description": "Configuration to use OIDC to access Google CloudSQL",
@@ -203,7 +207,7 @@
                   "required": ["workloadIdentityProvider", "audience", "serviceAccountName"]
                 }
               },
-              "required": ["enabled", "instance", "databaseName", "oidc"]
+              "required": ["enabled", "instance", "databaseName", "pscEnabled", "oidc"]
             }
           },
           "required": ["sqlConnectionString", "cloudSQL"]
