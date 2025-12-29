@@ -325,11 +325,22 @@ data:
                   - endpoint:
                       address:
                         socket_address:
-                          address: {{ (urlParse .Values.envoy.auth.jwksUri).host }}
+                          {{- $parsedHost := (urlParse .Values.envoy.auth.jwksUri).host }}
+                          {{- if contains "]:" $parsedHost }}
+                            {{- $hostPort := $parsedHost | splitList "]:" }}
+                          address: "{{ $hostPort | first }}]"
+                          port_value: {{ $hostPort | last }}
+                          {{- else if and (not (contains "[" $parsedHost)) (contains ":" $parsedHost) }}
+                            {{- $hostPort := $parsedHost | splitList ":" }}
+                          address: "{{ $hostPort | first }}"
+                          port_value: {{ $hostPort | last }}
+                          {{- else }}
+                          address: "{{ $parsedHost }}"
                           {{- if eq (urlParse .Values.envoy.auth.jwksUri).scheme "https" }}
                           port_value: 443
                           {{- else }}
                           port_value: 80
+                          {{- end }}
                           {{- end }}
           {{- if eq (urlParse .Values.envoy.auth.jwksUri).scheme "https" }}
           transport_socket:
