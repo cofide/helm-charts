@@ -1,0 +1,52 @@
+# Default values for cofide-connect-ui.
+
+replicaCount: 1
+
+# Container image configuration. Use `repository` and `tag` to point at the image
+# to deploy. `pullPolicy` controls the image pull behaviour.
+image:
+  repository: 010438484483.dkr.ecr.eu-west-1.amazonaws.com/cofide/connect-ui
+  # Defaults to chart appVersion if not set.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# Override chart name
+nameOverride: ""
+fullnameOverride: ""
+
+# Service configuration
+service:
+  type: LoadBalancer
+  annotations: {}
+  port: 8443
+
+# Pod-level security context
+securityContext:
+  fsGroup: 65532
+
+resources: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Extra environment variables to pass to the UI container
+env: {}
+
+# UI-specific configuration consumed by templates and the running app
+ui:
+  hostname: ""
+  connectUrl: ""
+  oauth:
+    clientId: ""
+    issuer: ""
+
+# Envoy sidecar config used to proxy traffic to the UI
+envoy:
+  image:
+    repository: envoyproxy/envoy
+    tag: v1.33-latest
+    pullPolicy: IfNotPresent
+  configMapName: connect-ui-envoy-config
+  tlsSecretName: envoy-tls
+  resources: {}
