@@ -25,3 +25,13 @@ rules:
     - federatedservices/finalizers
     - federatedservices/status
     verbs: ["*"]
+  {{- if eq (.Values.agent.env.MANAGEMENT_ZONE | toString) "true" }}
+  - apiGroups:
+      - tzaas.cofide.io
+    resources:
+      - trustzoneservers
+    verbs:
+      - get
+      - create
+      - update
+  {{- end }}
