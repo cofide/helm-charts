@@ -22,7 +22,9 @@ runs:
         mkdir -p temp-indexes
 
         # Download index from Cofide SPIRE Helm charts
-        curl --fail -L -o temp-indexes/spiffe-helm-charts-hardened-index.yaml \
+        curl --fail -L \
+          -H 'Cache-Control: no-cache' \
+          -o temp-indexes/spiffe-helm-charts-hardened-index.yaml \
           https://cofide.github.io/spiffe-helm-charts-hardened/index.yaml
 
     - name: Install ruamel.yaml
