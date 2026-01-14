@@ -45,6 +45,7 @@ data:
         enabled: {{ .enabled }}
         instance: {{ .instance | quote }}
         database_name: {{ .databaseName | quote }}
+        psc_enabled: {{ .pscEnabled }}
         {{- with .oidc }}
         oidc:
           workload_identity_provider: {{ .workloadIdentityProvider | quote }}

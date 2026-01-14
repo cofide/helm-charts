@@ -82,6 +82,8 @@ connect:
       instance: ""
       # Name of the Connect database
       databaseName: "connect-db"
+      # Whether to use Private Service Connect to connect to the database instance
+      pscEnabled: false
       # Configuration to use OIDC to access Google CloudSQL, exchanging server's SVID for a SA impersonation token 
       oidc:
         # Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC.
