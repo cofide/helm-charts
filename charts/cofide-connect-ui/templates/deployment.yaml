@@ -1,0 +1,111 @@
+{{- if not .Values.ui.hostname -}}
+{{- fail "A value for .Values.ui.hostname is required" -}}
+{{- end -}}
+{{- if not .Values.ui.connectUrl -}}
+{{- fail "A value for .Values.ui.connectUrl is required" -}}
+{{- end -}}
+{{- if not .Values.ui.oauth.clientId -}}
+{{- fail "A value for .Values.ui.oauth.clientId is required" -}}
+{{- end -}}
+{{- if not .Values.ui.oauth.issuer -}}
+{{- fail "A value for .Values.ui.oauth.issuer is required" -}}
+{{- end -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cofide-connect-ui.fullname" . }}
+  labels:
+    {{- include "cofide-connect-ui.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "cofide-connect-ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "cofide-connect-ui.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
+        - name: envoy-config
+          configMap:
+            name: {{ .Values.envoy.configMapName }}
+        - name: envoy-tls
+          secret:
+            secretName: {{ .Values.envoy.tlsSecretName }}
+      containers:
+        - name: envoy-sidecar
+          image: "{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}"
+          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
+          command: ["envoy"]
+          args: ["-c", "/etc/envoy/envoy.yaml", "--service-node", "$(POD_NAME)", "--service-cluster", "$(POD_NAMESPACE)"]
+          ports:
+            - name: https
+              containerPort: 8443
+            - name: admin
+              containerPort: 9901
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+            - name: envoy-tls
+              mountPath: /etc/envoy/tls
+              readOnly: true
+          {{- with .Values.envoy.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        - name: cofide-connect-ui
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: VITE_OAUTH_ISSUER
+              value: "{{ .Values.ui.oauth.issuer }}"
+            - name: VITE_OAUTH_CLIENT_ID
+              value: "{{ .Values.ui.oauth.clientId }}"
+            - name: VITE_APP_URL
+              value: "https://{{ .Values.ui.hostname }}{{ if ne (int .Values.service.port) 443 }}:{{ .Values.service.port }}{{ end }}"
+            - name: VITE_CONNECT_URL
+              value: "{{ .Values.ui.connectUrl }}"
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
