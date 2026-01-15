@@ -24,5 +24,5 @@ version: 0.11.0
 appVersion: "v0.39.1"
 
 maintainers:
-    - name: Cofide
-      url: https://cofide.io
+  - name: Cofide
+    url: https://cofide.io
