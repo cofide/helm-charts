@@ -2,6 +2,19 @@ apiVersion: v1
 entries:
   cofide-agent:
   - apiVersion: v2
+    appVersion: v0.39.1
+    created: "2026-01-15T12:27:53.740676374Z"
+    description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
+    digest: de42ce3bb7e1b8b81575fad4895c16eae2627f9a759a60a9b39628b743f7ed1b
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-agent
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.5.0/cofide-agent-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
     appVersion: v0.38.0
     created: "2026-01-13T09:15:08.168002738Z"
     description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
@@ -155,6 +168,20 @@ entries:
     - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.1.3/cofide-agent-0.1.3.tgz
     version: 0.1.3
   cofide-connect:
+  - apiVersion: v2
+    appVersion: v0.39.1
+    created: "2026-01-15T12:27:53.881314581Z"
+    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
+      cluster
+    digest: 9bce929cf374fd7eeaa27a1629cf22fddb983b3af6815afab5e7a22ee0dc1084
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-connect
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-connect-0.11.0/cofide-connect-0.11.0.tgz
+    version: 0.11.0
   - apiVersion: v2
     appVersion: v0.38.8
     created: "2026-01-14T10:29:19.541866062Z"
@@ -1140,4 +1167,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-01-14T10:29:19.542109665Z"
+generated: "2026-01-15T12:27:53.881666276Z"
