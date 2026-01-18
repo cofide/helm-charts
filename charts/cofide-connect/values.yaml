@@ -125,6 +125,7 @@ connect:
   extraEnv: []
 
 envoy:
+  # Pinned to a specific non-floating version
   image: "envoyproxy/envoy:v1.33.14"
   imagePullPolicy: IfNotPresent
   auth:
