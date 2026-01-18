@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   registry: ghcr.io
   repository: cofide/spiffe-enable
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   tag: ""
 
 imagePullSecrets: []
@@ -34,7 +34,7 @@ securityContext: {}
 
 service:
   type: ClusterIP # Type of the service for the webhook
-  port: 9443      # Port the service listens on (used by MutatingWebhookConfiguration)
+  port: 9443 # Port the service listens on (used by MutatingWebhookConfiguration)
 
 webhook:
   appName: "spiffe-enable-webhook" # Used for app label and container name, matches original manifest
@@ -73,6 +73,6 @@ certManager:
   dnsNames:
     # Default: <service-fullname>.<namespace>.svc
     # e.g., myrelease-spiffe-enable.cofide.svc
-    - "{{ include \"spiffe-enable.fullname\" . }}.{{ .Values.namespace | default .Release.Namespace }}.svc"
+    - '{{ include "spiffe-enable.fullname" . }}.{{ .Values.namespace | default .Release.Namespace }}.svc'
     # You can add more static or templated DNS names if needed
     # - "spiffe-enable-webhook.{{ .Values.namespace | default .Release.Namespace }}.svc.cluster.local"
