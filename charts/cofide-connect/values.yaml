@@ -9,7 +9,7 @@ replicaCount: 1
 image:
   registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
   repository: cofide/connect-api
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Defaults to chart appVersion if not set.
   tag: ""
 
@@ -84,7 +84,7 @@ connect:
       databaseName: "connect-db"
       # Whether to use Private Service Connect to connect to the database instance
       pscEnabled: false
-      # Configuration to use OIDC to access Google CloudSQL, exchanging server's SVID for a SA impersonation token 
+      # Configuration to use OIDC to access Google CloudSQL, exchanging server's SVID for a SA impersonation token
       oidc:
         # Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC.
         # Must be in the form projects/PROJECT_ID/locations/global/workloadIdentityPools/WORKLOAD_IDENTITY_POOL_NAME/providers/WORKLOAD_IDENTITY_PROVIDER_NAME.
@@ -140,7 +140,6 @@ envoy:
   logLevel: "info"
   securityContext: {}
   resources: {}
-
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
