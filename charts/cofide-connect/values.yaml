@@ -125,8 +125,8 @@ connect:
   extraEnv: []
 
 envoy:
-  image: "envoyproxy/envoy:v1.33-latest"
-  imagePullPolicy: Always
+  image: "envoyproxy/envoy:v1.33.14"
+  imagePullPolicy: IfNotPresent
   auth:
     # Issuer of the IdP in use.
     issuer: ""
