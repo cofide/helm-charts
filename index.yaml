@@ -3,6 +3,19 @@ entries:
   cofide-agent:
   - apiVersion: v2
     appVersion: v0.39.1
+    created: "2026-01-18T22:12:48.357639867Z"
+    description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
+    digest: df1ad2f80ecd78ebc3c7fee9b377831a9418ffcdecaccb77a6059a0597b42dc5
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-agent
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.5.1/cofide-agent-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
+    appVersion: v0.39.1
     created: "2026-01-15T12:27:53.740676374Z"
     description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
     digest: de42ce3bb7e1b8b81575fad4895c16eae2627f9a759a60a9b39628b743f7ed1b
@@ -168,6 +181,20 @@ entries:
     - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.1.3/cofide-agent-0.1.3.tgz
     version: 0.1.3
   cofide-connect:
+  - apiVersion: v2
+    appVersion: v0.39.1
+    created: "2026-01-18T22:12:48.500511119Z"
+    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
+      cluster
+    digest: fbdc77e7c41db300753a96571c69cf0b0c8990386578fcfb6fa1940910fa7665
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-connect
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-connect-0.11.1/cofide-connect-0.11.1.tgz
+    version: 0.11.1
   - apiVersion: v2
     appVersion: v0.39.1
     created: "2026-01-15T12:27:53.881314581Z"
@@ -521,6 +548,19 @@ entries:
     - https://github.com/cofide/helm-charts/releases/download/cofide-observer-0.1.0/cofide-observer-0.1.0.tgz
     version: 0.1.0
   spiffe-enable:
+  - apiVersion: v2
+    appVersion: v0.5.0
+    created: "2026-01-18T22:12:48.625386618Z"
+    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    digest: ef1c499363a6bc9bdaf3ae39b2098e91dc3bd3acd90c5551e15c3802a1927ab7
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: spiffe-enable
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/spiffe-enable-0.1.7/spiffe-enable-0.1.7.tgz
+    version: 0.1.7
   - apiVersion: v2
     appVersion: v0.5.0
     created: "2025-12-02T10:47:38.257832646Z"
@@ -1181,4 +1221,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-01-15T15:10:58.480533289Z"
+generated: "2026-01-18T22:12:48.625738846Z"
