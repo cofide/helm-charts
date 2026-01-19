@@ -45,7 +45,7 @@ ui:
 envoy:
   image:
     repository: envoyproxy/envoy
-    tag: v1.33-latest
+    tag: v1.33.14
     pullPolicy: IfNotPresent
   configMapName: connect-ui-envoy-config
   tlsSecretName: envoy-tls
