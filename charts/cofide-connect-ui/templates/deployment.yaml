@@ -25,6 +25,8 @@ spec:
     metadata:
       labels:
         {{- include "cofide-connect-ui.labels" . | nindent 8 }}
+      annotations:
+        checksum/envoy-config: {{ include (print $.Template.BasePath "/configmap-envoy.yaml") . | sha256sum }}
     spec:
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
