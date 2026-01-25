@@ -153,6 +153,13 @@ data:
                                   uri: {{ .Values.envoy.auth.jwksUri }}
                                   cluster: jwks_cluster
                                   timeout: 30s
+                                # Use the default backoff strategy with 5 retries.
+                                retry_policy:
+                                  num_retries: 5
+                                  retry_on: 5xx,reset
+                                # Fetch JWKS in a background thread. Wait for the fetch to complete before starting the listener.
+                                async_fetch:
+                                  fast_listener: false
                               claim_to_headers:
                                 - header_name: x-jwt-claim-sub
                                   claim_name: sub
