@@ -129,6 +129,16 @@ data:
                               max_age: "7200"
                           routes:
                             - match:
+                                prefix: /.well-known/openid-configuration
+                              route:
+                                cluster: oidc_issuer_cluster
+                                auto_host_rewrite: true
+                              # Explicitly disable JWT auth for this public discovery endpoint
+                              typed_per_filter_config:
+                                envoy.filters.http.jwt_authn:
+                                  "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.PerRouteConfig
+                                  disabled: true
+                            - match:
                                 prefix: /proto.connect
                               route:
                                 cluster: connect_service
@@ -313,6 +323,49 @@ data:
                       address:
                         pipe:
                           path: /spiffe-workload-api/spire-agent.sock
+        - name: oidc_issuer_cluster
+          connect_timeout: 30.0s
+          type: LOGICAL_DNS
+          dns_lookup_family: V4_ONLY
+          lb_policy: ROUND_ROBIN
+          load_assignment:
+            cluster_name: oidc_issuer_cluster
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          # Parse the host/port from the Issuer URL
+                          {{- $parsedHost := (urlParse .Values.envoy.auth.issuer).host }}
+                          {{- if contains "]:" $parsedHost }}
+                            {{- $hostPort := $parsedHost | splitList "]:" }}
+                          address: "{{ $hostPort | first }}]"
+                          port_value: {{ $hostPort | last }}
+                          {{- else if and (not (contains "[" $parsedHost)) (contains ":" $parsedHost) }}
+                            {{- $hostPort := $parsedHost | splitList ":" }}
+                          address: "{{ $hostPort | first }}"
+                          port_value: {{ $hostPort | last }}
+                          {{- else }}
+                          address: "{{ $parsedHost }}"
+                          {{- if eq (urlParse .Values.envoy.auth.issuer).scheme "https" }}
+                          port_value: 443
+                          {{- else }}
+                          port_value: 80
+                          {{- end }}
+                          {{- end }}
+          # Enable TLS if the issuer is HTTPS
+          {{- if eq (urlParse .Values.envoy.auth.issuer).scheme "https" }}
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              sni: {{ (urlParse .Values.envoy.auth.issuer).host }}
+              common_tls_context:
+                tls_params:
+                  tls_minimum_protocol_version: TLSv1_3
+                  tls_maximum_protocol_version: TLSv1_3
+          {{- end }}
+
         - name: jwks_cluster
           connect_timeout: 30.0s
           type: LOGICAL_DNS
