@@ -9,7 +9,7 @@ replicaCount: 1
 image:
   registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
   repository: cofide/cofide-agent
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   tag: ""
 
 agent:
@@ -50,7 +50,7 @@ serviceAccount:
   name: ""
 
 # This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 # This is for setting Kubernetes Labels to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -73,15 +73,15 @@ resources:
     memory: 128Mi
 
 volumes:
- - name: spiffe-workload-api
-   csi:
-     driver: "csi.spiffe.io"
-     readOnly: true
+  - name: spiffe-workload-api
+    csi:
+      driver: "csi.spiffe.io"
+      readOnly: true
 
 volumeMounts:
- - name: spiffe-workload-api
-   mountPath: "/spiffe-workload-api"
-   readOnly: true
+  - name: spiffe-workload-api
+    mountPath: "/spiffe-workload-api"
+    readOnly: true
 
 nodeSelector: {}
 
