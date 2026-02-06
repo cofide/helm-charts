@@ -87,6 +87,7 @@ data:
               filter_chain_match:
                 application_protocols:
                   - h2
+                  - http/1.1
                 server_names:
                   - connect.{{ .Values.connect.urlBase }}
               transport_socket:
@@ -96,6 +97,7 @@ data:
                   common_tls_context:
                     alpn_protocols:
                       - h2
+                      - http/1.1
                     tls_certificates:
                       - certificate_chain:
                           filename: /etc/envoy/tls/tls.crt
@@ -129,10 +131,21 @@ data:
                               max_age: "7200"
                           routes:
                             - match:
-                                prefix: /.well-known/openid-configuration
-                              route:
-                                cluster: oidc_issuer_cluster
-                                auto_host_rewrite: true
+                                path: "/.well-known/oauth-protected-resource"
+                              direct_response:
+                                status: 200
+                                body:
+                                  inline_string: |
+                                    {
+                                      "resource": "https://connect.{{ .Values.connect.urlBase }}",
+                                      "authorization_servers": ["{{ .Values.envoy.auth.issuer }}"],
+                                      "scopes_supported": ["openid", "profile", "offline_access"],
+                                      "bearer_methods_supported": ["header"]
+                                    }
+                              response_headers_to_add:
+                              - header:
+                                  key: "content-type"
+                                  value: "application/json"
                               # Explicitly disable JWT auth for this public discovery endpoint
                               typed_per_filter_config:
                                 envoy.filters.http.jwt_authn:
@@ -330,49 +343,6 @@ data:
                       address:
                         pipe:
                           path: /spiffe-workload-api/spire-agent.sock
-        - name: oidc_issuer_cluster
-          connect_timeout: 30.0s
-          type: LOGICAL_DNS
-          dns_lookup_family: V4_ONLY
-          lb_policy: ROUND_ROBIN
-          load_assignment:
-            cluster_name: oidc_issuer_cluster
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          # Parse the host/port from the Issuer URL
-                          {{- $parsedHost := (urlParse .Values.envoy.auth.issuer).host }}
-                          {{- if contains "]:" $parsedHost }}
-                            {{- $hostPort := $parsedHost | splitList "]:" }}
-                          address: "{{ $hostPort | first }}]"
-                          port_value: {{ $hostPort | last }}
-                          {{- else if and (not (contains "[" $parsedHost)) (contains ":" $parsedHost) }}
-                            {{- $hostPort := $parsedHost | splitList ":" }}
-                          address: "{{ $hostPort | first }}"
-                          port_value: {{ $hostPort | last }}
-                          {{- else }}
-                          address: "{{ $parsedHost }}"
-                          {{- if eq (urlParse .Values.envoy.auth.issuer).scheme "https" }}
-                          port_value: 443
-                          {{- else }}
-                          port_value: 80
-                          {{- end }}
-                          {{- end }}
-          # Enable TLS if the issuer is HTTPS
-          {{- if eq (urlParse .Values.envoy.auth.issuer).scheme "https" }}
-          transport_socket:
-            name: envoy.transport_sockets.tls
-            typed_config:
-              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
-              sni: {{ (urlParse .Values.envoy.auth.issuer).host }}
-              common_tls_context:
-                tls_params:
-                  tls_minimum_protocol_version: TLSv1_3
-                  tls_maximum_protocol_version: TLSv1_3
-          {{- end }}
-
         - name: jwks_cluster
           connect_timeout: 30.0s
           type: LOGICAL_DNS
