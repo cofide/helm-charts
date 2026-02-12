@@ -48,10 +48,16 @@ data:
                     combined_validation_context:
                       default_validation_context:
                         match_typed_subject_alt_names:
+                          # cofide-agent identity without cluster name - legacy, to be removed
                           - san_type: URI
                             matcher:
                               safe_regex:
-                                regex: spiffe://[^/]*/ns/cofide/sa/cofide-agent
+                                regex: spiffe://[^/]+/ns/cofide/sa/cofide-agent
+                          # cofide-agent identity with cluster name
+                          - san_type: URI
+                            matcher:
+                              safe_regex:
+                                regex: spiffe://[^/]+/cluster/[^/]+/ns/cofide/sa/cofide-agent
                       validation_context_sds_secret_config:
                         name: ALL
                         sds_config:
@@ -225,24 +231,6 @@ data:
                               - envoy_grpc:
                                   cluster_name: spire_agent
                     combined_validation_context:
-                      default_validation_context:
-                        match_typed_subject_alt_names:
-                          - san_type: URI
-                            matcher:
-                              safe_regex:
-                                regex: spiffe://[^/]*/ns/cofide/sa/cofide-agent
-                          - san_type: URI
-                            matcher:
-                              safe_regex:
-                                regex: spiffe://[^/]*/spire/server
-                          - san_type: URI
-                            matcher:
-                              safe_regex:
-                                regex: spiffe://[^/]*/ns/cofide/sa/cofide-observer
-                          - san_type: URI
-                            matcher:
-                              safe_regex:
-                                regex: spiffe://[^/]*/ns/cofide/sa/trust-zone-operator
                       validation_context_sds_secret_config:
                         name: ALL
                         sds_config:
