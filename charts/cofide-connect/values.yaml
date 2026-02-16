@@ -138,6 +138,8 @@ envoy:
     tlsSecretName: ""
     # Audiences set in tokens from the IdP. If empty, defaults to `["https://connect.{{ .Values.connect.urlBase }}"]`
     audiences: []
+    # Supported scopes
+    scopesSupported: []
   logLevel: "info"
   securityContext: {}
   resources: {}

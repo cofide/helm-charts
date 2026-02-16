@@ -146,7 +146,7 @@ data:
                                     {
                                       "resource": "https://connect.{{ .Values.connect.urlBase }}",
                                       "authorization_servers": ["{{ .Values.envoy.auth.issuer }}"],
-                                      "scopes_supported": ["openid", "profile", "offline_access"],
+                                      "scopes_supported": {{ .Values.envoy.auth.scopesSupported | default (list "openid" "profile" "offline_access" "email") | toJson }},
                                       "bearer_methods_supported": ["header"]
                                     }
                               response_headers_to_add:
