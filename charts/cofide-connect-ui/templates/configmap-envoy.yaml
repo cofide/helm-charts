@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "cofide-connect-ui.labels" . | nindent 4 }}
 data:
+  # envoy.yaml is the main Envoy configuration file.
   envoy.yaml: |
     node:
       id: connect-ui-envoy-proxy
@@ -34,11 +35,11 @@ data:
                   common_tls_context:
                     alpn_protocols:
                       - h2
-                    tls_certificates:
-                      - certificate_chain:
-                          filename: /etc/envoy/tls/tls.crt
-                        private_key:
-                          filename: /etc/envoy/tls/tls.key
+                    tls_certificate_sds_secret_configs:
+                      - name: connect_ui_tls_cert
+                        sds_config:
+                          path_config_source:
+                            path: /etc/envoy/envoy-sds.yaml
               filters:
                 - name: envoy.filters.network.http_connection_manager
                   typed_config:
@@ -102,3 +103,18 @@ data:
         socket_address:
           address: 127.0.0.1
           port_value: 9901
+
+  # envoy-sds.yaml is a Secret Discovery Service (SDS) configuration file.
+  # This is used as an SDS dynamic configuration source, supporting automatic
+  # certificate rotation by ensuring that a filesystem watch is used for the
+  # certificate and key. See example 3 in
+  # https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret#key-rotation
+  envoy-sds.yaml: |
+    resources:
+      - "@type": "type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret"
+        name: connect_ui_tls_cert
+        tls_certificate:
+          certificate_chain:
+            filename: /etc/envoy/tls/tls.crt
+          private_key:
+            filename: /etc/envoy/tls/tls.key
