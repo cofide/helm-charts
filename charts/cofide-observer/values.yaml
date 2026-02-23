@@ -7,6 +7,10 @@ observer:
   connectURL:
   # SPIFFE trust domain of Cofide Connect API. Required.
   connectTrustDomain:
+  # Controls whether periodic resync is active (default: false).
+  resyncEnabled: false
+  # Sets the resync interval as a Go duration string (default: 10m).
+  resyncPeriod: "10m"
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 replicaCount: 1
@@ -39,7 +43,7 @@ serviceAccount:
   name: ""
 
 # This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ 
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
 # This is for setting Kubernetes Labels to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
@@ -74,16 +78,16 @@ readinessProbe:
 
 # Additional volumes on the output Deployment definition.
 volumes:
- - name: spiffe-workload-api
-   csi:
-     driver: "csi.spiffe.io"
-     readOnly: true
+  - name: spiffe-workload-api
+    csi:
+      driver: "csi.spiffe.io"
+      readOnly: true
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
- - name: spiffe-workload-api
-   mountPath: "/spiffe-workload-api"
-   readOnly: true
+  - name: spiffe-workload-api
+    mountPath: "/spiffe-workload-api"
+    readOnly: true
 
 nodeSelector: {}
 
