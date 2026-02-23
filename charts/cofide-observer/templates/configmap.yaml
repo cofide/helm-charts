@@ -5,3 +5,5 @@ metadata:
 data:
   CONNECT_URL: {{ required "Connect URL is required" .Values.observer.connectURL }}
   CONNECT_TRUST_DOMAIN: {{ required "Connect Trust Domain is required" .Values.observer.connectTrustDomain }}
+  RESYNC_ENABLED: {{ .Values.observer.resyncEnabled | quote }}
+  RESYNC_PERIOD: {{ .Values.observer.resyncPeriod | quote }}
