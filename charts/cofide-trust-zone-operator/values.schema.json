@@ -99,6 +99,26 @@
       },
       "required": ["createAggregateRoles"]
     },
+    "vap": {
+      "type": "object",
+      "description": "ValidatingAdmissionPolicy configuration. Restricts the operator to only create/modify resources in designated namespaces. Requires Kubernetes >= 1.30.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether to create the ValidatingAdmissionPolicy and binding."
+        },
+        "spireNamespacePrefix": {
+          "type": "string",
+          "description": "Prefix for SPIRE server namespaces. Required when vap.enabled=true. The operator will only be permitted to manage resources in namespaces whose names start with this prefix."
+        },
+        "validationAction": {
+          "type": "string",
+          "description": "Validation action: Deny (enforcing) or Warn (dry-run / audit mode).",
+          "enum": ["Deny", "Warn"]
+        }
+      },
+      "required": ["enabled", "validationAction"]
+    },
     "podAnnotations": {
       "type": "object",
       "description": "Additional annotations to add to the operator pod.",
@@ -316,5 +336,5 @@
       "required": ["replicas", "manager"]
     }
   },
-  "required": ["connect", "gateway", "kubernetesClusterDomain", "serviceAccount", "healthProbe", "leaderElection", "metrics", "trustZoneOperator", "rbac"]
+  "required": ["connect", "gateway", "kubernetesClusterDomain", "serviceAccount", "healthProbe", "leaderElection", "metrics", "trustZoneOperator", "rbac", "vap"]
 }

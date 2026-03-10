@@ -58,6 +58,20 @@ rbac:
   # Whether to create the admin, editor and viewer aggregate ClusterRoles for TrustZoneServer resources.
   createAggregateRoles: true
 
+# ValidatingAdmissionPolicy configuration.
+# Restricts the operator to only create/modify resources in designated namespaces.
+# Requires Kubernetes >= 1.30 (ValidatingAdmissionPolicy is GA). Skipped automatically on older clusters.
+vap:
+  # Whether to create the ValidatingAdmissionPolicy and binding.
+  enabled: true
+  # Prefix for SPIRE server namespaces. Required when vap.enabled=true.
+  # The operator will only be permitted to manage resources in namespaces whose names
+  # start with this prefix (plus the gateway namespace and the operator's own namespace).
+  spireNamespacePrefix: ""
+  # Validation action: Deny (enforcing) or Warn (dry-run / audit mode).
+  # Use Warn during initial rollout to observe policy hits before switching to Deny.
+  validationAction: Deny
+
 # Metrics endpoint configuration.
 metrics:
   # Whether to enable the metrics endpoint, metrics service, and associated RBAC.
