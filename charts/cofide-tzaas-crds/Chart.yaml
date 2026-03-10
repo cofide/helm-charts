@@ -1,0 +1,11 @@
+apiVersion: v2
+name: cofide-tzaas-crds
+description: Helm chart to install CRDs for the Cofide Trust Zone Operator
+type: application
+version: 0.1.0
+# appVersion tracks the version of the cofide-trust-zone-operator chart that these CRDs were released alongside.
+appVersion: "0.1.0"
+
+maintainers:
+  - name: Cofide
+    url: https://cofide.io
