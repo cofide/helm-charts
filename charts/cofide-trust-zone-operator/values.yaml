@@ -1,0 +1,155 @@
+# Default values for cofide-trust-zone-operator.
+
+# Override the chart name used in resource names and labels.
+nameOverride: ""
+# Override the fully qualified app name used in resource names.
+fullnameOverride: ""
+
+# The Kubernetes cluster domain.
+kubernetesClusterDomain: cluster.local
+
+# Image pull secrets for pulling the operator image from private registries.
+# More information: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+
+# Service account configuration for the operator.
+# More information: https://kubernetes.io/docs/concepts/security/service-accounts/
+serviceAccount:
+  # Whether to create a service account for the operator.
+  create: true
+  # Automatically mount the service account token.
+  automount: true
+  # Annotations to add to the service account.
+  annotations: {}
+  # Name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template.
+  name: ""
+
+# Connect control plane configuration.
+connect:
+  # URL of the Connect instance.
+  url: ""
+  # Trust domain of the Connect instance.
+  trustDomain: ""
+  # Configuration identifying the cluster this operator manages.
+  cluster:
+    # ID of the cluster this operator is running in.
+    clusterId: ""
+
+# Gateway API configuration.
+gateway:
+  # Namespace for Gateway API resources.
+  namespace: cofide
+  # Base domain for Gateway API TLSRoutes.
+  baseDomain: ""
+
+# Health probe configuration.
+healthProbe:
+  # Port on which the health probe endpoints are served.
+  port: 8081
+
+# Leader election configuration.
+leaderElection:
+  # Whether to enable leader election for the operator. Should be enabled when running multiple replicas.
+  enabled: true
+
+# RBAC configuration.
+rbac:
+  # Whether to create the admin, editor and viewer aggregate ClusterRoles for TrustZoneServer resources.
+  createAggregateRoles: true
+
+# Metrics endpoint configuration.
+metrics:
+  # Whether to enable the metrics endpoint, metrics service, and associated RBAC.
+  enabled: true
+  # TLS certificate configuration for the metrics endpoint.
+  tls:
+    # Whether to serve the metrics endpoint over HTTPS.
+    enabled: true
+    # Name of an existing Secret containing tls.crt and tls.key.
+    # Required when metrics.tls.enabled=true (unless metrics.tls.certManager.enabled=true, which creates it).
+    # Set metrics.tls.enabled=false to disable TLS (e.g. local development).
+    certSecretName: ""
+    # Optional cert-manager integration to automatically provision the metrics TLS certificate.
+    certManager:
+      # Whether to create a cert-manager Certificate resource to supply the metrics TLS secret.
+      # Requires cert-manager to be installed. The Certificate will populate the secret named
+      # by metrics.tls.certSecretName.
+      enabled: false
+      issuerName: ""
+      issuerKind: ClusterIssuer
+  # Configuration for the metrics service.
+  service:
+    type: ClusterIP
+    ports:
+    - port: 8443
+      protocol: TCP
+      targetPort: 8443
+
+# Additional annotations to add to the operator pod.
+# More information: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+# Additional labels to add to the operator pod.
+# More information: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+# Configuration for the Trust Zone Operator deployment.
+trustZoneOperator:
+  # Number of operator replicas to deploy.
+  replicas: 1
+
+  # Pod-level security context.
+  podSecurityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+  # Node selector for the operator pod.
+  nodeSelector: {}
+
+  # Tolerations for the operator pod.
+  tolerations: []
+
+  # Topology spread constraints for the operator pod.
+  topologySpreadConstraints: []
+
+  # Configuration for the manager container.
+  manager:
+    image:
+      # Container image registry.
+      registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
+      # Container image repository.
+      repository: cofide/trust-zone-operator
+      # Container image tag. Defaults to the chart appVersion if empty.
+      tag: ""
+
+    # Image pull policy.
+    imagePullPolicy: IfNotPresent
+
+    # Additional arguments to pass to the manager binary. The chart appends --health-probe-bind-address,
+    # --connect-url, --connect-trust-domain, --gateway-namespace, --gateway-base-domain,
+    # --leader-elect (if leaderElection.enabled), --metrics-bind-address/--metrics-secure
+    # (if metrics.enabled), and --metrics-cert-path (if metrics.tls.enabled and metrics.tls.certSecretName is set) automatically.
+    args: []
+
+    # Environment variable configuration for the manager container.
+    env:
+      # SPIFFE endpoint socket path/URL for workload API access.
+      spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
+
+    # Container-level security context.
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+
+    # Compute resource requests and limits.
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi

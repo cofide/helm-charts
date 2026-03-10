@@ -1,0 +1,21 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cofide-trust-zone-operator.fullname" . }}-metrics
+  labels:
+    control-plane: trust-zone-operator
+  {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  selector:
+    control-plane: trust-zone-operator
+    {{- include "cofide-trust-zone-operator.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- range .Values.metrics.service.ports }}
+  - name: {{ if $.Values.metrics.tls.enabled }}https{{ else }}http{{ end }}
+    port: {{ .port }}
+    protocol: {{ .protocol }}
+    targetPort: {{ .targetPort }}
+  {{- end }}
+{{- end }}

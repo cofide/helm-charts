@@ -1,0 +1,16 @@
+{{- if and .Values.metrics.enabled .Values.metrics.tls.enabled .Values.metrics.tls.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "cofide-trust-zone-operator.fullname" . }}-metrics-cert
+  labels:
+    {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+spec:
+  secretName: {{ required "metrics.tls.certSecretName must be set when metrics.certManager.enabled=true" .Values.metrics.tls.certSecretName }}
+  dnsNames:
+    - {{ include "cofide-trust-zone-operator.fullname" . }}-metrics.{{ .Release.Namespace }}.svc
+    - {{ include "cofide-trust-zone-operator.fullname" . }}-metrics.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesClusterDomain }}
+  issuerRef:
+    name: {{ required "metrics.certManager.issuerName must be set when metrics.certManager.enabled=true" .Values.metrics.tls.certManager.issuerName }}
+    kind: {{ .Values.metrics.tls.certManager.issuerKind }}
+{{- end }}

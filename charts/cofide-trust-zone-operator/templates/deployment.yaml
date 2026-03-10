@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cofide-trust-zone-operator.fullname" . }}
+  labels:
+    control-plane: trust-zone-operator
+  {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.trustZoneOperator.replicas }}
+  selector:
+    matchLabels:
+      control-plane: trust-zone-operator
+    {{- include "cofide-trust-zone-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        control-plane: trust-zone-operator
+      {{- include "cofide-trust-zone-operator.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      {{- $args := concat .Values.trustZoneOperator.manager.args (list (printf "--health-probe-bind-address=:%d" (int .Values.healthProbe.port))) }}
+      {{- $args = append $args (printf "--gateway-namespace=%s" .Values.gateway.namespace) }}
+      {{- if .Values.gateway.baseDomain }}
+      {{- $args = append $args (printf "--gateway-base-domain=%s" .Values.gateway.baseDomain) }}
+      {{- end }}
+      {{- if .Values.connect.url }}
+      {{- $args = append $args (printf "--connect-url=%s" .Values.connect.url) }}
+      {{- end }}
+      {{- if .Values.connect.trustDomain }}
+      {{- $args = append $args (printf "--connect-trust-domain=%s" .Values.connect.trustDomain) }}
+      {{- end }}
+      {{- if .Values.connect.cluster.clusterId }}
+      {{- $args = append $args (printf "--cluster-id=%s" .Values.connect.cluster.clusterId) }}
+      {{- end }}
+      {{- if .Values.leaderElection.enabled }}
+      {{- $args = append $args "--leader-elect" }}
+      {{- end }}
+      {{- if .Values.metrics.enabled }}
+      {{- $args = append $args (printf "--metrics-bind-address=:%d" (int (index .Values.metrics.service.ports 0).targetPort)) }}
+      {{- $args = append $args (printf "--metrics-secure=%t" .Values.metrics.tls.enabled) }}
+      {{- if and .Values.metrics.tls.enabled (not .Values.metrics.tls.certSecretName) }}
+      {{- required "metrics.tls.certSecretName must be set when metrics.tls.enabled=true (or set metrics.tls.enabled=false for local development)" .Values.metrics.tls.certSecretName }}
+      {{- end }}
+      {{- if and .Values.metrics.tls.enabled .Values.metrics.tls.certSecretName }}
+      {{- $args = append $args "--metrics-cert-path=/tmp/k8s-metrics-server/metrics-certs" }}
+      {{- end }}
+      {{- end }}
+      - args: {{- toYaml $args | nindent 8 }}
+        command:
+        - /manager
+        env:
+        - name: SPIFFE_ENDPOINT_SOCKET
+          value: {{ quote .Values.trustZoneOperator.manager.env.spiffeEndpointSocket }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.trustZoneOperator.manager.image.registry }}/{{ .Values.trustZoneOperator.manager.image.repository }}:{{ .Values.trustZoneOperator.manager.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.trustZoneOperator.manager.imagePullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.healthProbe.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: {{ .Values.healthProbe.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: {{- toYaml .Values.trustZoneOperator.manager.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.trustZoneOperator.manager.containerSecurityContext | nindent 10 }}
+        volumeMounts:
+        - mountPath: /tmp/helm
+          name: helm
+        - mountPath: /spiffe-workload-api
+          name: spiffe-workload-api
+          readOnly: true
+        {{- if and .Values.metrics.enabled .Values.metrics.tls.enabled .Values.metrics.tls.certSecretName }}
+        - mountPath: /tmp/k8s-metrics-server/metrics-certs
+          name: metrics-certs
+          readOnly: true
+        {{- end }}
+      nodeSelector: {{- toYaml .Values.trustZoneOperator.nodeSelector | nindent 8 }}
+      securityContext: {{- toYaml .Values.trustZoneOperator.podSecurityContext | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cofide-trust-zone-operator.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 10
+      tolerations: {{- toYaml .Values.trustZoneOperator.tolerations | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml .Values.trustZoneOperator.topologySpreadConstraints | nindent 8 }}
+      volumes:
+      - emptyDir: {}
+        name: helm
+      - csi:
+          driver: csi.spiffe.io
+          readOnly: true
+        name: spiffe-workload-api
+      {{- if and .Values.metrics.enabled .Values.metrics.tls.enabled .Values.metrics.tls.certSecretName }}
+      - name: metrics-certs
+        secret:
+          secretName: {{ .Values.metrics.tls.certSecretName }}
+          optional: false
+          items:
+            - key: tls.crt
+              path: tls.crt
+            - key: tls.key
+              path: tls.key
+      {{- end }}

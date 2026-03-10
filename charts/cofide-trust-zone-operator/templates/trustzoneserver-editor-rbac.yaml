@@ -1,0 +1,28 @@
+{{- if .Values.rbac.createAggregateRoles }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "cofide-trust-zone-operator.fullname" . }}-trustzoneserver-editor-role
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - tzaas.connect.cofide.io
+  resources:
+  - trustzoneservers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tzaas.connect.cofide.io
+  resources:
+  - trustzoneservers/status
+  verbs:
+  - get
+{{- end }}
