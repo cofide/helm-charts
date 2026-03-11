@@ -31,6 +31,7 @@ spec:
       {{- if .Values.gateway.baseDomain }}
       {{- $args = append $args (printf "--gateway-base-domain=%s" .Values.gateway.baseDomain) }}
       {{- end }}
+      {{- $args = append $args (printf "--gateway-name=%s" .Values.gateway.name) }}
       {{- if .Values.connect.url }}
       {{- $args = append $args (printf "--connect-url=%s" .Values.connect.url) }}
       {{- end }}

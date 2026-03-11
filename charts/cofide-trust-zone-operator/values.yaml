@@ -42,6 +42,13 @@ gateway:
   namespace: cofide
   # Base domain for Gateway API TLSRoutes.
   baseDomain: ""
+  # Whether to create a Gateway resource for TZaaS traffic.
+  create: true
+  # Name of the GatewayClass to use for the Gateway. Required.
+  # The GatewayClass must be installed separately before deploying this chart.
+  className: ""
+  # Name of the Gateway resource that TLSRoutes will reference.
+  name: "tzaas-gateway"
 
 # Health probe configuration.
 healthProbe:

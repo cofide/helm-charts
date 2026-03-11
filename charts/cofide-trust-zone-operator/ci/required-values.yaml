@@ -7,3 +7,5 @@ connect:
 gateway:
   # Base domain for Gateway API TLSRoutes. Required.
   baseDomain: example.org
+  # Name of the GatewayClass to use. Required.
+  className: eg
