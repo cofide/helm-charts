@@ -25,12 +25,20 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template.
   name: ""
 
+# Operator configuration.
+operator:
+  # Namespace used for Helm release state storage.
+  # Defaults to the release namespace if not set.
+  namespace: ""
+
 # Connect control plane configuration.
 connect:
   # URL of the Connect instance.
   url: ""
   # Trust domain of the Connect instance.
   trustDomain: ""
+  # URL of the Connect bundle endpoint.
+  bundleUrl: ""
   # Configuration identifying the cluster this operator manages.
   cluster:
     # ID of the cluster this operator is running in.

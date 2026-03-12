@@ -1,7 +1,7 @@
 {{- if and .Values.vap.enabled (semverCompare ">=1.30.0-0" .Capabilities.KubeVersion.GitVersion) }}
 {{- $prefix := required "vap.spireNamespacePrefix is required when vap.enabled=true" .Values.vap.spireNamespacePrefix }}
 {{- $gatewayNs := .Values.gateway.namespace }}
-{{- $operatorNs := .Release.Namespace }}
+{{- $helmReleaseNs := .Values.operator.namespace | default .Release.Namespace }}
 {{- $saName := include "cofide-trust-zone-operator.serviceAccountName" . }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -30,26 +30,26 @@ spec:
       - statefulsets
       - roles
       - rolebindings
-      operations:  ["CREATE", "UPDATE", "PATCH", "DELETE"]
+      operations:  ["CREATE", "UPDATE", "DELETE"]
     # Gateway resources
     - apiGroups:   ["gateway.networking.k8s.io"]
       apiVersions: ["*"]
       resources:   ["referencegrants", "tlsroutes"]
-      operations:  ["CREATE", "UPDATE", "PATCH", "DELETE"]
+      operations:  ["CREATE", "UPDATE", "DELETE"]
   matchConditions:
   - name: is-operator-service-account
     expression: >-
-      request.userInfo.username == "system:serviceaccount:{{ $operatorNs }}:{{ $saName }}"
+      request.userInfo.username == "system:serviceaccount:{{ .Release.Namespace }}:{{ $saName }}"
   validations:
-  # Core/apps/RBAC resources: restrict to SPIRE namespaces or the operator's own namespace.
-  # The operator namespace exception covers leader-election ConfigMaps/leases and events.
+  # Core/apps/RBAC resources: restrict to SPIRE namespaces or the Helm release namespace
+  # (used for Helm release state storage).
   - expression: >-
       !(request.resource.group in ["", "apps", "rbac.authorization.k8s.io"])
       || request.namespace.startsWith("{{ $prefix }}")
-      || request.namespace == "{{ $operatorNs }}"
+      || request.namespace == "{{ $helmReleaseNs }}"
     message: >-
       The operator may only manage core, apps, and RBAC resources in namespaces
-      starting with "{{ $prefix }}" or in its own namespace "{{ $operatorNs }}"
+      starting with "{{ $prefix }}" or in the Helm release namespace "{{ $helmReleaseNs }}"
     reason: Forbidden
   # Namespace creation/deletion: name must start with the prefix.
   - expression: >-
