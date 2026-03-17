@@ -12,6 +12,37 @@ data:
         spiffe_id: spiffe://{{ .Values.connect.trustDomain }}/ns/{{ .Release.Namespace }}/sa/{{ include "cofide-connect.serviceAccountName" . }}
     static_resources:
       listeners:
+        # Proxy requests to /ready on port 9902 to the envoy admin API.
+        # This allows for readiness probes without exposing the full admin API outside of the pod.
+        - name: listener_ready
+          address:
+            socket_address:
+              address: 0.0.0.0
+              port_value: 9902
+          filter_chains:
+            - filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    '@type': type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: ready
+                    route_config:
+                      virtual_hosts:
+                        - name: admin_ready
+                          domains:
+                            - '*'
+                          routes:
+                            - match:
+                                path: /ready
+                              route:
+                                cluster: admin
+                            - match:
+                                prefix: /
+                              direct_response:
+                                status: 404
+                    http_filters:
+                      - name: envoy.filters.http.router
+                        typed_config:
+                          '@type': type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
         - name: listener_0
           address:
             socket_address:
@@ -293,6 +324,18 @@ data:
                         typed_config:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
       clusters:
+        - name: admin
+          connect_timeout: 1.0s
+          type: STATIC
+          load_assignment:
+            cluster_name: admin
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          address: 127.0.0.1
+                          port_value: 9901
         - name: connect_service
           connect_timeout: 5.0s
           type: STRICT_DNS
