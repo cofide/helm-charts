@@ -57,6 +57,15 @@ gateway:
   className: ""
   # Name of the Gateway resource that TLSRoutes will reference.
   name: "tzaas-gateway"
+  # EnvoyProxy configuration for the Gateway.
+  # When envoyProxy.name is set, a matching EnvoyProxy CR is created in the gateway namespace
+  # and the Gateway is configured to reference it via spec.infrastructure.parametersRef,
+  # causing Envoy Gateway to create a proxy service of the configured type.
+  envoyProxy:
+    # Name of the EnvoyProxy CR to create and reference. Leave empty to disable.
+    name: ""
+    # Envoy proxy service type.
+    serviceType: LoadBalancer
 
 # Health probe configuration.
 healthProbe:

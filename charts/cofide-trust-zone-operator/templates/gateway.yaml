@@ -8,6 +8,13 @@ metadata:
     {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
 spec:
   gatewayClassName: {{ .Values.gateway.className }}
+  {{- if .Values.gateway.envoyProxy.name }}
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: {{ .Values.gateway.envoyProxy.name }}
+  {{- end }}
   listeners:
     - name: tls-passthrough
       protocol: TLS

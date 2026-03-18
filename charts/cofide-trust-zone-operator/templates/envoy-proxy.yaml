@@ -1,0 +1,15 @@
+{{- if and .Values.gateway.create .Values.gateway.envoyProxy.name }}
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: {{ .Values.gateway.envoyProxy.name }}
+  namespace: {{ .Values.gateway.namespace }}
+  labels:
+    {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: {{ .Values.gateway.envoyProxy.serviceType }}
+{{- end }}
