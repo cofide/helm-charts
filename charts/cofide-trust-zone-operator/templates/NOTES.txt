@@ -1,0 +1,19 @@
+The Cofide Trust Zone Operator has been deployed.
+
+Verify the operator is running:
+
+  kubectl get deployment {{ include "cofide-trust-zone-operator.fullname" . }} -n {{ .Release.Namespace }}
+
+NOTE: The operator requires the CRDs from the cofide-tzaas-crds chart to be installed separately before use.
+{{- if or (not .Values.connect.url) (not .Values.connect.trustDomain) }}
+
+WARNING: Connect integration is not configured. Set connect.url and connect.trustDomain to enable it.
+{{- end }}
+{{- if not .Values.gateway.baseDomain }}
+
+WARNING: gateway.baseDomain is not set. This is required for Gateway API TLSRoute configuration.
+{{- end }}
+
+To list managed TrustZoneServer resources:
+
+  kubectl get trustzoneservers -A

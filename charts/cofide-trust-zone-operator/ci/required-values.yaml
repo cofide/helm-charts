@@ -1,0 +1,11 @@
+connect:
+  # URL of the Connect instance. Required.
+  url: api.connect.example.org:4321
+  # Trust domain of the Connect instance. Required.
+  trustDomain: connect.example.org
+
+gateway:
+  # Base domain for Gateway API TLSRoutes. Required.
+  baseDomain: example.org
+  # Name of the GatewayClass to use. Required.
+  className: eg

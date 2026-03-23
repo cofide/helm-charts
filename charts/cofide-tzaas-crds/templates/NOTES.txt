@@ -1,0 +1,14 @@
+The Cofide TZaaS CRDs have been installed.
+
+To verify the CRDs are available:
+
+  kubectl get crd trustzoneservers.tzaas.connect.cofide.io
+
+These CRDs are required by the cofide-trust-zone-operator chart. Install that chart next:
+
+  helm install cofide-trust-zone-operator cofide/cofide-trust-zone-operator
+
+NOTE: Helm does not upgrade CRDs during 'helm upgrade'. To update the CRDs to a
+newer version, apply them directly using helm template piped to kubectl:
+
+  helm template cofide-tzaas-crds cofide/cofide-tzaas-crds | kubectl apply --server-side -f -

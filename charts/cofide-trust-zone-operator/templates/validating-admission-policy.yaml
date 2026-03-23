@@ -1,0 +1,81 @@
+{{- if and .Values.vap.enabled (semverCompare ">=1.30.0-0" .Capabilities.KubeVersion.GitVersion) }}
+{{- $prefix := required "vap.spireNamespacePrefix is required when vap.enabled=true" .Values.vap.spireNamespacePrefix }}
+{{- $gatewayNs := .Values.gateway.namespace }}
+{{- $helmReleaseNs := .Values.operator.namespace | default .Release.Namespace }}
+{{- $saName := include "cofide-trust-zone-operator.serviceAccountName" . }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "cofide-trust-zone-operator.fullname" . }}-operator-scope
+  labels:
+  {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    # Namespace creation/deletion
+    - apiGroups:   [""]
+      apiVersions: ["v1"]
+      resources:   ["namespaces"]
+      operations:  ["CREATE", "DELETE"]
+    # Core, apps, and RBAC namespace-scoped resources
+    - apiGroups:   ["", "apps", "rbac.authorization.k8s.io"]
+      apiVersions: ["*"]
+      resources:
+      - configmaps
+      - secrets
+      - serviceaccounts
+      - services
+      - deployments
+      - statefulsets
+      - roles
+      - rolebindings
+      operations:  ["CREATE", "UPDATE", "DELETE"]
+    # Gateway resources
+    - apiGroups:   ["gateway.networking.k8s.io"]
+      apiVersions: ["*"]
+      resources:   ["referencegrants", "tlsroutes"]
+      operations:  ["CREATE", "UPDATE", "DELETE"]
+  matchConditions:
+  - name: is-operator-service-account
+    expression: >-
+      request.userInfo.username == "system:serviceaccount:{{ .Release.Namespace }}:{{ $saName }}"
+  validations:
+  # Core/apps/RBAC resources: restrict to SPIRE namespaces or the Helm release namespace
+  # (used for Helm release state storage).
+  - expression: >-
+      !(request.resource.group in ["", "apps", "rbac.authorization.k8s.io"])
+      || request.namespace.startsWith("{{ $prefix }}")
+      || request.namespace == "{{ $helmReleaseNs }}"
+    message: >-
+      The operator may only manage core, apps, and RBAC resources in namespaces
+      starting with "{{ $prefix }}" or in the Helm release namespace "{{ $helmReleaseNs }}"
+    reason: Forbidden
+  # Namespace creation/deletion: name must start with the prefix.
+  - expression: >-
+      !(request.resource.group == "" && request.resource.resource == "namespaces")
+      || object.metadata.name.startsWith("{{ $prefix }}")
+    message: >-
+      The operator may only create or delete namespaces whose names start with "{{ $prefix }}"
+    reason: Forbidden
+  # Gateway resources: restrict to gateway namespace or SPIRE namespaces
+  # (TLSRoutes live in gateway namespace; ReferenceGrants live in SPIRE namespaces).
+  - expression: >-
+      request.resource.group != "gateway.networking.k8s.io"
+      || request.namespace == "{{ $gatewayNs }}"
+      || request.namespace.startsWith("{{ $prefix }}")
+    message: >-
+      The operator may only manage gateway resources in the "{{ $gatewayNs }}"
+      namespace or in namespaces starting with "{{ $prefix }}"
+    reason: Forbidden
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "cofide-trust-zone-operator.fullname" . }}-operator-scope-binding
+  labels:
+  {{- include "cofide-trust-zone-operator.labels" . | nindent 4 }}
+spec:
+  policyName: {{ include "cofide-trust-zone-operator.fullname" . }}-operator-scope
+  validationActions: [{{ .Values.vap.validationAction }}]
+{{- end }}

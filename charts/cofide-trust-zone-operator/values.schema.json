@@ -1,0 +1,354 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cofide Trust Zone Operator Configuration Schema",
+  "type": "object",
+  "properties": {
+    "nameOverride": {
+      "type": "string",
+      "description": "Override the chart name used in resource names and labels."
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override the fully qualified app name used in resource names."
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "description": "Image pull secrets for pulling the operator container image from private registries.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "connect": {
+      "type": "object",
+      "description": "Connect control plane configuration.",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "URL of the Connect instance. Required for Connect integration.",
+          "minLength": 1
+        },
+        "trustDomain": {
+          "type": "string",
+          "description": "Trust domain of the Connect instance. Required for Connect integration.",
+          "minLength": 1
+        },
+        "cluster": {
+          "type": "object",
+          "description": "Configuration identifying the cluster this operator manages.",
+          "properties": {
+            "clusterId": {
+              "type": "string",
+              "description": "ID of the cluster this operator is running in."
+            }
+          }
+        }
+      }
+    },
+    "gateway": {
+      "type": "object",
+      "description": "Gateway API configuration.",
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "description": "Namespace for Gateway API resources."
+        },
+        "baseDomain": {
+          "type": "string",
+          "description": "Base domain for Gateway API TLSRoutes.",
+          "minLength": 1
+        },
+        "create": {
+          "type": "boolean",
+          "description": "Whether to create a Gateway resource for TZaaS traffic."
+        },
+        "className": {
+          "type": "string",
+          "description": "Name of the GatewayClass to use for the Gateway. The GatewayClass must be installed separately before deploying this chart.",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the Gateway resource that TLSRoutes will reference.",
+          "minLength": 1
+        }
+      },
+      "required": ["namespace", "baseDomain", "create", "className", "name"]
+    },
+    "healthProbe": {
+      "type": "object",
+      "description": "Health probe configuration.",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "description": "Port on which the health probe endpoints are served."
+        }
+      },
+      "required": ["port"]
+    },
+    "leaderElection": {
+      "type": "object",
+      "description": "Leader election configuration.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether to enable leader election for the operator. Should be enabled when running multiple replicas."
+        }
+      },
+      "required": ["enabled"]
+    },
+    "rbac": {
+      "type": "object",
+      "description": "RBAC configuration.",
+      "properties": {
+        "createAggregateRoles": {
+          "type": "boolean",
+          "description": "Whether to create the admin, editor and viewer aggregate ClusterRoles for TrustZoneServer resources."
+        }
+      },
+      "required": ["createAggregateRoles"]
+    },
+    "vap": {
+      "type": "object",
+      "description": "ValidatingAdmissionPolicy configuration. Restricts the operator to only create/modify resources in designated namespaces. Requires Kubernetes >= 1.30.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether to create the ValidatingAdmissionPolicy and binding."
+        },
+        "spireNamespacePrefix": {
+          "type": "string",
+          "description": "Prefix for SPIRE server namespaces. Required when vap.enabled=true. The operator will only be permitted to manage resources in namespaces whose names start with this prefix."
+        },
+        "validationAction": {
+          "type": "string",
+          "description": "Validation action: Deny (enforcing) or Warn (dry-run / audit mode).",
+          "enum": ["Deny", "Warn"]
+        }
+      },
+      "required": ["enabled", "validationAction"]
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Additional annotations to add to the operator pod.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podLabels": {
+      "type": "object",
+      "description": "Additional labels to add to the operator pod.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "kubernetesClusterDomain": {
+      "type": "string",
+      "description": "The Kubernetes cluster domain.",
+      "default": "cluster.local"
+    },
+    "serviceAccount": {
+      "type": "object",
+      "description": "Service account configuration for the operator.",
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "description": "Whether to create a service account for the operator."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the service account to use. If empty and create is true, a name is generated using the fullname template."
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the service account.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "automount": {
+          "type": "boolean",
+          "description": "Whether to automount the service account token."
+        }
+      },
+      "required": ["create", "automount"]
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Metrics endpoint configuration.",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether to enable the metrics endpoint, metrics service, and associated RBAC."
+        },
+        "tls": {
+          "type": "object",
+          "description": "TLS certificate configuration for the metrics endpoint.",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether to serve the metrics endpoint over HTTPS."
+            },
+            "certSecretName": {
+              "type": "string",
+              "description": "Name of an existing Secret containing tls.crt and tls.key. Required when metrics.tls.enabled=true."
+            },
+            "certManager": {
+              "type": "object",
+              "description": "Optional cert-manager integration to automatically provision the metrics TLS certificate.",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Whether to create a cert-manager Certificate resource to supply the metrics TLS secret."
+                },
+                "issuerName": {
+                  "type": "string",
+                  "description": "Name of the cert-manager Issuer or ClusterIssuer."
+                },
+                "issuerKind": {
+                  "type": "string",
+                  "description": "Kind of the cert-manager issuer.",
+                  "enum": ["Issuer", "ClusterIssuer"]
+                }
+              },
+              "required": ["enabled"]
+            }
+          },
+          "required": ["enabled"]
+        },
+        "service": {
+          "type": "object",
+          "description": "Configuration for the metrics service.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Kubernetes service type for the metrics endpoint.",
+              "enum": ["ClusterIP", "NodePort", "LoadBalancer"]
+            },
+            "ports": {
+              "type": "array",
+              "description": "Port definitions for the metrics service.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "port": {
+                    "type": "integer"
+                  },
+                  "protocol": {
+                    "type": "string"
+                  },
+                  "targetPort": {
+                    "type": "integer"
+                  }
+                },
+                "required": ["port", "protocol", "targetPort"]
+              }
+            }
+          },
+          "required": ["type", "ports"]
+        }
+      },
+      "required": ["enabled", "tls", "service"]
+    },
+    "trustZoneOperator": {
+      "type": "object",
+      "description": "Configuration for the Trust Zone Operator deployment.",
+      "properties": {
+        "replicas": {
+          "type": "integer",
+          "description": "Number of operator replicas to deploy.",
+          "minimum": 1
+        },
+        "manager": {
+          "type": "object",
+          "description": "Configuration for the manager container.",
+          "properties": {
+            "args": {
+              "type": "array",
+              "description": "Additional arguments to pass to the manager binary.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "image": {
+              "type": "object",
+              "description": "Container image configuration.",
+              "properties": {
+                "registry": {
+                  "type": "string",
+                  "description": "Container image registry."
+                },
+                "repository": {
+                  "type": "string",
+                  "description": "Container image repository."
+                },
+                "tag": {
+                  "type": "string",
+                  "description": "Container image tag. Defaults to the chart appVersion if empty."
+                }
+              },
+              "required": ["registry", "repository"]
+            },
+            "imagePullPolicy": {
+              "type": "string",
+              "description": "Image pull policy.",
+              "enum": ["Always", "IfNotPresent", "Never"]
+            },
+            "env": {
+              "type": "object",
+              "description": "Environment variable configuration for the manager container.",
+              "properties": {
+                "spiffeEndpointSocket": {
+                  "type": "string",
+                  "description": "SPIFFE endpoint socket path/URL for workload API access."
+                }
+              },
+              "required": ["spiffeEndpointSocket"]
+            },
+            "resources": {
+              "type": "object",
+              "description": "Compute resource requests and limits for the manager container."
+            },
+            "containerSecurityContext": {
+              "type": "object",
+              "description": "Security context for the manager container."
+            }
+          },
+          "required": ["image", "imagePullPolicy", "env"]
+        },
+        "podSecurityContext": {
+          "type": "object",
+          "description": "Security context for the operator pod."
+        },
+        "nodeSelector": {
+          "type": "object",
+          "description": "Node selector for the operator pod.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tolerations": {
+          "type": "array",
+          "description": "Tolerations for the operator pod.",
+          "items": {
+            "type": "object"
+          }
+        },
+        "topologySpreadConstraints": {
+          "type": "array",
+          "description": "Topology spread constraints for the operator pod.",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": ["replicas", "manager"]
+    }
+  },
+  "required": ["connect", "gateway", "kubernetesClusterDomain", "serviceAccount", "healthProbe", "leaderElection", "metrics", "trustZoneOperator", "rbac", "vap"]
+}
