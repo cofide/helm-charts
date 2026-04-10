@@ -46,7 +46,7 @@ This is a Helm chart mono-repo for Cofide's SPIFFE-based zero-trust infrastructu
 
 **Envoy sidecar pattern**: `cofide-connect` and `cofide-connect-ui` both deploy an Envoy proxy sidecar alongside the main container, configured via a separate `configmap-envoy.yaml` template.
 
-**Trust Zone Operator**: The operator manages `TrustZoneServer` custom resources (group `tzaas.connect.cofide.io/v1alpha1`). It includes a Validating Admission Policy, metrics endpoint with certificate, and Gateway resource for Envoy proxy configuration.
+**Trust Zone Operator**: The operator manages TrustZoneServer custom resources (group tzaas.connect.cofide.io/v1alpha1). It includes a Validating Admission Policy, metrics endpoint with certificate, and Gateway API resources (TLSRoute, ReferenceGrant) for Envoy proxy configuration.
 
 ## Release Process
 
