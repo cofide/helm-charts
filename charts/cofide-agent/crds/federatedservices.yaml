@@ -71,7 +71,7 @@ spec:
                 type: integer
               spiffeIDPaths:
                 description: The SPIFFE ID Paths of the servers the federated service
-                  references.
+                  references. Leading slashes are optional.
                 items:
                   type: string
                 minItems: 1
