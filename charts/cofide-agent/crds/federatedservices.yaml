@@ -69,6 +69,13 @@ spec:
               port:
                 format: int32
                 type: integer
+              spiffeIDPaths:
+                description: The SPIFFE ID Paths of the servers the federated service
+                  references. Leading slashes are optional.
+                items:
+                  type: string
+                minItems: 1
+                type: array
               tlsMode:
                 description: TLSMode defines the TLS mode for a federated service.
                 enum:
@@ -84,8 +91,9 @@ spec:
             - name
             - namespace
             - port
-            - workloadLabels
+            - spiffeIDPaths
             - tlsMode
+            - workloadLabels
             type: object
           status:
             description: FederatedServiceStatus defines the observed state of FederatedService
