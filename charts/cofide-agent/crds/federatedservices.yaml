@@ -74,6 +74,7 @@ spec:
                   references.
                 items:
                   type: string
+                minItems: 1
                 type: array
               tlsMode:
                 description: TLSMode defines the TLS mode for a federated service.
