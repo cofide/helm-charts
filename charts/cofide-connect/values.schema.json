@@ -361,6 +361,26 @@
         "initialRBAC",
         "extraEnv"
       ]
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer"
+        },
+        "externalTrafficPolicy": {
+          "type": "string",
+          "enum": ["Local", "Cluster"]
+        }
+      },
+      "required": ["type", "port"]
     }
   },
   "required": ["connect"]

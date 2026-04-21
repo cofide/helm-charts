@@ -150,6 +150,12 @@ data:
                     forward_client_cert_details: ALWAYS_FORWARD_ONLY
                     route_config:
                       name: local_route
+                      request_headers_to_remove:
+                        - x-source-ip
+                      request_headers_to_add:
+                        - header:
+                            key: x-source-ip
+                            value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
                       virtual_hosts:
                         - name: grpc_services
                           domains:
@@ -310,6 +316,12 @@ data:
                       uri: true
                     route_config:
                       name: mtls_route
+                      request_headers_to_remove:
+                        - x-source-ip
+                      request_headers_to_add:
+                        - header:
+                            key: x-source-ip
+                            value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
                       virtual_hosts:
                         - name: mtls_services
                           domains:
