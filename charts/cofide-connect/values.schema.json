@@ -361,6 +361,33 @@
         "initialRBAC",
         "extraEnv"
       ]
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer"
+        },
+        "proxyProtocol": {
+          "type": "object",
+          "description": "PROXY protocol configuration for the Envoy listener.",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable PROXY protocol on the Envoy listener. Requires the upstream load balancer to send PROXY protocol headers."
+            }
+          },
+          "required": ["enabled"]
+        }
+      },
+      "required": ["type", "port"]
     }
   },
   "required": ["connect"]

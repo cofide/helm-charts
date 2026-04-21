@@ -175,9 +175,24 @@ serviceAccount:
   name: ""
 
 service:
+  # Annotations to add to the Service.
+  # When proxyProtocol.enabled is true, the load balancer must also be configured to send PROXY
+  # protocol headers. The Envoy proxy handles both PROXY protocol v1 and v2 automatically.
+  # Cloud provider-specific annotations or configuration is required:
+  # AWS NLB (in-tree cloud provider or AWS Load Balancer Controller) sends PROXY protocol v2:
+  #   service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+  # GCP: the default passthrough NLB does not support PROXY protocol. Use a TCP Proxy Load
+  # Balancer and reference a BackendConfig that enables proxyHeader: PROXY_V1 (the only version
+  # supported by GCP) with:
+  #   cloud.google.com/backend-config: '{"default": "<backend-config-name>"}'
   annotations: {}
   type: LoadBalancer
   port: 8443
+  proxyProtocol:
+    # Enable PROXY protocol on the Envoy listener. Requires the upstream load balancer to send
+    # PROXY protocol headers. Disable in environments that do not support it (e.g. kind with
+    # cloud-provider-kind). Source IP is required for audit events so this is enabled by default.
+    enabled: true
 
 # This is for setting Kubernetes Annotations to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
