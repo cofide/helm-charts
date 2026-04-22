@@ -49,6 +49,11 @@ data:
               address: 0.0.0.0
               port_value: 8443
           listener_filters:
+            {{- if .Values.envoy.proxyProtocol.enabled }}
+            - name: envoy.filters.listener.proxy_protocol
+              typed_config:
+                '@type': type.googleapis.com/envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol
+            {{- end }}
             - name: envoy.filters.listener.tls_inspector
               typed_config:
                 '@type': type.googleapis.com/envoy.extensions.filters.listener.tls_inspector.v3.TlsInspector
@@ -150,6 +155,14 @@ data:
                     forward_client_cert_details: ALWAYS_FORWARD_ONLY
                     route_config:
                       name: local_route
+                      request_headers_to_remove:
+                        - x-source-ip
+                      {{- if or .Values.envoy.proxyProtocol.enabled (eq .Values.service.externalTrafficPolicy "Local") }}
+                      request_headers_to_add:
+                        - header:
+                            key: x-source-ip
+                            value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+                      {{- end }}
                       virtual_hosts:
                         - name: grpc_services
                           domains:
@@ -310,6 +323,14 @@ data:
                       uri: true
                     route_config:
                       name: mtls_route
+                      request_headers_to_remove:
+                        - x-source-ip
+                      {{- if or .Values.envoy.proxyProtocol.enabled (eq .Values.service.externalTrafficPolicy "Local") }}
+                      request_headers_to_add:
+                        - header:
+                            key: x-source-ip
+                            value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+                      {{- end }}
                       virtual_hosts:
                         - name: mtls_services
                           domains:
