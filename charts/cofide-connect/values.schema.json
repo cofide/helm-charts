@@ -361,6 +361,43 @@
         "initialRBAC",
         "extraEnv"
       ]
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer"
+        },
+        "externalTrafficPolicy": {
+          "type": "string",
+          "enum": ["Local", "Cluster"],
+          "description": "Controls how traffic is routed from external load balancers. Set to Local to preserve the original client source IP."
+        }
+      },
+      "required": ["type", "port", "externalTrafficPolicy"]
+    },
+    "envoy": {
+      "type": "object",
+      "properties": {
+        "proxyProtocol": {
+          "type": "object",
+          "description": "PROXY protocol configuration for the Envoy listener.",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable PROXY protocol on the Envoy listener. Requires the upstream load balancer to send PROXY protocol headers."
+            }
+          },
+          "required": ["enabled"]
+        }
+      }
     }
   },
   "required": ["connect"]

@@ -144,6 +144,11 @@ envoy:
       - profile
       - offline_access
       - email
+  proxyProtocol:
+    # Enable PROXY protocol on the Envoy listener. When enabled, Envoy unwraps the PROXY header
+    # to obtain the original client source IP. The upstream load balancer must be configured to
+    # send PROXY protocol headers - see the annotations examples above.
+    enabled: false
   logLevel: "info"
   securityContext: {}
   resources: {}
@@ -175,9 +180,46 @@ serviceAccount:
   name: ""
 
 service:
+  # Annotations to add to the Service.
+  # When proxyProtocol.enabled is true, cloud-provider annotations are needed to configure the
+  # load balancer to send PROXY protocol headers. Examples:
+  #
+  # AWS NLB (in-tree cloud provider or AWS Load Balancer Controller) - sends PROXY protocol v2:
+  #   annotations:
+  #     service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+  #
+  # GCP: the default passthrough NLB does not support PROXY protocol. Switch to a TCP Proxy load
+  # balancer and reference a BackendConfig CR that enables proxyHeader: PROXY_V1 (the only version
+  # GCP supports):
+  #   annotations:
+  #     cloud.google.com/backend-config: '{"default": "connect-backend-config"}'
+  #     cloud.google.com/load-balancer-type: "External"
+  # Create the BackendConfig separately in the same namespace:
+  #   apiVersion: cloud.google.com/v1
+  #   kind: BackendConfig
+  #   metadata:
+  #     name: connect-backend-config
+  #   spec:
+  #     customRequestHeaders:
+  #       headers:
+  #         - "X-Forwarded-Proto: https"
+  #     # proxyHeader instructs the TCP Proxy load balancer to prepend a PROXY protocol header.
+  #     # Only PROXY_V1 is supported by GCP.
+  #     # Note: requires the Service to use a TCP Proxy (not passthrough) load balancer.
+  #
+  # When externalTrafficPolicy is Local (below), no additional annotations are required on most
+  # cloud providers - node-local routing is a native Kubernetes feature.
   annotations: {}
   type: LoadBalancer
   port: 8443
+  # externalTrafficPolicy controls how traffic from external load balancers is routed to pods.
+  # Set to Local to preserve the original client source IP by bypassing kube-proxy SNAT.
+  # Requires pods to be spread across nodes, as traffic is dropped for nodes with no ready pod.
+  # Kubernetes provisions a healthCheckNodePort so the load balancer can identify nodes with a
+  # ready pod. Most cloud controllers (GCP, AWS NLB, Azure) configure the LB health check against
+  # this port automatically, so no additional annotations should be required - but verify this
+  # holds for your environment and cloud controller version.
+  externalTrafficPolicy: Cluster
 
 # This is for setting Kubernetes Annotations to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
