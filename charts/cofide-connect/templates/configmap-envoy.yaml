@@ -111,6 +111,9 @@ data:
                     stream_idle_timeout: 3600s
                     stat_prefix: grpc_json
                     codec_type: AUTO
+                    forward_client_cert_details: SANITIZE_SET
+                    set_current_client_cert_details:
+                      uri: true
                     route_config:
                       name: local_route
                       virtual_hosts:
