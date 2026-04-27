@@ -117,6 +117,8 @@ connect:
     #    user:
     #      subject: clusterAadmin@example.com
     roleBindings: []
+  # Whether audit events should be recorded within Connect. If enabled all operations within Connect that change state (e.g. create/update/delete APIs, node attestation/deletion, workload creation/deletion) will be recorded.
+  recordAuditEvents: false
   # Additional environment variables to pass to connect api binary.
   # For example:
   #  extraEnv:
