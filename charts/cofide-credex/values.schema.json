@@ -1,0 +1,343 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cofide Credex Configuration Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "replicaCount": {
+      "type": "integer",
+      "description": "Number of replicas for the Credex deployment.",
+      "minimum": 0
+    },
+    "image": {
+      "type": "object",
+      "description": "Container image configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "registry": {
+          "type": "string",
+          "description": "Container image registry."
+        },
+        "repository": {
+          "type": "string",
+          "description": "Container image repository."
+        },
+        "pullPolicy": {
+          "type": "string",
+          "description": "Image pull policy.",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": {
+          "type": "string",
+          "description": "Image tag. Defaults to the chart's appVersion when empty."
+        }
+      },
+      "required": ["registry", "repository", "pullPolicy"]
+    },
+    "credex": {
+      "type": "object",
+      "description": "Configuration settings for the Credex service.",
+      "additionalProperties": false,
+      "properties": {
+        "enableOAuthAS": {
+          "type": "boolean",
+          "description": "Enable the OAuth authorisation server."
+        },
+        "enableCustomExchange": {
+          "type": "boolean",
+          "description": "Enable the custom token exchange endpoint."
+        },
+        "baseDomain": {
+          "type": "string",
+          "description": "Base domain for the custom token exchange endpoint. Required when enableCustomExchange is true."
+        },
+        "spireAgentAdminSocket": {
+          "type": "string",
+          "description": "SPIRE Agent admin socket path. Required when enableCustomExchange is true."
+        },
+        "issuerURL": {
+          "type": "string",
+          "description": "Issuer URL for the OAuth AS. Required when enableOAuthAS is true."
+        },
+        "accessTokenLifetime": {
+          "type": "string",
+          "description": "Access token lifetime, e.g. \"5m\", \"1h\". Defaults to 1 minute when unset."
+        },
+        "oauthPrivateKeyFile": {
+          "type": "string",
+          "description": "Path to the OAuth AS private key file."
+        },
+        "spiffeEndpointSocket": {
+          "type": "string",
+          "description": "SPIFFE workload API endpoint socket."
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "Enable debug logging."
+        },
+        "trustedIssuers": {
+          "type": "array",
+          "description": "Trusted issuers for token exchange. Each entry generates a numbered set of TRUSTED_ISSUER_n / TRUSTED_ISSUER_JWKS_URL_n / TRUSTED_ISSUER_ALLOWED_AUDIENCES_n env vars.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string",
+                "description": "Issuer URL."
+              },
+              "jwksURL": {
+                "type": "string",
+                "description": "JWKS endpoint URL for the issuer."
+              },
+              "allowedAudiences": {
+                "type": "array",
+                "description": "Audiences accepted from this issuer.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["issuer", "jwksURL"]
+          }
+        },
+        "policyConfigFile": {
+          "type": "string",
+          "description": "Path to a YAML file containing exchange policies. Mutually exclusive with connectURL. One of policyConfigFile or connectURL must be set when enableOAuthAS is true."
+        },
+        "connectURL": {
+          "type": "string",
+          "description": "URL of the Cofide Connect service used as the exchange policy store. Mutually exclusive with policyConfigFile. One of policyConfigFile or connectURL must be set when enableOAuthAS is true."
+        },
+        "connectTrustDomain": {
+          "type": "string",
+          "description": "SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set."
+        },
+        "extraCA": {
+          "type": "string",
+          "description": "PEM-encoded CA certificate. When non-empty, creates a cofide-credex-extra-ca ConfigMap and mounts it at /etc/ssl/certs/extra-ca.crt."
+        },
+        "extraEnv": {
+          "type": "array",
+          "description": "Additional environment variables to pass to the credex binary.",
+          "items": {
+            "type": "object",
+            "allOf": [
+              {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Environment variable name."
+                  }
+                },
+                "required": ["name"]
+              }
+            ],
+            "oneOf": [
+              {
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Simple string value for the environment variable."
+                  }
+                },
+                "required": ["value"]
+              },
+              {
+                "properties": {
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source of the environment variable value, as defined in https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#envvarsource-v1-core."
+                  }
+                },
+                "required": ["valueFrom"]
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "enableOAuthAS",
+        "enableCustomExchange",
+        "oauthPrivateKeyFile",
+        "spiffeEndpointSocket",
+        "debug",
+        "trustedIssuers",
+        "extraEnv"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "enableOAuthAS": { "const": true } },
+            "required": ["enableOAuthAS"]
+          },
+          "then": {
+            "properties": {
+              "issuerURL": { "type": "string", "minLength": 1 }
+            },
+            "required": ["issuerURL"],
+            "anyOf": [
+              { "properties": { "policyConfigFile": { "type": "string", "minLength": 1 } } },
+              { "properties": { "connectURL": { "type": "string", "minLength": 1 } } }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "enableCustomExchange": { "const": true } },
+            "required": ["enableCustomExchange"]
+          },
+          "then": {
+            "properties": {
+              "baseDomain": { "type": "string", "minLength": 1 },
+              "spireAgentAdminSocket": { "type": "string", "minLength": 1 }
+            },
+            "required": ["baseDomain", "spireAgentAdminSocket"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "connectURL": { "type": "string", "minLength": 1 } },
+            "required": ["connectURL"]
+          },
+          "then": {
+            "properties": {
+              "connectTrustDomain": { "type": "string", "minLength": 1 }
+            },
+            "required": ["connectTrustDomain"]
+          }
+        }
+      ]
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "description": "List of image pull secrets.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "nameOverride": {
+      "type": "string",
+      "description": "Override for the chart name."
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override for the fully-qualified app name."
+    },
+    "serviceAccount": {
+      "type": "object",
+      "description": "Service account configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "description": "Whether to create a service account."
+        },
+        "automount": {
+          "type": "boolean",
+          "description": "Whether to automount the service account token."
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the service account.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the service account to use. If empty and create is true, a name is generated using the fullname template."
+        }
+      },
+      "required": ["create", "automount"]
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to the pod.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podLabels": {
+      "type": "object",
+      "description": "Labels to add to the pod.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "description": "Security context for the pod."
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Security context for the container."
+    },
+    "service": {
+      "type": "object",
+      "description": "Kubernetes Service configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Service type.",
+          "enum": ["ClusterIP", "NodePort", "LoadBalancer", "ExternalName"]
+        },
+        "port": {
+          "type": "integer",
+          "description": "Service port."
+        },
+        "targetPort": {
+          "type": "integer",
+          "description": "Container port to forward traffic to."
+        }
+      },
+      "required": ["type", "port", "targetPort"]
+    },
+    "livenessProbe": {
+      "type": "object",
+      "description": "Liveness probe configuration for the container."
+    },
+    "readinessProbe": {
+      "type": "object",
+      "description": "Readiness probe configuration for the container."
+    },
+    "resources": {
+      "type": "object",
+      "description": "CPU/memory resource requests and limits for the container."
+    },
+    "volumes": {
+      "type": "array",
+      "description": "Additional volumes to mount into the pod.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "volumeMounts": {
+      "type": "array",
+      "description": "Volume mounts for the container.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "nodeSelector": {
+      "type": "object",
+      "description": "Node selector for pod scheduling.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tolerations": {
+      "type": "array",
+      "description": "Tolerations for pod scheduling.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules for pod scheduling."
+    }
+  },
+  "required": ["replicaCount", "image", "credex", "service"]
+}

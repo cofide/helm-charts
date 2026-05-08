@@ -1,0 +1,151 @@
+# Number of replicas for the Credex deployment.
+replicaCount: 1
+
+# Container image configuration.
+image:
+  registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
+  repository: cofide/credex-exchange
+  pullPolicy: IfNotPresent
+  # Defaults to the chart's appVersion when empty.
+  tag: ""
+
+credex:
+  # Enable the OAuth AS.
+  enableOAuthAS: true
+  # Enable the custom token exchange endpoint.
+  enableCustomExchange: false
+  # Base domain for the custom token exchange endpoint.
+  # Required when enableCustomExchange is true.
+  baseDomain: ""
+  # SPIRE Agent admin socket path.
+  # Required when enableCustomExchange is true.
+  spireAgentAdminSocket: ""
+  # Issuer URL for the OAuth AS.
+  # Required when enableOAuthAS is true.
+  issuerURL: ""
+  # Access token lifetime, e.g. "5m", "1h". Defaults to 1 minute when unset.
+  accessTokenLifetime: ""
+  # Path to the OAuth AS private key file.
+  oauthPrivateKeyFile: /run/credex/keys/private-key.pem
+  # SPIFFE workload API endpoint socket.
+  spiffeEndpointSocket: unix:///run/spire/sockets/spire-agent.sock
+  # Enable debug logging.
+  debug: false
+  # Trusted issuers for token exchange. Each entry generates a numbered set of
+  # TRUSTED_ISSUER_n / TRUSTED_ISSUER_JWKS_URL_n / TRUSTED_ISSUER_ALLOWED_AUDIENCES_n env vars.
+  trustedIssuers: []
+  # - issuer: ""
+  #   jwksURL: ""
+  #   allowedAudiences: []
+  # Path to a YAML file containing exchange policies. Mutually exclusive with connectURL.
+  # One of policyConfigFile or connectURL must be set when enableOAuthAS is true.
+  policyConfigFile: ""
+  # URL of the Cofide Connect service used as the exchange policy store.
+  # One of policyConfigFile or connectURL must be set when enableOAuthAS is true.
+  connectURL: ""
+  # SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set.
+  connectTrustDomain: ""
+  # PEM-encoded CA certificate. When non-empty, creates a cofide-credex-extra-ca ConfigMap
+  # and mounts it at /etc/ssl/certs/extra-ca.crt.
+  extraCA: ""
+  # Additional environment variables to pass to the credex binary.
+  # For example:
+  #  extraEnv:
+  #  - name: SOME_VAR
+  #    value: 'some value'
+  extraEnv: []
+
+# List of image pull secrets for pulling from private registries.
+imagePullSecrets: []
+# Override for the chart name.
+nameOverride: ""
+# Override for the fully-qualified app name.
+fullnameOverride: ""
+
+# Service account configuration.
+serviceAccount:
+  # Whether to create a service account.
+  create: true
+  # Whether to automount the service account token.
+  automount: false
+  # Annotations to add to the service account.
+  annotations: {}
+  # Name of the service account to use. If empty and create is true, a name is generated using the fullname template.
+  name: ""
+
+# Annotations to add to the pod.
+podAnnotations: {}
+# Labels to add to the pod.
+podLabels: {}
+
+# Security context for the pod.
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# Security context for the container.
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# Service configuration.
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+# Liveness probe configuration.
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 15
+  failureThreshold: 3
+
+# Readiness probe configuration.
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  failureThreshold: 12
+
+# CPU/memory resource requests and limits for the container.
+resources:
+  requests:
+    cpu: "250m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+# Additional volumes to mount into the pod.
+volumes:
+  - name: spire-agent-socket
+    csi:
+      driver: "csi.spiffe.io"
+      readOnly: true
+  - name: oauth-private-key
+    secret:
+      secretName: oauth-private-key
+
+# Volume mounts for the container.
+volumeMounts:
+  - name: spire-agent-socket
+    mountPath: /run/spire/sockets
+    readOnly: true
+  - name: oauth-private-key
+    mountPath: /run/credex/keys
+    readOnly: true
+
+# Node selector for pod scheduling.
+nodeSelector: {}
+# Tolerations for pod scheduling.
+tolerations: []
+# Affinity rules for pod scheduling.
+affinity: {}
