@@ -1,0 +1,10 @@
+Cofide Credex has been deployed.
+
+To check the status of the deployment:
+  kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "cofide-credex.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+To view logs:
+  kubectl logs --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "cofide-credex.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+To access the service within the cluster:
+  kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "cofide-credex.fullname" . }} 8080:{{ .Values.service.port }}

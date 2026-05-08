@@ -1,0 +1,7 @@
+credex:
+  # Issuer URL for the OAuth AS. Required when enableOAuthAS is true.
+  issuerURL: https://credex.example.org
+  # URL of the Cofide Connect service. Required when enableOAuthAS is true.
+  connectURL: https://connect.example.org
+  # SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set.
+  connectTrustDomain: example.org
