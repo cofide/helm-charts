@@ -5,6 +5,7 @@
   "properties": {
     "connect": {
       "type": "object",
+      "additionalProperties": false,
       "description": "Configuration settings for the Connect service.",
       "properties": {
         "urlBase": {
@@ -20,6 +21,7 @@
         },
         "insecureServerAddress": {
           "type": "object",
+          "additionalProperties": false,
           "description": "Address for the insecure Connect server endpoint.",
           "properties": {
             "host": {
@@ -33,6 +35,7 @@
         },
         "adsServerAddress": {
           "type": "object",
+          "additionalProperties": false,
           "description": "Address for the ADS server endpoint.",
           "properties": {
             "host": {
@@ -56,6 +59,7 @@
               "properties": {
                 "s3": {
                   "type": "object",
+                  "additionalProperties": false,
                   "description": "Configuration for S3 trust bundle store backend.",
                   "properties": {
                     "enabled": {
@@ -68,6 +72,7 @@
                     },
                     "oidc": {
                       "type": "object",
+                      "additionalProperties": false,
                       "description": "Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.",
                       "properties": {
                         "enabled": {
@@ -103,6 +108,7 @@
               "properties": {
                 "gcs": {
                   "type": "object",
+                  "additionalProperties": false,
                   "description": "Configuration for GCS trust bundle store backend.",
                   "properties": {
                     "enabled": {
@@ -115,6 +121,7 @@
                     },
                     "oidc": {
                       "type": "object",
+                      "additionalProperties": false,
                       "description": "Configuration to use OIDC to access GCS, exchanging the Connect server's SVID for GCP credentials.",
                       "properties": {
                         "enabled": {
@@ -145,10 +152,12 @@
         },
         "datastore": {
           "type": "object",
+          "additionalProperties": false,
           "description": "Configuration of the datastore used by Connect",
           "properties": {
             "sqlConnectionString": {
               "type": "object",
+              "additionalProperties": false,
               "description": "SQL connection string configuration",
               "properties": {
                 "enabled": {
@@ -168,6 +177,7 @@
             },
             "cloudSQL": {
               "type": "object",
+              "additionalProperties": false,
               "description": "Google CloudSQL configuration",
               "properties": {
                 "enabled": {
@@ -189,6 +199,7 @@
                 },
                 "oidc": {
                   "type": "object",
+                  "additionalProperties": false,
                   "description": "Configuration to use OIDC to access Google CloudSQL",
                   "properties": {
                     "workloadIdentityProvider": {
@@ -204,10 +215,20 @@
                       "description": "Name of service account with access privileges to the Connect database"
                     }
                   },
-                  "required": ["workloadIdentityProvider", "audience", "serviceAccountName"]
+                  "required": [
+                    "workloadIdentityProvider",
+                    "audience",
+                    "serviceAccountName"
+                  ]
                 }
               },
-              "required": ["enabled", "instance", "databaseName", "pscEnabled", "oidc"]
+              "required": [
+                "enabled",
+                "instance",
+                "databaseName",
+                "pscEnabled",
+                "oidc"
+              ]
             }
           },
           "required": ["sqlConnectionString", "cloudSQL"]
@@ -234,6 +255,7 @@
         },
         "initialRBAC": {
           "type": "object",
+          "additionalProperties": false,
           "description": "Initial RBAC configuration to bootstrap the system.",
           "properties": {
             "version": {
@@ -245,6 +267,7 @@
               "description": "List of initial role bindings.",
               "items": {
                 "type": "object",
+                "additionalProperties": false,
                 "description": "A single role binding definition.",
                 "allOf": [
                   {
@@ -270,6 +293,7 @@
                         "properties": {
                           "user": {
                             "type": "object",
+                            "additionalProperties": false,
                             "description": "User to bind to",
                             "properties": {
                               "subject": {
@@ -286,6 +310,7 @@
                         "properties": {
                           "group": {
                             "type": "object",
+                            "additionalProperties": false,
                             "description": "Group to bind to",
                             "properties": {
                               "claimValue": {
@@ -369,6 +394,7 @@
     },
     "service": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "annotations": {
           "type": "object"
@@ -393,6 +419,7 @@
       "properties": {
         "proxyProtocol": {
           "type": "object",
+          "additionalProperties": false,
           "description": "PROXY protocol configuration for the Envoy listener.",
           "properties": {
             "enabled": {
