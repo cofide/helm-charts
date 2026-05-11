@@ -8,35 +8,35 @@ data:
   ENABLE_OAUTH_AS: {{ .Values.credex.enableOAuthAS | toString | quote }}
   ENABLE_CUSTOM_EXCHANGE: {{ .Values.credex.enableCustomExchange | toString | quote }}
   ISSUER_URL: {{ .Values.credex.issuerURL | quote }}
-  {{- if .Values.credex.accessTokenLifetime }}
-  ACCESS_TOKEN_LIFETIME: {{ .Values.credex.accessTokenLifetime | quote }}
+  {{- with .Values.credex.accessTokenLifetime }}
+  ACCESS_TOKEN_LIFETIME: {{ . | quote }}
   {{- end }}
   OAUTH_PRIVATE_KEY_FILE: {{ .Values.credex.oauthPrivateKeyFile | quote }}
   SPIFFE_ENDPOINT_SOCKET: {{ .Values.credex.spiffeEndpointSocket | quote }}
   SERVER_DEBUG: {{ .Values.credex.debug | toString | quote }}
-  {{- if .Values.credex.baseDomain }}
-  BASE_DOMAIN: {{ .Values.credex.baseDomain | quote }}
+  {{- with .Values.credex.baseDomain }}
+  BASE_DOMAIN: {{ . | quote }}
   {{- end }}
-  {{- if .Values.credex.spireAgentAdminSocket }}
-  SPIRE_AGENT_ADMIN_SOCKET: {{ .Values.credex.spireAgentAdminSocket | quote }}
+  {{- with .Values.credex.spireAgentAdminSocket }}
+  SPIRE_AGENT_ADMIN_SOCKET: {{ . | quote }}
   {{- end }}
-  {{- if .Values.credex.policyConfigFile }}
-  POLICY_CONFIG_FILE: {{ .Values.credex.policyConfigFile | quote }}
+  {{- with .Values.credex.policyConfigFile }}
+  POLICY_CONFIG_FILE: {{ . | quote }}
   {{- end }}
-  {{- if .Values.credex.connectURL }}
-  CONNECT_URL: {{ .Values.credex.connectURL | quote }}
+  {{- with .Values.credex.connectURL }}
+  CONNECT_URL: {{ . | quote }}
   {{- end }}
-  {{- if .Values.credex.connectTrustDomain }}
-  CONNECT_TRUST_DOMAIN: {{ .Values.credex.connectTrustDomain | quote }}
+  {{- with .Values.credex.connectTrustDomain }}
+  CONNECT_TRUST_DOMAIN: {{ . | quote }}
   {{- end }}
   {{- range $i, $issuer := .Values.credex.trustedIssuers }}
   {{ printf "TRUSTED_ISSUER_%d" (add1 $i) }}: {{ $issuer.issuer | quote }}
   {{ printf "TRUSTED_ISSUER_JWKS_URL_%d" (add1 $i) }}: {{ $issuer.jwksURL | quote }}
-  {{- if $issuer.allowedAudiences }}
-  {{ printf "TRUSTED_ISSUER_ALLOWED_AUDIENCES_%d" (add1 $i) }}: {{ $issuer.allowedAudiences | join "," | quote }}
+  {{- with $issuer.allowedAudiences }}
+  {{ printf "TRUSTED_ISSUER_ALLOWED_AUDIENCES_%d" (add1 $i) }}: {{ . | join "," | quote }}
   {{- end }}
   {{- end }}
-{{- if .Values.credex.extraCA }}
+{{- with .Values.credex.extraCA }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -46,5 +46,5 @@ metadata:
     {{- include "cofide-credex.labels" . | nindent 4 }}
 data:
   ca.crt: |
-    {{- .Values.credex.extraCA | nindent 4 }}
+    {{- . | nindent 4 }}
 {{- end }}
