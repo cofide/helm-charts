@@ -27,6 +27,8 @@ credex:
   accessTokenLifetime: ""
   # Path to the OAuth AS private key file.
   oauthPrivateKeyFile: /run/credex/keys/private-key.pem
+  # Name of the Kubernetes Secret containing the OAuth AS private key.
+  oauthPrivateKeySecret: oauth-private-key
   # SPIFFE workload API endpoint socket.
   spiffeEndpointSocket: unix:///run/spire/sockets/spire-agent.sock
   # Enable debug logging.
@@ -40,7 +42,7 @@ credex:
   # Path to a YAML file containing exchange policies. Mutually exclusive with connectURL.
   # One of policyConfigFile or connectURL must be set when enableOAuthAS is true.
   policyConfigFile: ""
-  # URL of the Cofide Connect service used as the exchange policy store.
+  # Host:port of the Cofide Connect service used as the exchange policy store.
   # One of policyConfigFile or connectURL must be set when enableOAuthAS is true.
   connectURL: ""
   # SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set.
@@ -48,6 +50,9 @@ credex:
   # PEM-encoded CA certificate. When non-empty, creates a cofide-credex-extra-ca ConfigMap
   # and mounts it at /etc/ssl/certs/extra-ca.crt.
   extraCA: ""
+  # Enable pre-flight checks at install time (e.g. verifying required Secrets exist).
+  # Set to false when rendering templates without cluster access.
+  preflightChecks: true
   # Additional environment variables to pass to the credex binary.
   # For example:
   #  extraEnv:
@@ -130,17 +135,11 @@ volumes:
     csi:
       driver: "csi.spiffe.io"
       readOnly: true
-  - name: oauth-private-key
-    secret:
-      secretName: oauth-private-key
 
 # Volume mounts for the container.
 volumeMounts:
   - name: spire-agent-socket
     mountPath: /run/spire/sockets
-    readOnly: true
-  - name: oauth-private-key
-    mountPath: /run/credex/keys
     readOnly: true
 
 # Node selector for pod scheduling.
