@@ -5,3 +5,5 @@ credex:
   connectURL: https://connect.example.org
   # SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set.
   connectTrustDomain: example.org
+  # Disable pre-flight cluster lookups since ct lint runs without a cluster.
+  preflightChecks: false

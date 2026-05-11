@@ -67,6 +67,10 @@
           "type": "string",
           "description": "Path to the OAuth AS private key file."
         },
+        "oauthPrivateKeySecret": {
+          "type": "string",
+          "description": "Name of the Kubernetes Secret containing the OAuth AS private key."
+        },
         "spiffeEndpointSocket": {
           "type": "string",
           "description": "SPIFFE workload API endpoint socket."
@@ -107,7 +111,7 @@
         },
         "connectURL": {
           "type": "string",
-          "description": "URL of the Cofide Connect service used as the exchange policy store. Mutually exclusive with policyConfigFile. One of policyConfigFile or connectURL must be set when enableOAuthAS is true."
+          "description": "Host:port of the Cofide Connect service used as the exchange policy store. Mutually exclusive with policyConfigFile. One of policyConfigFile or connectURL must be set when enableOAuthAS is true."
         },
         "connectTrustDomain": {
           "type": "string",
@@ -116,6 +120,10 @@
         "extraCA": {
           "type": "string",
           "description": "PEM-encoded CA certificate. When non-empty, creates a cofide-credex-extra-ca ConfigMap and mounts it at /etc/ssl/certs/extra-ca.crt."
+        },
+        "preflightChecks": {
+          "type": "boolean",
+          "description": "Enable pre-flight checks at install time (e.g. verifying required Secrets exist). Set to false when rendering templates without cluster access."
         },
         "extraEnv": {
           "type": "array",
@@ -160,6 +168,7 @@
         "enableOAuthAS",
         "enableCustomExchange",
         "oauthPrivateKeyFile",
+        "oauthPrivateKeySecret",
         "spiffeEndpointSocket",
         "debug",
         "trustedIssuers",

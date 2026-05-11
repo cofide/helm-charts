@@ -1,3 +1,8 @@
+{{- if .Values.credex.preflightChecks }}
+{{- if not (lookup "v1" "Secret" .Release.Namespace .Values.credex.oauthPrivateKeySecret) }}
+{{- fail (printf "Required Secret '%s' not found in namespace '%s'. Create it with the OAuth AS private key before installing cofide-credex." .Values.credex.oauthPrivateKeySecret .Release.Namespace) }}
+{{- end }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -62,29 +67,31 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if or .Values.volumeMounts .Values.credex.extraCA }}
           volumeMounts:
+            - name: oauth-private-key
+              mountPath: /run/credex/keys
+              readOnly: true
             {{- if .Values.volumeMounts }}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
             {{- end }}
-            {{- if .Values.credex.extraCA }}
+            {{- with .Values.credex.extraCA }}
             - name: extra-ca
               mountPath: /etc/ssl/certs/extra-ca.crt
               subPath: ca.crt
               readOnly: true
             {{- end }}
-          {{- end }}
-      {{- if or .Values.volumes .Values.credex.extraCA }}
       volumes:
+        - name: oauth-private-key
+          secret:
+            secretName: {{ .Values.credex.oauthPrivateKeySecret }}
         {{- if .Values.volumes }}
         {{- toYaml .Values.volumes | nindent 8 }}
         {{- end }}
-        {{- if .Values.credex.extraCA }}
+        {{- with .Values.credex.extraCA }}
         - name: extra-ca
           configMap:
             name: {{ include "cofide-credex.fullname" . }}-extra-ca
         {{- end }}
-      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
