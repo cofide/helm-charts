@@ -53,7 +53,11 @@
         },
         "spireAgentAdminSocket": {
           "type": "string",
-          "description": "SPIRE Agent admin socket path. Required when enableCustomExchange is true."
+          "description": "SPIRE Agent admin socket path. Defaults to `unix:///run/spire/private/sockets/admin.sock`."
+        },
+        "spireAgentAdminSocketHostPath": {
+          "type": "string",
+          "description": "Host path to the SPIRE agent admin socket directory on the node. Setting this enables Delegation API access (required for enableCustomExchange: true). Also requires securityContext.runAsUser: 0."
         },
         "issuerURL": {
           "type": "string",
@@ -199,9 +203,9 @@
           "then": {
             "properties": {
               "baseDomain": { "type": "string", "minLength": 1 },
-              "spireAgentAdminSocket": { "type": "string", "minLength": 1 }
+              "spireAgentAdminSocketHostPath": { "type": "string", "minLength": 1 }
             },
-            "required": ["baseDomain", "spireAgentAdminSocket"]
+            "required": ["baseDomain", "spireAgentAdminSocketHostPath"]
           }
         },
         {

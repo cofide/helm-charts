@@ -17,9 +17,15 @@ credex:
   # Base domain for the custom token exchange endpoint.
   # Required when enableCustomExchange is true.
   baseDomain: ""
-  # SPIRE Agent admin socket path.
-  # Required when enableCustomExchange is true.
-  spireAgentAdminSocket: ""
+  # SPIRE Agent admin socket path inside the container.
+  # Defaults to a standard path; override only if needed.
+  # Also set spireAgentAdminSocketHostPath and securityContext.runAsUser: 0.
+  spireAgentAdminSocket: "unix:///run/spire/private/sockets/admin.sock"
+  # Host path to the SPIRE agent admin socket directory on the node.
+  # Setting this enables Delegation API access (required for enableCustomExchange: true).
+  # Also requires securityContext.runAsUser: 0.
+  # Example: /run/spire/agent/sockets/csi.spiffe.io/admin
+  spireAgentAdminSocketHostPath: ""
   # Issuer URL for the OAuth AS.
   # Required when enableOAuthAS is true.
   issuerURL: ""

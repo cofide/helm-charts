@@ -17,8 +17,8 @@ data:
   {{- with .Values.credex.baseDomain }}
   BASE_DOMAIN: {{ . | quote }}
   {{- end }}
-  {{- with .Values.credex.spireAgentAdminSocket }}
-  SPIRE_AGENT_ADMIN_SOCKET: {{ . | quote }}
+  {{- with .Values.credex.spireAgentAdminSocketHostPath }}
+  SPIRE_AGENT_ADMIN_SOCKET: {{ $.Values.credex.spireAgentAdminSocket | quote }}
   {{- end }}
   {{- with .Values.credex.policyConfigFile }}
   POLICY_CONFIG_FILE: {{ . | quote }}
