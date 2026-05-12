@@ -267,7 +267,6 @@
               "description": "List of initial role bindings.",
               "items": {
                 "type": "object",
-                "additionalProperties": false,
                 "description": "A single role binding definition.",
                 "allOf": [
                   {
