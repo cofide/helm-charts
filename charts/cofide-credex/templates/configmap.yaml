@@ -41,9 +41,9 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "cofide-credex.fullname" . }}-extra-ca
+  name: {{ include "cofide-credex.fullname" $ }}-extra-ca
   labels:
-    {{- include "cofide-credex.labels" . | nindent 4 }}
+    {{- include "cofide-credex.labels" $ | nindent 4 }}
 data:
   ca.crt: |
     {{- . | nindent 4 }}

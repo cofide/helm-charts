@@ -90,7 +90,7 @@ spec:
         {{- with .Values.credex.extraCA }}
         - name: extra-ca
           configMap:
-            name: {{ include "cofide-credex.fullname" . }}-extra-ca
+            name: {{ include "cofide-credex.fullname" $ }}-extra-ca
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
