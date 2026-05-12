@@ -149,7 +149,7 @@ envoy:
   proxyProtocol:
     # Enable PROXY protocol on the Envoy listener. When enabled, Envoy unwraps the PROXY header
     # to obtain the original client source IP. The upstream load balancer must be configured to
-    # send PROXY protocol headers - see the annotations examples above.
+    # send PROXY protocol headers - see the service.annotations example values.
     enabled: false
   logLevel: "info"
   securityContext: {}
