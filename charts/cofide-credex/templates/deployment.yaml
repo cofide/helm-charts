@@ -80,6 +80,11 @@ spec:
               subPath: ca.crt
               readOnly: true
             {{- end }}
+            {{- with $.Values.credex.spireAgentAdminSocketHostPath }}
+            - name: spire-agent-admin-socket-dir
+              mountPath: {{ $.Values.credex.spireAgentAdminSocket | trimPrefix "unix://" | dir }}
+              readOnly: true
+            {{- end }}
       volumes:
         - name: oauth-private-key
           secret:
@@ -91,6 +96,12 @@ spec:
         - name: extra-ca
           configMap:
             name: {{ include "cofide-credex.fullname" $ }}-extra-ca
+        {{- end }}
+        {{- with .Values.credex.spireAgentAdminSocketHostPath }}
+        - name: spire-agent-admin-socket-dir
+          hostPath:
+            path: {{ . }}
+            type: DirectoryOrCreate
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
