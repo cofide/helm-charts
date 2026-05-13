@@ -12,14 +12,14 @@ image:
 credex:
   # Enable the OAuth AS.
   enableOAuthAS: true
-  # Enable the custom token exchange endpoint.
-  enableCustomExchange: false
+  # Enable the SPIFFE token exchange endpoint.
+  enableSPIFFEExchange: false
   # SPIRE Agent admin socket path inside the container.
   # Defaults to a standard path; override only if needed.
   # Also set spireAgentAdminSocketHostPath and securityContext.runAsUser: 0.
   spireAgentAdminSocket: "unix:///run/spire/private/sockets/admin.sock"
   # Host path to the SPIRE agent admin socket directory on the node.
-  # Setting this enables Delegation API access (required for enableCustomExchange: true).
+  # Setting this enables Delegation API access (required for enableSPIFFEExchange: true).
   # Also requires securityContext.runAsUser: 0.
   # Example: /run/spire/agent/sockets/csi.spiffe.io/admin
   spireAgentAdminSocketHostPath: ""
