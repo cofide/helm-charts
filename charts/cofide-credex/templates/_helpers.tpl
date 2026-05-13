@@ -60,3 +60,58 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Determine the service port based on TLS configuration.
+*/}}
+{{- define "cofide-credex.servicePort" -}}
+{{- if and .Values.credex.tls.enabled (eq (int .Values.service.port) 80) -}}
+443
+{{- else -}}
+{{- .Values.service.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the target port based on TLS configuration.
+*/}}
+{{- define "cofide-credex.targetPort" -}}
+{{- if and .Values.credex.tls.enabled (eq (int .Values.service.targetPort) 8080) -}}
+8443
+{{- else -}}
+{{- .Values.service.targetPort -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the Liveness probe port based on TLS configuration.
+*/}}
+{{- define "cofide-credex.livenessProbePort" -}}
+{{- if and .Values.credex.tls.enabled (eq (int .Values.livenessProbe.httpGet.port) 8080) -}}
+8443
+{{- else -}}
+{{- .Values.livenessProbe.httpGet.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the Readiness probe port based on TLS configuration.
+*/}}
+{{- define "cofide-credex.readinessProbePort" -}}
+{{- if and .Values.credex.tls.enabled (eq (int .Values.readinessProbe.httpGet.port) 8080) -}}
+8443
+{{- else -}}
+{{- .Values.readinessProbe.httpGet.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Determine the probe scheme based on TLS configuration.
+*/}}
+{{- define "cofide-credex.probeScheme" -}}
+{{- if .Values.credex.tls.enabled -}}
+HTTPS
+{{- else -}}
+HTTP
+{{- end -}}
+{{- end -}}

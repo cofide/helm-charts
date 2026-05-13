@@ -55,6 +55,30 @@
           "type": "string",
           "description": "Host path to the SPIRE agent admin socket directory on the node. Setting this enables Delegation API access (required for enableCustomExchange: true). Also requires securityContext.runAsUser: 0."
         },
+        "tls": {
+          "type": "object",
+          "description": "TLS configuration for the service.",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable TLS for the service."
+            },
+            "certFile": {
+              "type": "string",
+              "description": "Path to the PEM-encoded TLS certificate file inside the container."
+            },
+            "keyFile": {
+              "type": "string",
+              "description": "Path to the PEM-encoded TLS private key file inside the container."
+            },
+            "secretName": {
+              "type": "string",
+              "description": "Name of the Kubernetes Secret containing the TLS certificate and key."
+            }
+          },
+          "required": ["enabled", "certFile", "keyFile", "secretName"]
+        },
         "issuerURL": {
           "type": "string",
           "description": "Issuer URL for the OAuth AS. Required when enableOAuthAS is true."
@@ -168,6 +192,7 @@
       "required": [
         "enableOAuthAS",
         "enableCustomExchange",
+        "tls",
         "oauthPrivateKeyFile",
         "oauthPrivateKeySecret",
         "spiffeEndpointSocket",
@@ -202,6 +227,24 @@
               "spireAgentAdminSocketHostPath": { "type": "string", "minLength": 1 }
             },
             "required": ["spireAgentAdminSocketHostPath"]
+          }
+        },
+        {
+          "if": {
+            "x-comment": "Check TLS requirements when enabled",
+            "properties": { "tls": { "properties": { "enabled": { "const": true } } } }
+          },
+          "then": {
+            "properties": {
+              "tls": {
+                "properties": {
+                  "secretName": { "type": "string", "minLength": 1 },
+                  "certFile": { "type": "string", "minLength": 1 },
+                  "keyFile": { "type": "string", "minLength": 1 }
+                },
+                "required": ["secretName", "certFile", "keyFile"]
+              }
+            }
           }
         },
         {
@@ -294,11 +337,11 @@
         },
         "port": {
           "type": "integer",
-          "description": "Service port."
+          "description": "Service port. Defaults to 80 (or 443 when TLS is enabled)."
         },
         "targetPort": {
           "type": "integer",
-          "description": "Container port to forward traffic to."
+          "description": "Container port to forward traffic to. Defaults to 8080 (or 8443 when TLS is enabled)."
         },
         "annotations": {
           "type": "object",
