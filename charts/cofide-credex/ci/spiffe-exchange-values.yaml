@@ -1,7 +1,8 @@
 credex:
-  # Minimum values for default OAuth AS enabled state
   issuerURL: https://credex.example.org
   connectURL: https://connect.example.org
   connectTrustDomain: example.org
-  # Disable pre-flight cluster lookups since ct lint runs without a cluster.
+  # Test SPIFFE exchange feature
+  enableSPIFFEExchange: true
+  spireAgentAdminSocketHostPath: /run/spire/sockets/admin
   preflightChecks: false
