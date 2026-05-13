@@ -44,7 +44,7 @@ helm install cofide-credex cofide/cofide-credex \
 | `credex.connectURL` | Host:port of the Cofide Connect service used as the policy store. Mutually exclusive with `policyConfigFile` | One of |
 | `credex.connectTrustDomain` | SPIFFE trust domain of the Cofide Connect service. Required when `connectURL` is set | Conditional |
 
-### Custom Token Exchange (`enableCustomExchange: true`)
+### SPIFFE Token Exchange (`enableSPIFFEExchange: true`)
 
 | Value | Description | Required |
 |---|---|---|

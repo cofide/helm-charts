@@ -6,7 +6,7 @@ metadata:
     {{- include "cofide-credex.labels" . | nindent 4 }}
 data:
   ENABLE_OAUTH_AS: {{ .Values.credex.enableOAuthAS | toString | quote }}
-  ENABLE_CUSTOM_EXCHANGE: {{ .Values.credex.enableCustomExchange | toString | quote }}
+  ENABLE_SPIFFE_EXCHANGE: {{ .Values.credex.enableSPIFFEExchange | toString | quote }}
   ISSUER_URL: {{ .Values.credex.issuerURL | quote }}
   {{- with .Values.credex.accessTokenLifetime }}
   ACCESS_TOKEN_LIFETIME: {{ . | quote }}
