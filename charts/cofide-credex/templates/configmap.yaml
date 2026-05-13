@@ -15,12 +15,12 @@ data:
   SPIFFE_ENDPOINT_SOCKET: {{ .Values.credex.spiffeEndpointSocket | quote }}
   SERVER_DEBUG: {{ .Values.credex.debug | toString | quote }}
   PORT: {{ include "cofide-credex.targetPort" . | quote }}
-  {{- with .Values.credex.tls.enabled }}
-  TLS_CERT_FILE: {{ $.Values.credex.tls.certFile | quote }}
-  TLS_KEY_FILE: {{ $.Values.credex.tls.keyFile | quote }}
+  {{- if .Values.credex.tls.enabled }}
+  TLS_CERT_FILE: {{ .Values.credex.tls.certFile | quote }}
+  TLS_KEY_FILE: {{ .Values.credex.tls.keyFile | quote }}
   {{- end }}
-  {{- with .Values.credex.spireAgentAdminSocketHostPath }}
-  SPIRE_AGENT_ADMIN_SOCKET: {{ $.Values.credex.spireAgentAdminSocket | quote }}
+  {{- if .Values.credex.spireAgentAdminSocketHostPath }}
+  SPIRE_AGENT_ADMIN_SOCKET: {{ .Values.credex.spireAgentAdminSocket | quote }}
   {{- end }}
   {{- with .Values.credex.policyConfigFile }}
   POLICY_CONFIG_FILE: {{ . | quote }}

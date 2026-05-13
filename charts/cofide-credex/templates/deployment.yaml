@@ -105,9 +105,9 @@ spec:
               subPath: ca.crt
               readOnly: true
             {{- end }}
-            {{- with $.Values.credex.spireAgentAdminSocketHostPath }}
+            {{- if .Values.credex.spireAgentAdminSocketHostPath }}
             - name: spire-agent-admin-socket-dir
-              mountPath: {{ $.Values.credex.spireAgentAdminSocket | trimPrefix "unix://" | dir }}
+              mountPath: {{ .Values.credex.spireAgentAdminSocket | trimPrefix "unix://" | dir }}
               readOnly: true
             {{- end }}
       volumes:
