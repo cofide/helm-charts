@@ -7,6 +7,12 @@ This file provides guidance to AI coding agents when working with code in this r
 Charts are linted using [chart-testing](https://github.com/helm/chart-testing). CI runs on every PR:
 
 ```bash
+just lint
+```
+
+Or (equivalent):
+
+```bash
 ct lint --config .ct.yaml
 ```
 
