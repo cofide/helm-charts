@@ -134,6 +134,7 @@
           "description": "Additional environment variables to pass to the credex binary.",
           "items": {
             "type": "object",
+            "additionalProperties": false,
             "allOf": [
               {
                 "properties": {
