@@ -51,6 +51,29 @@ helm install cofide-credex cofide/cofide-credex \
 | `credex.spireAgentAdminSocket` | SPIRE Agent admin socket path inside the container. Defaults to `unix:///run/spire/private/sockets/admin.sock` | No |
 | `credex.spireAgentAdminSocketHostPath` | Host path for the SPIRE Agent admin socket. Enables Delegation API access. | Yes |
 
+### TLS Configuration
+
+The service can be configured to use TLS. When enabled, a Kubernetes Secret containing the TLS certificate and key must be provided.
+
+| Value | Description | Required |
+|---|---|---|
+| `credex.tls.enabled` | Enable TLS for the service | No |
+| `credex.tls.certFile` | Path to the PEM-encoded TLS certificate file inside the container. Defaults to `/run/credex/tls/tls.crt`. | No |
+| `credex.tls.keyFile` | Path to the PEM-encoded TLS private key file inside the container. Defaults to `/run/credex/tls/tls.key`. | No |
+| `credex.tls.secretName` | Name of the Kubernetes Secret containing the TLS certificate and key | Conditional |
+
+The Secret must contain `tls.crt` and `tls.key` keys.
+
+#### Smart Defaults for TLS
+
+When `credex.tls.enabled` is set to `true`, the chart automatically adjusts several parameters to align with a standard HTTPS configuration:
+
+- **`service.port`**: Switches from `80` to `443`.
+- **`service.targetPort`**: Switches from `8080` to `8443`.
+- **Probes**: Liveness and readiness probes automatically switch from `HTTP` to `HTTPS` and use port `8443`.
+
+These defaults are only applied if the respective values (e.g., `service.port`) are left at their chart-level default values. Explicit overrides in your `values.yaml` will always take precedence.
+
 ### Trusted Issuers
 
 External JWT issuers accepted for token exchange are configured as a list:

@@ -2,6 +2,11 @@
 {{- if not (lookup "v1" "Secret" .Release.Namespace .Values.credex.oauthPrivateKeySecret) }}
 {{- fail (printf "Required Secret '%s' not found in namespace '%s'. Create it with the OAuth AS private key before installing cofide-credex." .Values.credex.oauthPrivateKeySecret .Release.Namespace) }}
 {{- end }}
+{{- if .Values.credex.tls.enabled }}
+{{- if not (lookup "v1" "Secret" .Release.Namespace .Values.credex.tls.secretName) }}
+{{- fail (printf "TLS Secret '%s' not found in namespace '%s'. Create it with 'tls.crt' and 'tls.key' before installing cofide-credex." .Values.credex.tls.secretName .Release.Namespace) }}
+{{- end }}
+{{- end }}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment
@@ -46,7 +51,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.targetPort }}
+              containerPort: {{ include "cofide-credex.targetPort" . | int }}
               protocol: TCP
           envFrom:
             - configMapRef:
@@ -57,11 +62,21 @@ spec:
           {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
-            {{- toYaml . | nindent 12 }}
+            {{- $livenessProbe := . | deepCopy -}}
+            {{- if $livenessProbe.httpGet }}
+            {{- $_ := set $livenessProbe.httpGet "port" (include "cofide-credex.livenessProbePort" $ | int) -}}
+            {{- $_ := set $livenessProbe.httpGet "scheme" (include "cofide-credex.probeScheme" $) -}}
+            {{- end }}
+            {{- toYaml $livenessProbe | nindent 12 }}
           {{- end }}
           {{- with .Values.readinessProbe }}
           readinessProbe:
-            {{- toYaml . | nindent 12 }}
+            {{- $readinessProbe := . | deepCopy -}}
+            {{- if $readinessProbe.httpGet }}
+            {{- $_ := set $readinessProbe.httpGet "port" (include "cofide-credex.readinessProbePort" $ | int) -}}
+            {{- $_ := set $readinessProbe.httpGet "scheme" (include "cofide-credex.probeScheme" $) -}}
+            {{- end }}
+            {{- toYaml $readinessProbe | nindent 12 }}
           {{- end }}
           {{- with .Values.resources }}
           resources:
@@ -71,6 +86,16 @@ spec:
             - name: oauth-private-key
               mountPath: /run/credex/keys
               readOnly: true
+            {{- if .Values.credex.tls.enabled }}
+            - name: tls-certs
+              mountPath: {{ .Values.credex.tls.certFile }}
+              subPath: tls.crt
+              readOnly: true
+            - name: tls-certs
+              mountPath: {{ .Values.credex.tls.keyFile }}
+              subPath: tls.key
+              readOnly: true
+            {{- end }}
             {{- if .Values.volumeMounts }}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
             {{- end }}
@@ -89,6 +114,16 @@ spec:
         - name: oauth-private-key
           secret:
             secretName: {{ .Values.credex.oauthPrivateKeySecret }}
+        {{- if .Values.credex.tls.enabled }}
+        - name: tls-certs
+          secret:
+            secretName: {{ .Values.credex.tls.secretName }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        {{- end }}
         {{- if .Values.volumes }}
         {{- toYaml .Values.volumes | nindent 8 }}
         {{- end }}

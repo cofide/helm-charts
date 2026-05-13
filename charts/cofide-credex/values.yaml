@@ -23,6 +23,17 @@ credex:
   # Also requires securityContext.runAsUser: 0.
   # Example: /run/spire/agent/sockets/csi.spiffe.io/admin
   spireAgentAdminSocketHostPath: ""
+  # TLS configuration for the service.
+  tls:
+    # Enable TLS for the service.
+    enabled: false
+    # Path to the PEM-encoded TLS certificate file inside the container.
+    certFile: /run/credex/tls/tls.crt
+    # Path to the PEM-encoded TLS private key file inside the container.
+    keyFile: /run/credex/tls/tls.key
+    # Name of the Kubernetes Secret containing the TLS certificate and key.
+    # The Secret must contain 'tls.crt' and 'tls.key' keys.
+    secretName: ""
   # Issuer URL for the OAuth AS.
   # Required when enableOAuthAS is true.
   issuerURL: ""
@@ -107,6 +118,7 @@ service:
   annotations: {}
 
 # Liveness probe configuration.
+# When credex.tls.enabled is true, port defaults to 8443 and scheme to HTTPS.
 livenessProbe:
   httpGet:
     path: /health
@@ -116,6 +128,7 @@ livenessProbe:
   failureThreshold: 3
 
 # Readiness probe configuration.
+# When credex.tls.enabled is true, port defaults to 8443 and scheme to HTTPS.
 readinessProbe:
   httpGet:
     path: /health
