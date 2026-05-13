@@ -48,7 +48,6 @@ helm install cofide-credex cofide/cofide-credex \
 
 | Value | Description | Required |
 |---|---|---|
-| `credex.baseDomain` | Base domain for the custom token exchange endpoint | Yes |
 | `credex.spireAgentAdminSocket` | SPIRE Agent admin socket path inside the container. Defaults to `unix:///run/spire/private/sockets/admin.sock` | No |
 | `credex.spireAgentAdminSocketHostPath` | Host path for the SPIRE Agent admin socket. Enables Delegation API access. | Yes |
 

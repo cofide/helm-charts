@@ -14,9 +14,6 @@ credex:
   enableOAuthAS: true
   # Enable the custom token exchange endpoint.
   enableCustomExchange: false
-  # Base domain for the custom token exchange endpoint.
-  # Required when enableCustomExchange is true.
-  baseDomain: ""
   # SPIRE Agent admin socket path inside the container.
   # Defaults to a standard path; override only if needed.
   # Also set spireAgentAdminSocketHostPath and securityContext.runAsUser: 0.
