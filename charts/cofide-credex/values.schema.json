@@ -47,10 +47,6 @@
           "type": "boolean",
           "description": "Enable the custom token exchange endpoint."
         },
-        "baseDomain": {
-          "type": "string",
-          "description": "Base domain for the custom token exchange endpoint. Required when enableCustomExchange is true."
-        },
         "spireAgentAdminSocket": {
           "type": "string",
           "description": "SPIRE Agent admin socket path. Defaults to `unix:///run/spire/private/sockets/admin.sock`."
@@ -203,10 +199,9 @@
           },
           "then": {
             "properties": {
-              "baseDomain": { "type": "string", "minLength": 1 },
               "spireAgentAdminSocketHostPath": { "type": "string", "minLength": 1 }
             },
-            "required": ["baseDomain", "spireAgentAdminSocketHostPath"]
+            "required": ["spireAgentAdminSocketHostPath"]
           }
         },
         {

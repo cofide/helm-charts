@@ -14,9 +14,6 @@ data:
   OAUTH_PRIVATE_KEY_FILE: {{ .Values.credex.oauthPrivateKeyFile | quote }}
   SPIFFE_ENDPOINT_SOCKET: {{ .Values.credex.spiffeEndpointSocket | quote }}
   SERVER_DEBUG: {{ .Values.credex.debug | toString | quote }}
-  {{- with .Values.credex.baseDomain }}
-  BASE_DOMAIN: {{ . | quote }}
-  {{- end }}
   {{- with .Values.credex.spireAgentAdminSocketHostPath }}
   SPIRE_AGENT_ADMIN_SOCKET: {{ $.Values.credex.spireAgentAdminSocket | quote }}
   {{- end }}
