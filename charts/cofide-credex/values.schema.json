@@ -303,6 +303,13 @@
         "targetPort": {
           "type": "integer",
           "description": "Container port to forward traffic to."
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the service.",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "required": ["type", "port", "targetPort"]
