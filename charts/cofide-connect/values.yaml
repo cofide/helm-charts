@@ -118,7 +118,18 @@ connect:
     #      subject: clusterAadmin@example.com
     roleBindings: []
   # Whether audit events should be recorded within Connect. If enabled all operations within Connect that change state (e.g. create/update/delete APIs, node attestation/deletion, workload creation/deletion) will be recorded.
+  # DEPRECATED: This flag is deprecated and will be removed in a future release. Use the `audit` configuration block instead.
   recordAuditEvents: false
+  # Audit configured audit event recording and the sinks events are sent to.
+  audit:
+    sinks:
+      connectDatastore:
+        # EnabledEvents is the list of event types to enable. Use "all" to enable every event type.
+        # Examples: trust_zone_creation, workload_deletion, cluster_creation, node_attestation.
+        enabledEvents: []
+        # DisabledEvents is subtracted from the resolved enabledEvents list.
+        # Examples: trust_zone_deletion, cluster_deletion.
+        disabledEvents: []
   # Additional environment variables to pass to connect api binary.
   # For example:
   #  extraEnv:

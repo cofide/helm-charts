@@ -74,3 +74,20 @@ data:
           {{- end }}
       {{- end }}
     record_audit_events: {{ .Values.connect.recordAuditEvents | toString }}
+    audit:
+      sinks:
+        connect_datastore:
+          enabled_events:
+            {{- if .Values.connect.audit.sinks.connectDatastore.enabledEvents }}
+              {{- range .Values.connect.audit.sinks.connectDatastore.enabledEvents }}
+            - {{ . | quote }}
+              {{- end }}
+            {{- else }} []
+            {{- end }}
+          disabled_events:
+            {{- if .Values.connect.audit.sinks.connectDatastore.disabledEvents }}
+              {{- range .Values.connect.audit.sinks.connectDatastore.disabledEvents }}
+            - {{ . | quote }}
+              {{- end }}
+            {{- else }} []
+            {{- end }}

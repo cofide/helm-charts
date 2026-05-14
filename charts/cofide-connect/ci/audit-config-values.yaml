@@ -1,0 +1,8 @@
+connect:
+  audit:
+    sinks:
+      connectDatastore:
+        enabledEvents:
+          - all
+        disabledEvents:
+          - trust_zone_creation
