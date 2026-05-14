@@ -334,6 +334,42 @@
           "type": "boolean",
           "description": "Whether audit events should be recorded within Connect. If enabled all operations within Connect that change state (e.g. create/update/delete APIs, node attestation/deletion, workload creation/deletion) will be recorded."
         },
+        "audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Configures audit event recording and the sinks events are sent to.",
+          "properties": {
+            "sinks": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "connectDatastore": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "enabledEvents": {
+                      "type": "array",
+                      "description": "List of event types to enable. Use \"all\" to enable every event type.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "disabledEvents": {
+                      "type": "array",
+                      "description": "List of event types to disable. Subtracted from the resolved enabledEvents list.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": ["enabledEvents", "disabledEvents"]
+                }
+              },
+              "required": ["connectDatastore"]
+            }
+          },
+          "required": ["sinks"]
+        },
         "extraEnv": {
           "type": "array",
           "description": "Additional environment variables to pass to the connect api binary.",
@@ -388,6 +424,7 @@
         "authzPolicyEngine",
         "initialRBAC",
         "recordAuditEvents",
+        "audit",
         "extraEnv"
       ]
     },
