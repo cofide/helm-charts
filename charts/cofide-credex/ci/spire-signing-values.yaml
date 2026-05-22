@@ -1,0 +1,11 @@
+credex:
+  issuerURL: https://credex.example.org
+  connectURL: https://connect.example.org
+  connectTrustDomain: example.org
+  # Test SPIRE signer with a local extra JWKS source (migration overlap).
+  signing:
+    method: spire
+    spireServerAddr: spire-server.spire:8081
+    extraJWKSSources:
+      - local
+  preflightChecks: false

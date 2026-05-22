@@ -87,13 +87,60 @@
           "type": "string",
           "description": "Access token lifetime, e.g. \"5m\", \"1h\". Defaults to 1 minute when unset."
         },
-        "oauthPrivateKeyFile": {
-          "type": "string",
-          "description": "Path to the OAuth AS private key file."
-        },
-        "oauthPrivateKeySecret": {
-          "type": "string",
-          "description": "Name of the Kubernetes Secret containing the OAuth AS private key."
+        "signing": {
+          "type": "object",
+          "description": "OAuth AS signing key configuration.",
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "type": "string",
+              "description": "Signing method for OAuth AS access tokens.",
+              "enum": ["local", "spire"]
+            },
+            "spireServerAddr": {
+              "type": "string",
+              "description": "host:port of the SPIRE server's gRPC endpoint. Required when method is 'spire' or 'spire' appears in extraJWKSSources."
+            },
+            "extraJWKSSources": {
+              "type": "array",
+              "description": "Additional JWKS sources to publish on /keys alongside the active signer. Used to bridge a signing-key migration. Each entry must differ from method and appear at most once.",
+              "items": {
+                "type": "string",
+                "enum": ["local", "spire"]
+              },
+              "uniqueItems": true
+            },
+            "privateKeyFile": {
+              "type": "string",
+              "description": "Path to the OAuth AS private key file. Consulted by the local signer."
+            },
+            "privateKeySecret": {
+              "type": "string",
+              "description": "Name of the Kubernetes Secret containing the OAuth AS private key. Mounted only when the local signer is in use."
+            }
+          },
+          "required": ["method"],
+          "if": {
+            "anyOf": [
+              {
+                "properties": { "method": { "const": "spire" } },
+                "required": ["method"]
+              },
+              {
+                "properties": {
+                  "extraJWKSSources": {
+                    "type": "array",
+                    "contains": { "const": "spire" }
+                  }
+                },
+                "required": ["extraJWKSSources"]
+              }
+            ]
+          },
+          "then": {
+            "properties": { "spireServerAddr": { "type": "string", "minLength": 1 } },
+            "required": ["spireServerAddr"]
+          }
         },
         "spiffeEndpointSocket": {
           "type": "string",
@@ -193,8 +240,7 @@
         "enableOAuthAS",
         "enableSPIFFEExchange",
         "tls",
-        "oauthPrivateKeyFile",
-        "oauthPrivateKeySecret",
+        "signing",
         "spiffeEndpointSocket",
         "debug",
         "trustedIssuers",

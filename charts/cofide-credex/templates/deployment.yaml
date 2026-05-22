@@ -1,6 +1,8 @@
 {{- if .Values.credex.preflightChecks }}
-{{- if not (lookup "v1" "Secret" .Release.Namespace .Values.credex.oauthPrivateKeySecret) }}
-{{- fail (printf "Required Secret '%s' not found in namespace '%s'. Create it with the OAuth AS private key before installing cofide-credex." .Values.credex.oauthPrivateKeySecret .Release.Namespace) }}
+{{- if (include "cofide-credex.usesLocalSigning" .) }}
+{{- if not (lookup "v1" "Secret" .Release.Namespace .Values.credex.signing.privateKeySecret) }}
+{{- fail (printf "Required Secret '%s' not found in namespace '%s'. Create it with the OAuth AS private key before installing cofide-credex." .Values.credex.signing.privateKeySecret .Release.Namespace) }}
+{{- end }}
 {{- end }}
 {{- if .Values.credex.tls.enabled }}
 {{- if not (lookup "v1" "Secret" .Release.Namespace .Values.credex.tls.secretName) }}
@@ -83,9 +85,11 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if (include "cofide-credex.usesLocalSigning" .) }}
             - name: oauth-private-key
               mountPath: /run/credex/keys
               readOnly: true
+            {{- end }}
             {{- if .Values.credex.tls.enabled }}
             - name: tls-certs
               mountPath: {{ .Values.credex.tls.certFile }}
@@ -111,9 +115,11 @@ spec:
               readOnly: true
             {{- end }}
       volumes:
+        {{- if (include "cofide-credex.usesLocalSigning" .) }}
         - name: oauth-private-key
           secret:
-            secretName: {{ .Values.credex.oauthPrivateKeySecret }}
+            secretName: {{ .Values.credex.signing.privateKeySecret }}
+        {{- end }}
         {{- if .Values.credex.tls.enabled }}
         - name: tls-certs
           secret:
