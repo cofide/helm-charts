@@ -39,10 +39,26 @@ credex:
   issuerURL: ""
   # Access token lifetime, e.g. "5m", "1h". Defaults to 1 minute when unset.
   accessTokenLifetime: ""
-  # Path to the OAuth AS private key file.
-  oauthPrivateKeyFile: /run/credex/keys/private-key.pem
-  # Name of the Kubernetes Secret containing the OAuth AS private key.
-  oauthPrivateKeySecret: oauth-private-key
+  # OAuth AS signing key configuration.
+  signing:
+    # Signing method for OAuth AS access tokens.
+    # - "local": in-process RSA key. Loaded from privateKeyFile when set,
+    #   otherwise generated ephemerally on each start.
+    # - "spire": delegates signing to a Cofide-SPIRE custom JWT signer gRPC service.
+    method: local
+    # host:port of the SPIRE server's gRPC endpoint.
+    # Required when method is "spire" or "spire" appears in extraJWKSSources.
+    spireServerAddr: ""
+    # Additional JWKS sources to publish on /keys alongside the active signer.
+    # Used to bridge a signing-key migration. Each entry must be "local" or
+    # "spire", must differ from method, and appear at most once.
+    extraJWKSSources: []
+    # Path to the OAuth AS private key file. Consulted by the local signer.
+    privateKeyFile: /run/credex/keys/private-key.pem
+    # Name of the Kubernetes Secret containing the OAuth AS private key.
+    # Mounted only when the local signer is in use (method=local or
+    # 'local' appears in extraJWKSSources).
+    privateKeySecret: oauth-private-key
   # SPIFFE workload API endpoint socket.
   spiffeEndpointSocket: unix:///run/spire/sockets/spire-agent.sock
   # Enable debug logging.

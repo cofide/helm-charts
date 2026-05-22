@@ -115,3 +115,13 @@ HTTPS
 HTTP
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns "true" when the local signer is in use, either as the active signer
+or as an entry in extraJWKSSources. Empty otherwise.
+*/}}
+{{- define "cofide-credex.usesLocalSigning" -}}
+{{- if or (eq .Values.credex.signing.method "local") (has "local" .Values.credex.signing.extraJWKSSources) -}}
+true
+{{- end -}}
+{{- end -}}

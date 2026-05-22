@@ -9,7 +9,7 @@ A Helm chart for deploying Cofide Credex - an OAuth 2.0 Authorization Server (AS
 
 ### Required Secret
 
-A Kubernetes Secret named `oauth-private-key` must exist in the release namespace **before installation**. It should contain the OAuth AS private key at the key `private-key.pem`.
+When the local signer is in use (the default), a Kubernetes Secret named `oauth-private-key` must exist in the release namespace **before installation**. It should contain the OAuth AS private key at the key `private-key.pem`.
 
 Generate an EC P-256 private key and create the Secret:
 
@@ -20,7 +20,9 @@ kubectl create secret generic oauth-private-key \
   --from-file=private-key.pem=private-key.pem
 ```
 
-The Secret name defaults to `oauth-private-key` and is configurable via `credex.oauthPrivateKeySecret`. The chart verifies this Secret exists at install time and will fail with a clear error if it is missing. To skip this check when rendering templates without cluster access (e.g. in CI), set `credex.preflightChecks: false`.
+The Secret name defaults to `oauth-private-key` and is configurable via `credex.signing.privateKeySecret`. The chart verifies this Secret exists at install time and will fail with a clear error if it is missing. To skip this check when rendering templates without cluster access (e.g. in CI), set `credex.preflightChecks: false`.
+
+When the local signer is not in use (`credex.signing.method=spire` and `local` is not in `credex.signing.extraJWKSSources`), the Secret is not required and is not mounted.
 
 ## Installation
 
@@ -39,10 +41,26 @@ helm install cofide-credex cofide/cofide-credex \
 |---|---|---|
 | `credex.issuerURL` | Issuer URL advertised in the OAuth AS metadata | Yes |
 | `credex.accessTokenLifetime` | Token lifetime, e.g. `5m`, `1h`. Defaults to 1 minute | No |
-| `credex.oauthPrivateKeyFile` | Path to the OAuth AS private key file | Yes |
 | `credex.policyConfigFile` | Path to a local policy config file. Mutually exclusive with `connectURL` | One of |
 | `credex.connectURL` | Host:port of the Cofide Connect service used as the policy store. Mutually exclusive with `policyConfigFile` | One of |
 | `credex.connectTrustDomain` | SPIFFE trust domain of the Cofide Connect service. Required when `connectURL` is set | Conditional |
+
+### Signing Keys
+
+The OAuth AS supports two signing modes, configured via `credex.signing.method`:
+
+- `local` (default): an in-process RSA key. Loaded from `credex.signing.privateKeyFile` when the `oauth-private-key` Secret is mounted; otherwise an ephemeral key is generated on each start.
+- `spire`: delegates signing to a Cofide-SPIRE custom JWT signer gRPC service. The SPIRE server must allow Credex's SPIFFE ID via `experimental.custom_jwt_signers`.
+
+| Value | Description | Required |
+|---|---|---|
+| `credex.signing.method` | `local` or `spire` | No (defaults to `local`) |
+| `credex.signing.privateKeyFile` | Path to the OAuth AS private key file inside the container | When the local signer is in use |
+| `credex.signing.privateKeySecret` | Name of the Kubernetes Secret containing the OAuth AS private key at the `private-key.pem` key | When the local signer is in use |
+| `credex.signing.spireServerAddr` | host:port of the SPIRE server's gRPC endpoint | When method is `spire` or `spire` is in `extraJWKSSources` |
+| `credex.signing.extraJWKSSources` | Additional signing methods whose verification keys are published on `/keys` alongside the active signer. Each entry must be `local` or `spire`, differ from `method`, and appear at most once. Used to bridge a signing-key migration. | No |
+
+During a migration from `local` to `spire`, set `credex.signing.method=spire` and `credex.signing.extraJWKSSources=[local]` (keeping the `oauth-private-key` Secret in place). Once the previous access tokens have expired, drop `extraJWKSSources` and the `oauth-private-key` Secret.
 
 ### SPIFFE Token Exchange (`enableSPIFFEExchange: true`)
 

@@ -11,7 +11,16 @@ data:
   {{- with .Values.credex.accessTokenLifetime }}
   ACCESS_TOKEN_LIFETIME: {{ . | quote }}
   {{- end }}
-  OAUTH_PRIVATE_KEY_FILE: {{ .Values.credex.oauthPrivateKeyFile | quote }}
+  SIGNING_METHOD: {{ .Values.credex.signing.method | quote }}
+  {{- with .Values.credex.signing.spireServerAddr }}
+  SPIRE_SERVER_ADDR: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.credex.signing.extraJWKSSources }}
+  EXTRA_JWKS_SOURCES: {{ . | join "," | quote }}
+  {{- end }}
+  {{- if (include "cofide-credex.usesLocalSigning" .) }}
+  OAUTH_PRIVATE_KEY_FILE: {{ .Values.credex.signing.privateKeyFile | quote }}
+  {{- end }}
   SPIFFE_ENDPOINT_SOCKET: {{ .Values.credex.spiffeEndpointSocket | quote }}
   SERVER_DEBUG: {{ .Values.credex.debug | toString | quote }}
   PORT: {{ include "cofide-credex.targetPort" . | quote }}
