@@ -53,6 +53,23 @@ data:
           service_account_name: {{ .serviceAccountName | quote }}
         {{- end }}
       {{- end }}
+      {{- with .Values.connect.datastore.rds }}
+      rds:
+        enabled: {{ .enabled }}
+        host: {{ .host | quote }}
+        port: {{ .port }}
+        database_name: {{ .databaseName | quote }}
+        db_user: {{ .dbUser | quote }}
+        {{- with .oidc }}
+        oidc:
+          aws_region: {{ .awsRegion | quote }}
+          iam_role_arn: {{ .iamRoleARN | quote }}
+          audience: {{ .audience | quote }}
+        {{- end }}
+        max_open_conns: {{ .maxOpenConns }}
+        conn_max_lifetime: {{ .connMaxLifetime | quote }}
+        conn_max_idle_time: {{ .connMaxIdleTime | quote }}
+      {{- end }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
