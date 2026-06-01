@@ -1,3 +1,4 @@
+{{- $datastoreUsed := 0 -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -35,12 +36,18 @@ data:
       {{- end }}
     datastore:
       {{- with .Values.connect.datastore.sqlConnectionString }}
+      {{- if .enabled }}
+        {{- $datastoreUsed = add $datastoreUsed 1 }}
+      {{- end }}
       sql_connection_string:
         enabled: {{ .enabled }}
         connection_string: {{ .connectionString | quote }}
         remote_spiffe_id: {{ .remoteSPIFFEID | quote }}
       {{- end }}
       {{- with .Values.connect.datastore.cloudSQL }}
+      {{- if .enabled }}
+        {{- $datastoreUsed = add $datastoreUsed 1 }}
+      {{- end }}
       cloudsql:
         enabled: {{ .enabled }}
         instance: {{ .instance | quote }}
@@ -54,6 +61,9 @@ data:
         {{- end }}
       {{- end }}
       {{- with .Values.connect.datastore.rds }}
+      {{- if .enabled }}
+        {{- $datastoreUsed = add $datastoreUsed 1 }}
+      {{- end }}
       rds:
         enabled: {{ .enabled }}
         host: {{ .host | quote }}
@@ -108,3 +118,6 @@ data:
               {{- end }}
             {{- else }} []
             {{- end }}
+{{- if ne $datastoreUsed 1 }}
+{{- fail (printf "You have to enable exactly one datastore. There are %d enabled." $datastoreUsed) }}
+{{- end }}
