@@ -119,5 +119,5 @@ data:
             {{- else }} []
             {{- end }}
 {{- if ne $datastoreUsed 1 }}
-{{- fail (printf "You have to enable exactly one datastore. There are %d enabled." $datastoreUsed) }}
+{{- fail (printf "You must enable exactly one datastore. There are %d enabled." $datastoreUsed) }}
 {{- end }}
