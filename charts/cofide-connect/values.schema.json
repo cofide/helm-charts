@@ -229,9 +229,85 @@
                 "pscEnabled",
                 "oidc"
               ]
+            },
+            "rds": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "AWS RDS configuration",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "True to enable AWS RDS as the datastore"
+                },
+                "host": {
+                  "type": "string",
+                  "description": "Hostname of the RDS instance"
+                },
+                "port": {
+                  "type": "integer",
+                  "description": "Port of the RDS instance"
+                },
+                "databaseName": {
+                  "type": "string",
+                  "description": "Name of the Connect database",
+                  "minLength": 1
+                },
+                "dbUser": {
+                  "type": "string",
+                  "description": "Database user to connect as (must have the rds_iam role granted)"
+                },
+                "oidc": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Configuration to use OIDC to access AWS RDS, exchanging the server's SVID for temporary IAM credentials",
+                  "properties": {
+                    "awsRegion": {
+                      "type": "string",
+                      "description": "AWS region of the RDS instance"
+                    },
+                    "iamRoleARN": {
+                      "type": "string",
+                      "description": "IAM role ARN to assume for database access"
+                    },
+                    "audience": {
+                      "type": "string",
+                      "description": "Audience expected by the OIDC provider in AWS"
+                    }
+                  },
+                  "required": [
+                    "awsRegion",
+                    "iamRoleARN",
+                    "audience"
+                  ]
+                },
+                "maxOpenConns": {
+                  "type": "integer",
+                  "description": "Maximum number of open connections in the pool per Connect instance.",
+                  "minimum": 1
+                },
+                "connMaxLifetime": {
+                  "type": "string",
+                  "description": "Maximum time a connection may be reused (Go duration string, e.g. \"5m\", \"1h\")."
+                },
+                "connMaxIdleTime": {
+                  "type": "string",
+                  "description": "Maximum time a connection may be idle before being closed (Go duration string, e.g. \"1m\")."
+                }
+              },
+              "required": [
+                "enabled",
+                "host",
+                "port",
+                "databaseName",
+                "dbUser",
+                "oidc",
+                "maxOpenConns",
+                "connMaxLifetime",
+                "connMaxIdleTime"
+              ]
             }
           },
-          "required": ["sqlConnectionString", "cloudSQL"]
+          "required": ["sqlConnectionString", "cloudSQL", "rds"]
         },
         "connectPSATAudience": {
           "type": "string",

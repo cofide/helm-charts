@@ -1,3 +1,4 @@
+{{- $datastoreUsed := 0 -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -35,12 +36,18 @@ data:
       {{- end }}
     datastore:
       {{- with .Values.connect.datastore.sqlConnectionString }}
+      {{- if .enabled }}
+        {{- $datastoreUsed = add $datastoreUsed 1 }}
+      {{- end }}
       sql_connection_string:
         enabled: {{ .enabled }}
         connection_string: {{ .connectionString | quote }}
         remote_spiffe_id: {{ .remoteSPIFFEID | quote }}
       {{- end }}
       {{- with .Values.connect.datastore.cloudSQL }}
+      {{- if .enabled }}
+        {{- $datastoreUsed = add $datastoreUsed 1 }}
+      {{- end }}
       cloudsql:
         enabled: {{ .enabled }}
         instance: {{ .instance | quote }}
@@ -52,6 +59,26 @@ data:
           audience: {{ .audience | quote }}
           service_account_name: {{ .serviceAccountName | quote }}
         {{- end }}
+      {{- end }}
+      {{- with .Values.connect.datastore.rds }}
+      {{- if .enabled }}
+        {{- $datastoreUsed = add $datastoreUsed 1 }}
+      {{- end }}
+      rds:
+        enabled: {{ .enabled }}
+        host: {{ .host | quote }}
+        port: {{ .port }}
+        database_name: {{ .databaseName | quote }}
+        db_user: {{ .dbUser | quote }}
+        {{- with .oidc }}
+        oidc:
+          aws_region: {{ .awsRegion | quote }}
+          iam_role_arn: {{ .iamRoleARN | quote }}
+          audience: {{ .audience | quote }}
+        {{- end }}
+        max_open_conns: {{ .maxOpenConns }}
+        conn_max_lifetime: {{ .connMaxLifetime | quote }}
+        conn_max_idle_time: {{ .connMaxIdleTime | quote }}
       {{- end }}
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
@@ -91,3 +118,6 @@ data:
               {{- end }}
             {{- else }} []
             {{- end }}
+{{- if ne $datastoreUsed 1 }}
+{{- fail (printf "You must enable exactly one datastore. There are %d enabled." $datastoreUsed) }}
+{{- end }}

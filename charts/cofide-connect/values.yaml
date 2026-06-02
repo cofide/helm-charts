@@ -93,6 +93,34 @@ connect:
         audience: ""
         # Name of service account with access privileges to the Connect database in CloudSQL
         serviceAccountName: ""
+    rds:
+      # True to enable AWS RDS as the datastore
+      enabled: false
+      # Hostname of the RDS instance
+      host: ""
+      # Port of the RDS instance
+      port: 5432
+      # Name of the Connect database
+      databaseName: "connect-db"
+      # Database user to connect as (must have the rds_iam role granted)
+      dbUser: ""
+      # Configuration to use OIDC to access AWS RDS, exchanging the server's SVID for temporary IAM credentials
+      oidc:
+        # AWS region of the RDS instance
+        awsRegion: ""
+        # IAM role ARN to assume for database access
+        iamRoleARN: ""
+        # Audience expected by the OIDC provider in AWS
+        audience: ""
+      # Maximum number of open connections in the pool per Connect instance.
+      # Without RDS Proxy: total DB connections = maxOpenConns × number of Connect replicas,
+      # which must not exceed the RDS instance's max_connections limit.
+      # With RDS Proxy: excess connections queue at the proxy, but keeping this reasonable (e.g. 10-25) is still recommended.
+      maxOpenConns: 95
+      # Maximum time a connection may be reused (Go duration string, e.g. "5m", "1h").
+      connMaxLifetime: "5m"
+      # Maximum time a connection may be idle before being closed (Go duration string, e.g. "1m").
+      connMaxIdleTime: "1m"
   # Expected audience from OIDC token from Cofide SPIRE server in workload clusters.
   connectPSATAudience: ""
   # Trust domain of in-cluster SPIRE server.
