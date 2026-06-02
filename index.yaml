@@ -247,6 +247,20 @@ entries:
     version: 0.1.3
   cofide-connect:
   - apiVersion: v2
+    appVersion: v0.53.0
+    created: "2026-06-02T08:35:59.688598119Z"
+    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
+      cluster
+    digest: ad3aa7bac1514e4ece28d3bddee15d9f921368b544e75224f2720510888a2194
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-connect
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-connect-0.17.0/cofide-connect-0.17.0.tgz
+    version: 0.17.0
+  - apiVersion: v2
     appVersion: v0.51.0
     created: "2026-05-14T11:17:13.006555022Z"
     description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
@@ -2266,4 +2280,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-05-22T11:53:10.87574322Z"
+generated: "2026-06-02T08:35:59.688998989Z"
