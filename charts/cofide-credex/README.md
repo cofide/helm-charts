@@ -17,6 +17,7 @@ Generate an RSA private key and create the Secret:
 openssl genrsa -out private-key.pem 3072
 
 kubectl create secret generic oauth-private-key \
+  --namespace cofide \
   --from-file=private-key.pem=private-key.pem
 ```
 
@@ -28,6 +29,7 @@ When the local signer is not in use (`credex.signing.method=spire` and `local` i
 
 ```bash
 helm install cofide-credex cofide/cofide-credex \
+  --namespace cofide \
   --set credex.issuerURL=https://credex.example.org \
   --set credex.connectURL=connect.example.org:443 \
   --set credex.connectTrustDomain=example.org
