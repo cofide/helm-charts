@@ -100,7 +100,6 @@ data:
             claim_value: {{ .group.claimValue | quote }}
           {{- end }}
       {{- end }}
-    record_audit_events: {{ .Values.connect.recordAuditEvents | toString }}
     audit:
       sinks:
         connect_datastore:
