@@ -406,10 +406,6 @@
           },
           "required": ["version", "roleBindings"]
         },
-        "recordAuditEvents": {
-          "type": "boolean",
-          "description": "Whether audit events should be recorded within Connect. If enabled all operations within Connect that change state (e.g. create/update/delete APIs, node attestation/deletion, workload creation/deletion) will be recorded."
-        },
         "audit": {
           "type": "object",
           "additionalProperties": false,
@@ -499,7 +495,6 @@
         "telemetryEnabled",
         "authzPolicyEngine",
         "initialRBAC",
-        "recordAuditEvents",
         "audit",
         "extraEnv"
       ]

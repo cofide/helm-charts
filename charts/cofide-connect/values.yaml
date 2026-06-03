@@ -145,9 +145,6 @@ connect:
     #    user:
     #      subject: clusterAadmin@example.com
     roleBindings: []
-  # Whether audit events should be recorded within Connect. If enabled all operations within Connect that change state (e.g. create/update/delete APIs, node attestation/deletion, workload creation/deletion) will be recorded.
-  # DEPRECATED: This flag is deprecated and will be removed in a future release. Use the `audit` configuration block instead.
-  recordAuditEvents: false
   # Audit configured audit event recording and the sinks events are sent to.
   audit:
     sinks:
