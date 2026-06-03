@@ -11,10 +11,10 @@ A Helm chart for deploying Cofide Credex - an OAuth 2.0 Authorization Server (AS
 
 When the local signer is in use (the default), a Kubernetes Secret named `oauth-private-key` must exist in the release namespace **before installation**. It should contain the OAuth AS private key at the key `private-key.pem`.
 
-Generate an EC P-256 private key and create the Secret:
+Generate an RSA private key and create the Secret:
 
 ```bash
-openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -out private-key.pem
+openssl genrsa -out private-key.pem 3072
 
 kubectl create secret generic oauth-private-key \
   --from-file=private-key.pem=private-key.pem
