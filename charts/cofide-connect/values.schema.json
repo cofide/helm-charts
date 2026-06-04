@@ -70,6 +70,10 @@
                       "type": "string",
                       "description": "Name of bucket to use as trust bundle store."
                     },
+                    "usePathStyle": {
+                      "type": "boolean",
+                      "description": "Determines if path-style addressing is used to access S3 buckets (if false, virtual-hosted-style is used)."
+                    },
                     "oidc": {
                       "type": "object",
                       "additionalProperties": false,
@@ -100,7 +104,7 @@
                       ]
                     }
                   },
-                  "required": ["enabled", "bucket", "oidc"]
+                  "required": ["enabled", "bucket", "usePathStyle", "oidc"]
                 }
               }
             },

@@ -15,6 +15,7 @@ data:
       s3:
         enabled: {{ .enabled }}
         bucket: {{ .bucket }}
+        use_path_style: {{ .usePathStyle }}
         {{- with .oidc }}
         oidc:
           enabled: {{ .enabled }}
