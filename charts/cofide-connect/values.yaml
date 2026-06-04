@@ -39,6 +39,8 @@ connect:
       enabled: true
       # Name of bucket to use as trust bundle store.
       bucket: ""
+      # Determines if path-style addressing is used to access S3 buckets (if false, virtual-hosted-style is used).
+      usePathStyle: false
       # Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.
       oidc:
         # True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment.
