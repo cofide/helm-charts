@@ -447,36 +447,25 @@
           "description": "Additional environment variables to pass to the connect api binary.",
           "items": {
             "type": "object",
-            "allOf": [
-              {
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Environment variable name"
-                  }
-                },
-                "required": ["name"]
-              }
-            ],
-            "oneOf": [
-              {
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Simple string value to be set as environment variable"
-                  }
-                },
-                "required": ["value"]
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Environment variable name"
               },
-              {
-                "properties": {
-                  "valueFrom": {
-                    "type": "object",
-                    "description": "Source of environment value as defined in https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#envvarsource-v1-core"
-                  }
-                },
-                "required": ["valueFrom"]
+              "value": {
+                "type": "string",
+                "description": "Simple string value to be set as environment variable"
+              },
+              "valueFrom": {
+                "type": "object",
+                "description": "Source of environment value as defined in https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#envvarsource-v1-core"
               }
+            },
+            "required": ["name"],
+            "oneOf": [
+              { "required": ["value"] },
+              { "required": ["valueFrom"] }
             ]
           }
         }

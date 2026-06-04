@@ -202,36 +202,24 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "allOf": [
-              {
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Environment variable name."
-                  }
-                },
-                "required": ["name"]
-              }
-            ],
-            "oneOf": [
-              {
-                "properties": {
-                  "value": {
-                    "type": "string",
-                    "description": "Simple string value for the environment variable."
-                  }
-                },
-                "required": ["value"]
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Environment variable name."
               },
-              {
-                "properties": {
-                  "valueFrom": {
-                    "type": "object",
-                    "description": "Source of the environment variable value, as defined in https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#envvarsource-v1-core."
-                  }
-                },
-                "required": ["valueFrom"]
+              "value": {
+                "type": "string",
+                "description": "Simple string value for the environment variable."
+              },
+              "valueFrom": {
+                "type": "object",
+                "description": "Source of the environment variable value, as defined in https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.34/#envvarsource-v1-core."
               }
+            },
+            "required": ["name"],
+            "oneOf": [
+              { "required": ["value"] },
+              { "required": ["valueFrom"] }
             ]
           }
         }
