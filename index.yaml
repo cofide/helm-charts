@@ -248,6 +248,20 @@ entries:
   cofide-connect:
   - apiVersion: v2
     appVersion: v0.53.0
+    created: "2026-06-04T09:02:40.995378419Z"
+    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
+      cluster
+    digest: 468b6ad8a6d2e6c56558f31fa14b28f14df8e3a393c15041f0682555bb000b76
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-connect
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-connect-0.18.1/cofide-connect-0.18.1.tgz
+    version: 0.18.1
+  - apiVersion: v2
+    appVersion: v0.53.0
     created: "2026-06-03T21:28:49.632275857Z"
     description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
       cluster
@@ -891,6 +905,19 @@ entries:
     - https://github.com/cofide/helm-charts/releases/download/cofide-connect-ui-0.1.0/cofide-connect-ui-0.1.0.tgz
     version: 0.1.0
   cofide-credex:
+  - apiVersion: v2
+    appVersion: v0.13.0
+    created: "2026-06-04T09:02:41.271516219Z"
+    description: Helm chart to deploy Cofide Credex
+    digest: 00bf1373f3d95bbc24b33e0275345abeee3ee930539ddd7cd98ade66ae69db2f
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-credex
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-credex-0.3.2/cofide-credex-0.3.2.tgz
+    version: 0.3.2
   - apiVersion: v2
     appVersion: v0.13.0
     created: "2026-06-03T13:54:15.933924053Z"
@@ -2307,4 +2334,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-06-03T21:28:49.632595223Z"
+generated: "2026-06-04T09:02:41.273284799Z"
