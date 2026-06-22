@@ -1,0 +1,4 @@
+{{- if .Values.connect.urlBase }}
+WARNING: connect.urlBase is deprecated and will be removed in a future release.
+  Set connect.apiHostname, connect.mtlsHostname, and connect.xdsHostname explicitly instead.
+{{- end }}

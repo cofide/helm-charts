@@ -63,7 +63,7 @@ data:
                 application_protocols:
                   - h2
                 server_names:
-                  - xds.{{ .Values.connect.urlBase }}
+                  - {{ include "cofide-connect.xdsHostname" . }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:
@@ -135,7 +135,7 @@ data:
                   - h2
                   - http/1.1
                 server_names:
-                  - connect.{{ .Values.connect.urlBase }}
+                  - {{ include "cofide-connect.apiHostname" . }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:
@@ -191,7 +191,7 @@ data:
                                 body:
                                   inline_string: |
                                     {
-                                      "resource": "https://connect.{{ .Values.connect.urlBase }}",
+                                      "resource": "https://{{ include "cofide-connect.apiHostname" . }}",
                                       "authorization_servers": ["{{ .Values.envoy.auth.issuer }}"],
                                       "scopes_supported": {{ .Values.envoy.auth.scopesSupported | toJson }},
                                       "bearer_methods_supported": ["header"]
@@ -279,10 +279,10 @@ data:
                               upstream_local_address: '%UPSTREAM_LOCAL_ADDRESS%'
                               grpc_status: '%GRPC_STATUS%'
                               requested_server_name: '%REQUESTED_SERVER_NAME%'
-            - name: connect_agent_api
+            - name: connect_mtls_api
               filter_chain_match:
                 server_names:
-                  - connect-agent.{{ .Values.connect.urlBase }}
+                  - {{ include "cofide-connect.mtlsHostname" . }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:

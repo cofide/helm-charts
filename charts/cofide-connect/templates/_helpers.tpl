@@ -61,10 +61,43 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Hostname for the JWT API endpoint (connect.<urlBase> by default).
+*/}}
+{{- define "cofide-connect.apiHostname" -}}
+{{- if .Values.connect.apiHostname -}}
+{{- .Values.connect.apiHostname -}}
+{{- else -}}
+connect.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
+{{/*
+Hostname for the SPIFFE mTLS endpoint (cofide-agent.<urlBase> by default).
+*/}}
+{{- define "cofide-connect.mtlsHostname" -}}
+{{- if .Values.connect.mtlsHostname -}}
+{{- .Values.connect.mtlsHostname -}}
+{{- else -}}
+cofide-agent.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
+{{/*
+Hostname for the XDS/ADS endpoint (xds.<urlBase> by default).
+*/}}
+{{- define "cofide-connect.xdsHostname" -}}
+{{- if .Values.connect.xdsHostname -}}
+{{- .Values.connect.xdsHostname -}}
+{{- else -}}
+xds.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
 {{- define "cofide-connect.envoy.auth.audiences" -}}
 {{- if gt (len .Values.envoy.auth.audiences) 0 }}
 {{- toYaml .Values.envoy.auth.audiences }}
 {{- else -}}
-- https://connect.{{ .Values.connect.urlBase }}
+- https://{{ include "cofide-connect.apiHostname" . }}
 {{- end }}
 {{- end }}

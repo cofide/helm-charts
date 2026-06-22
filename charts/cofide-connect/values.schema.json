@@ -10,7 +10,19 @@
       "properties": {
         "urlBase": {
           "type": "string",
-          "description": "The base URL for the Connect service."
+          "description": "Deprecated: use apiHostname, mtlsHostname, and xdsHostname instead. urlBase will be removed in a future release. Used to construct default endpoint hostnames when the explicit hostname values are not set."
+        },
+        "apiHostname": {
+          "type": "string",
+          "description": "Hostname for the JWT API endpoint. Defaults to connect.<urlBase>."
+        },
+        "mtlsHostname": {
+          "type": "string",
+          "description": "Hostname for the SPIFFE mTLS endpoint. Defaults to cofide-agent.<urlBase>."
+        },
+        "xdsHostname": {
+          "type": "string",
+          "description": "Hostname for the XDS/ADS endpoint. Defaults to xds.<urlBase>."
         },
         "allowedOrigins": {
           "type": "array",
