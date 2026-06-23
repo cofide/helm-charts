@@ -1039,6 +1039,19 @@ entries:
     version: 0.1.0
   cofide-observer:
   - apiVersion: v2
+    appVersion: v0.6.0
+    created: "2026-06-23T13:00:51.464937111Z"
+    description: Helm chart to deploy Cofide Observer
+    digest: e24a5ed5133d88a65b21f3fa14b7d385131a9c06f3dbfb52f44cf3a932638885
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-observer
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-observer-0.3.5/cofide-observer-0.3.5.tgz
+    version: 0.3.5
+  - apiVersion: v2
     appVersion: v0.5.0
     created: "2026-06-08T08:34:30.918199675Z"
     description: Helm chart to deploy Cofide Observer
@@ -2375,4 +2388,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-06-09T09:39:29.816007376Z"
+generated: "2026-06-23T13:00:51.465262801Z"
