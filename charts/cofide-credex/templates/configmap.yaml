@@ -5,6 +5,11 @@ metadata:
   labels:
     {{- include "cofide-credex.labels" . | nindent 4 }}
 data:
+  {{- if .Values.credex.telemetry.enabled }}
+  TELEMETRY_ENABLED: {{ .Values.credex.telemetry.enabled | toString | quote }}
+  TELEMETRY_TARGET_SPIFFE_ID: {{ .Values.credex.telemetry.targetSPIFFEID | quote }}
+  OTEL_SERVICE_NAME: "credex"
+  {{- end }}
   ENABLE_OAUTH_AS: {{ .Values.credex.enableOAuthAS | toString | quote }}
   ENABLE_SPIFFE_EXCHANGE: {{ .Values.credex.enableSPIFFEExchange | toString | quote }}
   ISSUER_URL: {{ .Values.credex.issuerURL | quote }}
