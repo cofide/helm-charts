@@ -104,6 +104,13 @@ spec:
               value: "https://{{ .Values.ui.hostname }}{{ if ne (int .Values.service.port) 443 }}:{{ .Values.service.port }}{{ end }}"
             - name: VITE_CONNECT_URL
               value: "{{ .Values.ui.connectUrl }}"
+            - name: VITE_OAUTH_AUDIENCE
+              {{/*
+              Default to Connect URL base value to match envoy.auth.audiencies
+              default in cofide-connect chart.
+              */}}
+              {{- $url := urlParse .Values.ui.connectUrl -}}
+              value: "{{ .Values.ui.oauth.audience | default (printf "%s://%s" $url.scheme $url.hostname) }}"
           {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
           {{- end }}

@@ -40,6 +40,7 @@ ui:
   oauth:
     clientId: ""
     issuer: ""
+    audience: "" # Defaults to connectUrl's scheme://host
 
 # Envoy sidecar config used to proxy traffic to the UI
 envoy:
