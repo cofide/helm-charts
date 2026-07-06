@@ -73,22 +73,24 @@ connect.{{ .Values.connect.urlBase }}
 {{- end }}
 
 {{/*
-Hostname for the SPIFFE mTLS endpoint (cofide-agent.<urlBase> by default).
+TLS SNI for the SPIFFE mTLS endpoint (cofide-agent.<urlBase> by default). Used only for Envoy's
+filter_chain_match - there is no HTTP-layer use of this value.
 */}}
-{{- define "cofide-connect.mtlsHostname" -}}
-{{- if .Values.connect.mtlsHostname -}}
-{{- .Values.connect.mtlsHostname -}}
+{{- define "cofide-connect.mtlsServerName" -}}
+{{- if .Values.connect.mtlsServerName -}}
+{{- .Values.connect.mtlsServerName -}}
 {{- else -}}
 cofide-agent.{{ .Values.connect.urlBase }}
 {{- end -}}
 {{- end }}
 
 {{/*
-Hostname for the XDS/ADS endpoint (xds.<urlBase> by default).
+TLS SNI for the XDS/ADS endpoint (xds.<urlBase> by default). Used only for Envoy's
+filter_chain_match - there is no HTTP-layer use of this value.
 */}}
-{{- define "cofide-connect.xdsHostname" -}}
-{{- if .Values.connect.xdsHostname -}}
-{{- .Values.connect.xdsHostname -}}
+{{- define "cofide-connect.xdsServerName" -}}
+{{- if .Values.connect.xdsServerName -}}
+{{- .Values.connect.xdsServerName -}}
 {{- else -}}
 xds.{{ .Values.connect.urlBase }}
 {{- end -}}
@@ -99,5 +101,8 @@ xds.{{ .Values.connect.urlBase }}
 {{- toYaml .Values.envoy.auth.audiences }}
 {{- else -}}
 - https://{{ include "cofide-connect.apiHostname" . }}
+{{- range .Values.connect.apiExtraHostnames }}
+- https://{{ . }}
+{{- end }}
 {{- end }}
 {{- end }}

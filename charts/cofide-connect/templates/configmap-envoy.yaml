@@ -63,7 +63,10 @@ data:
                 application_protocols:
                   - h2
                 server_names:
-                  - {{ include "cofide-connect.xdsHostname" . }}
+                  - {{ include "cofide-connect.xdsServerName" . }}
+                  {{- range .Values.connect.xdsExtraServerNames }}
+                  - {{ . }}
+                  {{- end }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:
@@ -136,6 +139,9 @@ data:
                   - http/1.1
                 server_names:
                   - {{ include "cofide-connect.apiHostname" . }}
+                  {{- range .Values.connect.apiExtraHostnames }}
+                  - {{ . }}
+                  {{- end }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:
@@ -184,6 +190,14 @@ data:
                               allow_credentials: true
                               max_age: "7200"
                           routes:
+                            # TODO: "resource" below always reflects connect.apiHostname, even when the
+                            # request came in on one of connect.apiExtraHostnames. Per RFC 9728, "resource"
+                            # is a single URI and clients are expected to validate it matches the URL they
+                            # fetched this document from - a request via an extra hostname currently gets a
+                            # mismatched value. Since Envoy's direct_response body is static, fixing this
+                            # properly means generating one route per hostname (matching on the :authority
+                            # header) each with its own body, looping over
+                            # [apiHostname] + apiExtraHostnames. Deferred until this is a real interop problem.
                             - match:
                                 path: "/.well-known/oauth-protected-resource"
                               direct_response:
@@ -282,7 +296,10 @@ data:
             - name: connect_mtls_api
               filter_chain_match:
                 server_names:
-                  - {{ include "cofide-connect.mtlsHostname" . }}
+                  - {{ include "cofide-connect.mtlsServerName" . }}
+                  {{- range .Values.connect.mtlsExtraServerNames }}
+                  - {{ . }}
+                  {{- end }}
               transport_socket:
                 name: envoy.transport_sockets.tls
                 typed_config:

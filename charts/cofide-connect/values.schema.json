@@ -10,19 +10,40 @@
       "properties": {
         "urlBase": {
           "type": "string",
-          "description": "Deprecated: use apiHostname, mtlsHostname, and xdsHostname instead. urlBase will be removed in a future release. Used to construct default endpoint hostnames when the explicit hostname values are not set."
+          "description": "Deprecated: use apiHostname, mtlsServerName, and xdsServerName instead. urlBase will be removed in a future release. Used to construct default endpoint hostnames/SNIs when the explicit values are not set."
         },
         "apiHostname": {
           "type": "string",
-          "description": "Hostname for the JWT API endpoint. Defaults to connect.<urlBase>."
+          "description": "Hostname for the JWT API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is a real hostname, not just a TLS SNI."
         },
-        "mtlsHostname": {
-          "type": "string",
-          "description": "Hostname for the SPIFFE mTLS endpoint. Defaults to cofide-agent.<urlBase>."
+        "apiExtraHostnames": {
+          "type": "array",
+          "description": "Additional SNI hostnames Envoy will accept for the JWT API endpoint, alongside apiHostname.",
+          "items": {
+            "type": "string"
+          }
         },
-        "xdsHostname": {
+        "mtlsServerName": {
           "type": "string",
-          "description": "Hostname for the XDS/ADS endpoint. Defaults to xds.<urlBase>."
+          "description": "TLS SNI for the SPIFFE mTLS endpoint. Defaults to cofide-agent.<urlBase>. Only used for Envoy's filter_chain_match."
+        },
+        "mtlsExtraServerNames": {
+          "type": "array",
+          "description": "Additional SNIs Envoy will accept for the SPIFFE mTLS endpoint, alongside mtlsServerName.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "xdsServerName": {
+          "type": "string",
+          "description": "TLS SNI for the XDS/ADS endpoint. Defaults to xds.<urlBase>. Only used for Envoy's filter_chain_match."
+        },
+        "xdsExtraServerNames": {
+          "type": "array",
+          "description": "Additional SNIs Envoy will accept for the XDS/ADS endpoint, alongside xdsServerName.",
+          "items": {
+            "type": "string"
+          }
         },
         "allowedOrigins": {
           "type": "array",
