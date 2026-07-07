@@ -25,7 +25,7 @@
         },
         "mtlsServerName": {
           "type": "string",
-          "description": "TLS SNI for the SPIFFE mTLS endpoint. Defaults to cofide-agent.<urlBase>. Only used for Envoy's filter_chain_match."
+          "description": "TLS SNI for the SPIFFE mTLS endpoint. Defaults to connect-agent.<urlBase>. Only used for Envoy's filter_chain_match."
         },
         "mtlsExtraServerNames": {
           "type": "array",

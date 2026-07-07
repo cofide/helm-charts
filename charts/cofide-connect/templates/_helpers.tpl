@@ -73,14 +73,14 @@ connect.{{ .Values.connect.urlBase }}
 {{- end }}
 
 {{/*
-TLS SNI for the SPIFFE mTLS endpoint (cofide-agent.<urlBase> by default). Used only for Envoy's
+TLS SNI for the SPIFFE mTLS endpoint (connect-agent.<urlBase> by default). Used only for Envoy's
 filter_chain_match - there is no HTTP-layer use of this value.
 */}}
 {{- define "cofide-connect.mtlsServerName" -}}
 {{- if .Values.connect.mtlsServerName -}}
 {{- .Values.connect.mtlsServerName -}}
 {{- else -}}
-cofide-agent.{{ .Values.connect.urlBase }}
+connect-agent.{{ .Values.connect.urlBase }}
 {{- end -}}
 {{- end }}
 

@@ -15,7 +15,7 @@ image:
 
 connect:
   # Deprecated: use apiHostname, mtlsServerName, and xdsServerName instead. urlBase will be removed in a future release.
-  # Used to construct default endpoint hostnames (connect.<urlBase>, cofide-agent.<urlBase>, xds.<urlBase>) when the explicit hostname/SNI values are not set.
+  # Used to construct default endpoint hostnames (connect.<urlBase>, connect-agent.<urlBase>, xds.<urlBase>) when the explicit hostname/SNI values are not set.
   urlBase: ""
   # Hostname for the JWT API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth
   # audience and the "resource" value in the oauth-protected-resource metadata, so this is a
@@ -24,7 +24,7 @@ connect:
   # Additional SNI hostnames Envoy will accept for the JWT API endpoint, alongside apiHostname.
   # Useful when the same Connect instance is reachable under more than one public hostname.
   apiExtraHostnames: []
-  # TLS SNI for the SPIFFE mTLS endpoint. Defaults to cofide-agent.<urlBase>. Only used for
+  # TLS SNI for the SPIFFE mTLS endpoint. Defaults to connect-agent.<urlBase>. Only used for
   # Envoy's filter_chain_match - there is no HTTP-layer use of this value.
   mtlsServerName: ""
   # Additional SNIs Envoy will accept for the SPIFFE mTLS endpoint, alongside mtlsServerName.
