@@ -172,7 +172,10 @@
             },
             "then": {
               "properties": {
-                "targetSPIFFEID": { "type": "string", "minLength": 10 }
+                "targetSPIFFEID": {
+                  "type": "string",
+                  "pattern": "spiffe://[^/]+/.+"
+                }
               },
               "required": ["targetSPIFFEID"]
             }
