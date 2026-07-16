@@ -63,6 +63,12 @@ credex:
   spiffeEndpointSocket: unix:///run/spire/sockets/spire-agent.sock
   # Enable debug logging.
   debug: false
+  # Telemetry config (OpenTelemetry-based).
+  telemetry:
+    # Whether to enable pushing of metrics and traces telemetry data (via OpenTelemetry SDK).
+    enabled: false
+    # SPIFFE ID of the target OTel service (e.g., OTel collector service). Required when telemetry.enabled is true.
+    targetSPIFFEID: ""
   # Trusted issuers for token exchange. Each entry generates a numbered set of
   # TRUSTED_ISSUER_n / TRUSTED_ISSUER_JWKS_URL_n / TRUSTED_ISSUER_ALLOWED_AUDIENCES_n env vars.
   trustedIssuers: []
