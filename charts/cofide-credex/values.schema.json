@@ -181,6 +181,19 @@
             }
           }]
         },
+        "audit": {
+          "type": "object",
+          "description": "Audit configuration.",
+          "additionalProperties": false,
+          "properties": {
+            "backend": {
+              "type": "string",
+              "description": "Audit backend type. Supported values: \"log\" (logging to stdout), \"connect\" (sending to Cofide Connect service; requires setting credex.connectURL).",
+              "enum": ["log", "connect"]
+            }
+          },
+          "required": ["backend"]
+        },
         "trustedIssuers": {
           "type": "array",
           "description": "Trusted issuers for token exchange. Each entry generates a numbered set of TRUSTED_ISSUER_n / TRUSTED_ISSUER_JWKS_URL_n / TRUSTED_ISSUER_ALLOWED_AUDIENCES_n env vars.",
