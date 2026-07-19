@@ -10,6 +10,7 @@ data:
   TELEMETRY_TARGET_SPIFFE_ID: {{ .Values.credex.telemetry.targetSPIFFEID | quote }}
   OTEL_SERVICE_NAME: "credex"
   {{- end }}
+  AUDIT_BACKEND: {{ .Values.credex.audit.backend | quote }}
   ENABLE_OAUTH_AS: {{ .Values.credex.enableOAuthAS | toString | quote }}
   ENABLE_SPIFFE_EXCHANGE: {{ .Values.credex.enableSPIFFEExchange | toString | quote }}
   ISSUER_URL: {{ .Values.credex.issuerURL | quote }}
