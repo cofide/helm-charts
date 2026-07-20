@@ -518,7 +518,6 @@
         }
       },
       "required": [
-        "urlBase",
         "allowedOrigins",
         "insecureServerAddress",
         "adsServerAddress",
@@ -533,6 +532,10 @@
         "initialRBAC",
         "audit",
         "extraEnv"
+      ],
+      "anyOf": [
+        { "required": ["urlBase"] },
+        { "required": ["apiHostname", "mtlsServerName", "xdsServerName"] }
       ]
     },
     "service": {
