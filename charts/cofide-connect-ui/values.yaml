@@ -41,6 +41,10 @@ ui:
     clientId: ""
     issuer: ""
     audience: "" # Defaults to connectUrl's scheme://hostname
+    scopes:
+      - openid
+      - offline_access
+      - email
 
 # Envoy sidecar config used to proxy traffic to the UI
 envoy:

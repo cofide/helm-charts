@@ -111,6 +111,8 @@ spec:
               */}}
               {{- $url := urlParse .Values.ui.connectUrl -}}
               value: "{{ .Values.ui.oauth.audience | default (printf "%s://%s" $url.scheme $url.hostname) }}"
+            - name: VITE_OAUTH_SCOPES
+              value: "{{ .Values.ui.oauth.scopes | join " " }}"
           {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
