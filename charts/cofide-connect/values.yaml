@@ -41,6 +41,12 @@ connect:
       bucket: ""
       # Determines if path-style addressing is used to access S3 buckets (if false, virtual-hosted-style is used).
       usePathStyle: false
+      # Configuration for server-side encryption of objects written to the S3 trust bundle store.
+      encryption:
+        # Server-side encryption mode for objects written to S3: "" (bucket default), "SSE-S3", or "SSE-KMS".
+        type: ""
+        # KMS key to use when type is "SSE-KMS", as a key ID, key ARN, alias name, or alias ARN. Empty uses the account's default KMS key.
+        kmsKeyId: ""
       # Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.
       oidc:
         # True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment.

@@ -16,6 +16,14 @@ data:
         enabled: {{ .enabled }}
         bucket: {{ .bucket }}
         use_path_style: {{ .usePathStyle }}
+        {{- with .encryption }}
+        {{- if and .kmsKeyId (ne .type "SSE-KMS") }}
+        {{- fail (printf "connect.trustBundleStoreBackend.s3.encryption.kmsKeyId is only valid when type is \"SSE-KMS\" (got type: %q, kmsKeyId: %q)" .type .kmsKeyId) }}
+        {{- end }}
+        encryption:
+          type: {{ .type | quote }}
+          kms_key_id: {{ .kmsKeyId | quote }}
+        {{- end }}
         {{- with .oidc }}
         oidc:
           enabled: {{ .enabled }}

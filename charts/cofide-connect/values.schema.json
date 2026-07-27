@@ -74,6 +74,23 @@
                       "type": "boolean",
                       "description": "Determines if path-style addressing is used to access S3 buckets (if false, virtual-hosted-style is used)."
                     },
+                    "encryption": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "description": "Configuration for server-side encryption of objects written to the S3 trust bundle store.",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": ["", "SSE-S3", "SSE-KMS"],
+                          "description": "Server-side encryption mode for objects written to S3: \"\" (bucket default), \"SSE-S3\", or \"SSE-KMS\"."
+                        },
+                        "kmsKeyId": {
+                          "type": "string",
+                          "description": "KMS key to use when type is \"SSE-KMS\", as a key ID, key ARN, alias name, or alias ARN. Empty uses the account's default KMS key."
+                        }
+                      },
+                      "required": ["type", "kmsKeyId"]
+                    },
                     "oidc": {
                       "type": "object",
                       "additionalProperties": false,
@@ -104,7 +121,7 @@
                       ]
                     }
                   },
-                  "required": ["enabled", "bucket", "usePathStyle", "oidc"]
+                  "required": ["enabled", "bucket", "usePathStyle", "encryption", "oidc"]
                 }
               }
             },
