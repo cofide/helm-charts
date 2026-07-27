@@ -54,105 +54,115 @@
         "trustBundleStoreBackend": {
           "type": "object",
           "description": "Configuration of the trust bundle store backend to use. Only one backend may be enabled.",
-          "anyOf": [
-            {
+          "properties": {
+            "s3": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Configuration for S3 trust bundle store backend.",
               "properties": {
-                "s3": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "True to enable the S3 backend."
+                },
+                "bucket": {
+                  "type": "string",
+                  "description": "Name of bucket to use as trust bundle store."
+                },
+                "usePathStyle": {
+                  "type": "boolean",
+                  "description": "Determines if path-style addressing is used to access S3 buckets (if false, virtual-hosted-style is used)."
+                },
+                "encryption": {
                   "type": "object",
                   "additionalProperties": false,
-                  "description": "Configuration for S3 trust bundle store backend.",
+                  "description": "Configuration for server-side encryption of objects written to the S3 trust bundle store.",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["", "SSE-S3", "SSE-KMS"],
+                      "description": "Server-side encryption mode for objects written to S3: \"\" (bucket default), \"SSE-S3\", or \"SSE-KMS\"."
+                    },
+                    "kmsKeyId": {
+                      "type": "string",
+                      "description": "KMS key to use when type is \"SSE-KMS\", as a key ID, key ARN, alias name, or alias ARN. Empty uses the account's default KMS key."
+                    }
+                  },
+                  "required": ["type", "kmsKeyId"]
+                },
+                "oidc": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.",
                   "properties": {
                     "enabled": {
                       "type": "boolean",
-                      "description": "True to enable the S3 backend."
+                      "description": "True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment."
                     },
-                    "bucket": {
+                    "awsRegion": {
                       "type": "string",
-                      "description": "Name of bucket to use as trust bundle store."
+                      "description": "Region to set in the AWS config when obtaining credentials through OIDC."
                     },
-                    "usePathStyle": {
-                      "type": "boolean",
-                      "description": "Determines if path-style addressing is used to access S3 buckets (if false, virtual-hosted-style is used)."
+                    "iamRoleARN": {
+                      "type": "string",
+                      "description": "ARN of AWS role to assume when obtaining credentials through OIDC."
                     },
-                    "oidc": {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "description": "Configuration to use OIDC to access S3, exchanging the Connect server's SVID for AWS credentials.",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean",
-                          "description": "True to use OIDC with the server's SVID to get temporary credentials to access S3 using OIDC, otherwise the AWS credentials will be sourced from the environment."
-                        },
-                        "awsRegion": {
-                          "type": "string",
-                          "description": "Region to set in the AWS config when obtaining credentials through OIDC."
-                        },
-                        "iamRoleARN": {
-                          "type": "string",
-                          "description": "ARN of AWS role to assume when obtaining credentials through OIDC."
-                        },
-                        "audience": {
-                          "type": "string",
-                          "description": "Audience expected by the OIDC provider in AWS."
-                        }
-                      },
-                      "required": [
-                        "enabled",
-                        "awsRegion",
-                        "iamRoleARN",
-                        "audience"
-                      ]
+                    "audience": {
+                      "type": "string",
+                      "description": "Audience expected by the OIDC provider in AWS."
                     }
                   },
-                  "required": ["enabled", "bucket", "usePathStyle", "oidc"]
+                  "required": [
+                    "enabled",
+                    "awsRegion",
+                    "iamRoleARN",
+                    "audience"
+                  ]
                 }
-              }
+              },
+              "required": ["enabled", "bucket", "usePathStyle", "encryption", "oidc"]
             },
-            {
+            "gcs": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Configuration for GCS trust bundle store backend.",
               "properties": {
-                "gcs": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "True to enable the GCS backend."
+                },
+                "bucket": {
+                  "type": "string",
+                  "description": "Name of bucket to use as trust bundle store."
+                },
+                "oidc": {
                   "type": "object",
                   "additionalProperties": false,
-                  "description": "Configuration for GCS trust bundle store backend.",
+                  "description": "Configuration to use OIDC to access GCS, exchanging the Connect server's SVID for GCP credentials.",
                   "properties": {
                     "enabled": {
                       "type": "boolean",
-                      "description": "True to enable the GCS backend."
+                      "description": "True to use OIDC with the server's SVID to get temporary credentials to access GCS using OIDC, otherwise the GCP credentials will be sourced from the environment."
                     },
-                    "bucket": {
+                    "workloadIdentityProvider": {
                       "type": "string",
-                      "description": "Name of bucket to use as trust bundle store."
+                      "description": "Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC. Must be in the form projects/PROJECT_ID/locations/global/workloadIdentityPools/WORKLOAD_IDENTITY_POOL_NAME/providers/WORKLOAD_IDENTITY_PROVIDER_NAME."
                     },
-                    "oidc": {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "description": "Configuration to use OIDC to access GCS, exchanging the Connect server's SVID for GCP credentials.",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean",
-                          "description": "True to use OIDC with the server's SVID to get temporary credentials to access GCS using OIDC, otherwise the GCP credentials will be sourced from the environment."
-                        },
-                        "workloadIdentityProvider": {
-                          "type": "string",
-                          "description": "Fully qualified identifier of GCP workload identity provider to use when obtaining credentials through OIDC. Must be in the form projects/PROJECT_ID/locations/global/workloadIdentityPools/WORKLOAD_IDENTITY_POOL_NAME/providers/WORKLOAD_IDENTITY_PROVIDER_NAME."
-                        },
-                        "audience": {
-                          "type": "string",
-                          "description": "Audience expected by the OIDC provider in GCP."
-                        }
-                      },
-                      "required": [
-                        "enabled",
-                        "workloadIdentityProvider",
-                        "audience"
-                      ]
+                    "audience": {
+                      "type": "string",
+                      "description": "Audience expected by the OIDC provider in GCP."
                     }
                   },
-                  "required": ["enabled", "bucket", "oidc"]
+                  "required": [
+                    "enabled",
+                    "workloadIdentityProvider",
+                    "audience"
+                  ]
                 }
-              }
+              },
+              "required": ["enabled", "bucket", "oidc"]
             }
-          ]
+          },
+          "required": ["s3", "gcs"]
         },
         "datastore": {
           "type": "object",

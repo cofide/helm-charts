@@ -1,4 +1,5 @@
 {{- $datastoreUsed := 0 -}}
+{{- $trustBundleStoreBackendUsed := 0 -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,10 +13,21 @@ data:
     spiffe_endpoint_socket: {{ .Values.connect.spiffeEndpointSocket }}
     trust_bundle_store_backend:
       {{- with .Values.connect.trustBundleStoreBackend.s3 }}
+      {{- if .enabled }}
+        {{- $trustBundleStoreBackendUsed = add $trustBundleStoreBackendUsed 1 }}
+      {{- end }}
       s3:
         enabled: {{ .enabled }}
         bucket: {{ .bucket }}
         use_path_style: {{ .usePathStyle }}
+        {{- with .encryption }}
+        {{- if and .kmsKeyId (ne .type "SSE-KMS") }}
+        {{- fail (printf "connect.trustBundleStoreBackend.s3.encryption.kmsKeyId is only valid when type is \"SSE-KMS\" (got type: %q, kmsKeyId: %q)" .type .kmsKeyId) }}
+        {{- end }}
+        encryption:
+          type: {{ .type | quote }}
+          kms_key_id: {{ .kmsKeyId | quote }}
+        {{- end }}
         {{- with .oidc }}
         oidc:
           enabled: {{ .enabled }}
@@ -25,6 +37,9 @@ data:
         {{- end }}
       {{- end }}
       {{- with .Values.connect.trustBundleStoreBackend.gcs }}
+      {{- if .enabled }}
+        {{- $trustBundleStoreBackendUsed = add $trustBundleStoreBackendUsed 1 }}
+      {{- end }}
       gcs:
         enabled: {{ .enabled }}
         bucket: {{ .bucket }}
@@ -120,4 +135,7 @@ data:
             {{- end }}
 {{- if ne $datastoreUsed 1 }}
 {{- fail (printf "You must enable exactly one datastore. There are %d enabled." $datastoreUsed) }}
+{{- end }}
+{{- if ne $trustBundleStoreBackendUsed 1 }}
+{{- fail (printf "You must enable exactly one trust bundle store backend. There are %d enabled." $trustBundleStoreBackendUsed) }}
 {{- end }}
