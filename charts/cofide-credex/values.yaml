@@ -61,8 +61,10 @@ credex:
     privateKeySecret: oauth-private-key
   # SPIFFE workload API endpoint socket.
   spiffeEndpointSocket: unix:///run/spire/sockets/spire-agent.sock
-  # Enable debug logging.
-  debug: false
+  # Enable server debug logging.
+  serverDebug: false
+  # Enable policy debug logging.
+  policyDebug: false
   # Telemetry config (OpenTelemetry-based).
   telemetry:
     # Whether to enable pushing of metrics and traces telemetry data (via OpenTelemetry SDK).
