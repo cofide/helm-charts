@@ -10,15 +10,19 @@
       "properties": {
         "urlBase": {
           "type": "string",
-          "description": "Deprecated: use apiHostname, mtlsServerName, and xdsServerName instead. urlBase will be removed in a future release. Used to construct default endpoint hostnames/SNIs when the explicit values are not set."
+          "description": "Deprecated: use apiAddress, mtlsServerName, and xdsServerName instead. urlBase will be removed in a future release. Used to construct default endpoint hostnames/SNIs when the explicit values are not set."
         },
-        "apiHostname": {
+        "apiAddress": {
           "type": "string",
-          "description": "Hostname for the JWT API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is a real hostname, not just a TLS SNI."
+          "description": "Address (hostname, optionally with a port) for the JWT API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is the real address clients use, not just a TLS SNI."
+        },
+        "apiServername": {
+          "type": "string",
+          "description": "TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Only used for Envoy's filter_chain_match."
         },
         "apiExtraHostnames": {
           "type": "array",
-          "description": "Additional SNI hostnames Envoy will accept for the JWT API endpoint, alongside apiHostname.",
+          "description": "Additional hostnames Envoy will accept for the JWT API endpoint, as SNIs and as :authority/Host values, alongside apiServername and apiAddress respectively.",
           "items": {
             "type": "string"
           }
@@ -535,7 +539,7 @@
       ],
       "anyOf": [
         { "required": ["urlBase"] },
-        { "required": ["apiHostname", "mtlsServerName", "xdsServerName"] }
+        { "required": ["apiAddress", "mtlsServerName", "xdsServerName"] }
       ]
     },
     "service": {

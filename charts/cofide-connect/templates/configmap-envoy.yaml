@@ -138,7 +138,7 @@ data:
                   - h2
                   - http/1.1
                 server_names:
-                  - {{ include "cofide-connect.apiHostname" . }}
+                  - {{ include "cofide-connect.apiServername" . }}
                   {{- range .Values.connect.apiExtraHostnames }}
                   - {{ . }}
                   {{- end }}
@@ -193,7 +193,7 @@ data:
                             # Per RFC 9728, "resource" must be the URI the client actually fetched this
                             # document from, so we generate one route per accepted hostname, matching on
                             # the :authority header, each with its own static body.
-                            {{- range $hostname := prepend $.Values.connect.apiExtraHostnames (include "cofide-connect.apiHostname" $) }}
+                            {{- range $hostname := prepend $.Values.connect.apiExtraHostnames (include "cofide-connect.apiAddress" $) }}
                             - match:
                                 path: "/.well-known/oauth-protected-resource"
                                 headers:
@@ -229,7 +229,7 @@ data:
                                 body:
                                   inline_string: |
                                     {
-                                      "resource": "https://{{ include "cofide-connect.apiHostname" . }}",
+                                      "resource": "https://{{ include "cofide-connect.apiAddress" . }}",
                                       "authorization_servers": ["{{ .Values.envoy.auth.issuer }}"],
                                       "scopes_supported": {{ .Values.envoy.auth.scopesSupported | toJson }},
                                       "bearer_methods_supported": ["header"]

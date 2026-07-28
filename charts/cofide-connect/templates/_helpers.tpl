@@ -62,13 +62,25 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Hostname for the JWT API endpoint (connect.<urlBase> by default).
+Address (hostname, optionally with a port) for the JWT API endpoint (connect.<urlBase> by default).
 */}}
-{{- define "cofide-connect.apiHostname" -}}
-{{- if .Values.connect.apiHostname -}}
-{{- .Values.connect.apiHostname -}}
+{{- define "cofide-connect.apiAddress" -}}
+{{- if .Values.connect.apiAddress -}}
+{{- .Values.connect.apiAddress -}}
 {{- else -}}
 connect.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
+{{/*
+TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Used only for
+Envoy's filter_chain_match - there is no HTTP-layer use of this value.
+*/}}
+{{- define "cofide-connect.apiServername" -}}
+{{- if .Values.connect.apiServername -}}
+{{- .Values.connect.apiServername -}}
+{{- else -}}
+{{- regexReplaceAll ":[0-9]+$" (include "cofide-connect.apiAddress" .) "" -}}
 {{- end -}}
 {{- end }}
 
@@ -100,7 +112,7 @@ xds.{{ .Values.connect.urlBase }}
 {{- if gt (len .Values.envoy.auth.audiences) 0 }}
 {{- toYaml .Values.envoy.auth.audiences }}
 {{- else -}}
-- https://{{ include "cofide-connect.apiHostname" . }}
+- https://{{ include "cofide-connect.apiAddress" . }}
 {{- range .Values.connect.apiExtraHostnames }}
 - https://{{ . }}
 {{- end }}
