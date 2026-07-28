@@ -63,7 +63,7 @@ credex:
   spiffeEndpointSocket: unix:///run/spire/sockets/spire-agent.sock
   # Enable server debug logging.
   serverDebug: false
-  # Enable policy debug logging.
+  # Enable policy matching debug logging.
   policyDebug: false
   # Telemetry config (OpenTelemetry-based).
   telemetry:
