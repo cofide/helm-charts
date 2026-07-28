@@ -139,8 +139,8 @@ data:
                   - http/1.1
                 server_names:
                   - {{ include "cofide-connect.apiServername" . }}
-                  {{- range .Values.connect.apiExtraHostnames }}
-                  - {{ . }}
+                  {{- range .Values.connect.apiExtraEndpoints }}
+                  - {{ if .servername }}{{ .servername }}{{ else }}{{ regexReplaceAll ":[0-9]+$" .address "" }}{{ end }}
                   {{- end }}
               transport_socket:
                 name: envoy.transport_sockets.tls
@@ -193,7 +193,11 @@ data:
                             # Per RFC 9728, "resource" must be the URI the client actually fetched this
                             # document from, so we generate one route per accepted hostname, matching on
                             # the :authority header, each with its own static body.
-                            {{- range $hostname := prepend $.Values.connect.apiExtraHostnames (include "cofide-connect.apiAddress" $) }}
+                            {{- $apiAddresses := list (include "cofide-connect.apiAddress" $) }}
+                            {{- range $.Values.connect.apiExtraEndpoints }}
+                            {{- $apiAddresses = append $apiAddresses .address }}
+                            {{- end }}
+                            {{- range $hostname := $apiAddresses }}
                             - match:
                                 path: "/.well-known/oauth-protected-resource"
                                 headers:

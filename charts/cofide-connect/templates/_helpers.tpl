@@ -113,8 +113,8 @@ xds.{{ .Values.connect.urlBase }}
 {{- toYaml .Values.envoy.auth.audiences }}
 {{- else -}}
 - https://{{ include "cofide-connect.apiAddress" . }}
-{{- range .Values.connect.apiExtraHostnames }}
-- https://{{ . }}
+{{- range .Values.connect.apiExtraEndpoints }}
+- https://{{ .address }}
 {{- end }}
 {{- end }}
 {{- end }}
