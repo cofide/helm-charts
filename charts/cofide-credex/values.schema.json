@@ -146,9 +146,13 @@
           "type": "string",
           "description": "SPIFFE workload API endpoint socket."
         },
-        "debug": {
+        "serverDebug": {
           "type": "boolean",
-          "description": "Enable debug logging."
+          "description": "Enable server debug logging."
+        },
+        "policyDebug": {
+          "type": "boolean",
+          "description": "Enable policy debug logging."
         },
         "telemetry": {
           "type": "object",
@@ -274,7 +278,8 @@
         "tls",
         "signing",
         "spiffeEndpointSocket",
-        "debug",
+        "serverDebug",
+        "policyDebug",
         "trustedIssuers",
         "extraEnv"
       ],

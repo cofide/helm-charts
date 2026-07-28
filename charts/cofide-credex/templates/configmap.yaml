@@ -28,7 +28,8 @@ data:
   OAUTH_PRIVATE_KEY_FILE: {{ .Values.credex.signing.privateKeyFile | quote }}
   {{- end }}
   SPIFFE_ENDPOINT_SOCKET: {{ .Values.credex.spiffeEndpointSocket | quote }}
-  SERVER_DEBUG: {{ .Values.credex.debug | toString | quote }}
+  SERVER_DEBUG: {{ .Values.credex.serverDebug | toString | quote }}
+  POLICY_DEBUG: {{ .Values.credex.policyDebug | toString | quote }}
   PORT: {{ include "cofide-credex.targetPort" . | quote }}
   {{- if .Values.credex.tls.enabled }}
   TLS_CERT_FILE: {{ .Values.credex.tls.certFile | quote }}
