@@ -5,7 +5,7 @@
 observer:
   # DEPRECATED: use connectMTLSGRPCTarget instead. URL of Cofide Connect API.
   connectURL: ""
-  # gRPC target (host:port) for Cofide Connect's mTLS endpoint. One of connectMTLSGRPCTarget or connectURL is required.
+  # gRPC target (https://grpc.io/docs/guides/custom-name-resolution) for Cofide Connect's mTLS endpoint. One of connectMTLSGRPCTarget or connectURL is required.
   connectMTLSGRPCTarget: ""
   # Optional TLS server name override to use when verifying Cofide Connect's mTLS endpoint.
   connectMTLSServerName: ""
