@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cofide Observer values",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "observer": {
+      "type": "object",
+      "description": "Configuration settings for the Observer service.",
+      "additionalProperties": false,
+      "properties": {
+        "connectURL": {
+          "type": "string",
+          "description": "DEPRECATED: use connectMTLSGRPCTarget instead. URL of the Cofide Connect API."
+        },
+        "connectMTLSGRPCTarget": {
+          "type": "string",
+          "description": "gRPC target for the Connect API. One of connectMTLSGRPCTarget or connectURL is required."
+        },
+        "connectMTLSServerName": {
+          "type": "string",
+          "description": "Optional SNI override to use when calling the Connect API."
+        },
+        "connectTrustDomain": {
+          "type": "string",
+          "description": "DEPRECATED: use connectSPIFFEID instead. SPIFFE trust domain of the Cofide Connect API."
+        },
+        "connectSPIFFEID": {
+          "type": "string",
+          "description": "SPIFFE ID of the Cofide Connect API. One of connectSPIFFEID or connectTrustDomain is required."
+        },
+        "resyncEnabled": {
+          "type": "boolean",
+          "description": "Controls whether periodic resync is active."
+        },
+        "resyncPeriod": {
+          "type": "string",
+          "description": "Resync interval as a Go duration string."
+        }
+      },
+      "required": [
+        "connectURL",
+        "connectMTLSGRPCTarget",
+        "connectMTLSServerName",
+        "connectTrustDomain",
+        "connectSPIFFEID",
+        "resyncEnabled",
+        "resyncPeriod"
+      ]
+    },
+    "replicaCount": {
+      "type": "integer",
+      "description": "Number of replicas for the Observer deployment.",
+      "minimum": 0
+    },
+    "image": {
+      "type": "object",
+      "description": "Container image configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "registry": {
+          "type": "string",
+          "description": "Container image registry."
+        },
+        "repository": {
+          "type": "string",
+          "description": "Container image repository."
+        },
+        "pullPolicy": {
+          "type": "string",
+          "description": "Image pull policy.",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        },
+        "tag": {
+          "type": "string",
+          "description": "Image tag. Defaults to the chart's appVersion when empty."
+        }
+      },
+      "required": ["registry", "repository", "pullPolicy"]
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "description": "List of image pull secrets.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "nameOverride": {
+      "type": "string",
+      "description": "Override for the chart name."
+    },
+    "fullnameOverride": {
+      "type": "string",
+      "description": "Override for the fully-qualified app name."
+    },
+    "serviceAccount": {
+      "type": "object",
+      "description": "Service account configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "description": "Whether to create a service account."
+        },
+        "automount": {
+          "type": "boolean",
+          "description": "Whether to automount the service account token."
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Annotations to add to the service account.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the service account to use. If empty and create is true, a name is generated using the fullname template."
+        }
+      },
+      "required": ["create", "automount"]
+    },
+    "podAnnotations": {
+      "type": "object",
+      "description": "Annotations to add to the pod.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podLabels": {
+      "type": "object",
+      "description": "Labels to add to the pod.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "podSecurityContext": {
+      "type": "object",
+      "description": "Security context for the pod."
+    },
+    "securityContext": {
+      "type": "object",
+      "description": "Security context for the container."
+    },
+    "resources": {
+      "type": "object",
+      "description": "CPU/memory resource requests and limits for the container."
+    },
+    "livenessProbe": {
+      "description": "Liveness probe configuration for the container."
+    },
+    "readinessProbe": {
+      "description": "Readiness probe configuration for the container."
+    },
+    "volumes": {
+      "type": "array",
+      "description": "Additional volumes to mount into the pod.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "volumeMounts": {
+      "type": "array",
+      "description": "Additional volume mounts for the container.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "nodeSelector": {
+      "type": "object",
+      "description": "Node selector for pod scheduling.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tolerations": {
+      "type": "array",
+      "description": "Tolerations for pod scheduling.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules for pod scheduling."
+    }
+  },
+  "required": ["observer", "replicaCount", "image"]
+}

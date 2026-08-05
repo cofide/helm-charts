@@ -1,0 +1,8 @@
+{{- if .Values.observer.connectURL }}
+
+WARNING: observer.connectURL is deprecated, use observer.connectMTLSGRPCTarget instead.
+{{- end }}
+{{- if .Values.observer.connectTrustDomain }}
+
+WARNING: observer.connectTrustDomain is deprecated, use observer.connectSPIFFEID instead.
+{{- end }}

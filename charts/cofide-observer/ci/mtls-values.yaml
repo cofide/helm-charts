@@ -1,0 +1,5 @@
+observer:
+  # Test new mTLS gRPC target / SPIFFE ID connect fields.
+  connectMTLSGRPCTarget: connect.example.org:8443
+  connectMTLSServerName: connect.example.org
+  connectSPIFFEID: spiffe://example.org/connect
