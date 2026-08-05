@@ -27,7 +27,7 @@ helm template <release-name> charts/<chart-name> (optional: -f charts/<chart-nam
 
 ## Repository Structure
 
-This is a Helm chart mono-repo for Cofide's SPIFFE-based zero-trust infrastructure. There are 8 charts under `charts/`:
+This is a Helm chart mono-repo for Cofide's SPIFFE-based zero-trust infrastructure. All charts are under `charts/`:
 
 | Chart | Purpose |
 |---|---|
