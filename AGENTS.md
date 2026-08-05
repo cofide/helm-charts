@@ -4,19 +4,16 @@ This file provides guidance to AI coding agents when working with code in this r
 
 ## Linting
 
-Charts are linted using [chart-testing](https://github.com/helm/chart-testing). CI runs on every PR:
+Charts are linted using [chart-testing](https://github.com/helm/chart-testing). CI runs `ct lint --config .ct.yaml` on every PR, which only checks charts that have changed relative to `main`.
+
+The `just lint` recipe wraps the same command but defaults its args to `--all`, so it lints every chart rather than just changed ones. Pass args to override the default:
 
 ```bash
-just lint
+just lint                                    # lints all charts (passes --all)
+just lint --config .ct.yaml                  # changed charts only, like CI
 ```
 
-Or (equivalent):
-
-```bash
-ct lint --config .ct.yaml
-```
-
-`ct lint` only checks charts that have changed relative to `main`. To lint a specific chart directly:
+To lint a specific chart directly:
 
 ```bash
 helm lint charts/<chart-name>
@@ -25,18 +22,19 @@ helm lint charts/<chart-name>
 To template and inspect rendered output:
 
 ```bash
-helm template <release-name> charts/<chart-name> -f charts/<chart-name>/values.yaml
+helm template <release-name> charts/<chart-name> (optional: -f charts/<chart-name>/ci/<values-file>.yaml)
 ```
 
 ## Repository Structure
 
-This is a Helm chart mono-repo for Cofide's SPIFFE-based zero-trust infrastructure. There are 7 charts under `charts/`:
+This is a Helm chart mono-repo for Cofide's SPIFFE-based zero-trust infrastructure. All charts are under `charts/`:
 
 | Chart | Purpose |
 |---|---|
 | `cofide-agent` | Deploys the Cofide Agent (SPIFFE workload identity agent) |
 | `cofide-connect` | Deploys the Cofide Connect API server with an Envoy sidecar |
 | `cofide-connect-ui` | Deploys the Connect UI frontend with an Envoy sidecar |
+| `cofide-credex` | Deploys Cofide Credex, an OAuth 2.0 Authorization Server (AS) and Security Token Service (STS) using SPIFFE workload identity |
 | `cofide-observer` | Deploys the Cofide Observer (monitoring/observability) |
 | `cofide-trust-zone-operator` | Kubernetes operator for managing `TrustZoneServer` CRs |
 | `cofide-tzaas-crds` | Installs the `TrustZoneServer` CRD — must be installed before `cofide-trust-zone-operator` |
