@@ -2,6 +2,19 @@ apiVersion: v1
 entries:
   cofide-agent:
   - apiVersion: v2
+    appVersion: v0.58.0
+    created: "2026-08-05T09:26:38.199512801Z"
+    description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
+    digest: 94ad7b4910bf9e8a214b3b0caae8a3dd4b96fc2ca7ade0820b1ba9c889e3e73e
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-agent
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.7.1/cofide-agent-0.7.1.tgz
+    version: 0.7.1
+  - apiVersion: v2
     appVersion: v0.48.0
     created: "2026-04-16T11:19:45.716437944Z"
     description: Helm chart to deploy the Cofide Agent to a Kubernetes cluster
@@ -246,6 +259,20 @@ entries:
     - https://github.com/cofide/helm-charts/releases/download/cofide-agent-0.1.3/cofide-agent-0.1.3.tgz
     version: 0.1.3
   cofide-connect:
+  - apiVersion: v2
+    appVersion: v0.58.0
+    created: "2026-08-05T09:26:38.349784108Z"
+    description: A Helm chart to deploy the Cofide Connect server to a Kubernetes
+      cluster
+    digest: e7670345a277a15c97bfcef0b01312832d5ee9d43940171a54a53ca8017bdf2f
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-connect
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-connect-0.22.1/cofide-connect-0.22.1.tgz
+    version: 0.22.1
   - apiVersion: v2
     appVersion: v0.57.0
     created: "2026-08-03T08:16:48.679429922Z"
@@ -858,6 +885,19 @@ entries:
     version: 0.1.1
   cofide-connect-ui:
   - apiVersion: v2
+    appVersion: v0.6.3
+    created: "2026-08-05T09:26:38.499986897Z"
+    description: A Helm chart to deploy the Cofide Connect UI to a Kubernetes cluster
+    digest: 30d94c074a59083d4c18283ed93625a571d18c6ea750b94a791a0db085893f38
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-connect-ui
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-connect-ui-0.1.12/cofide-connect-ui-0.1.12.tgz
+    version: 0.1.12
+  - apiVersion: v2
     appVersion: v0.6.2
     created: "2026-07-22T09:21:18.648347012Z"
     description: A Helm chart to deploy the Cofide Connect UI to a Kubernetes cluster
@@ -1185,6 +1225,19 @@ entries:
     version: 0.1.0
   cofide-observer:
   - apiVersion: v2
+    appVersion: v0.7.0
+    created: "2026-08-05T09:26:38.66343952Z"
+    description: Helm chart to deploy Cofide Observer
+    digest: ebccd879794fbde9a65cd0d8e1bb18b1c7ec92aae2b4fc584337c092982b03cc
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-observer
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-observer-0.3.6/cofide-observer-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
     appVersion: v0.6.0
     created: "2026-06-23T13:00:51.464937111Z"
     description: Helm chart to deploy Cofide Observer
@@ -1315,6 +1368,19 @@ entries:
     - https://github.com/cofide/helm-charts/releases/download/cofide-tzaas-crds-0.1.0/cofide-tzaas-crds-0.1.0.tgz
     version: 0.1.0
   spiffe-enable:
+  - apiVersion: v2
+    appVersion: v0.5.3
+    created: "2026-08-05T09:26:38.845377392Z"
+    description: Helm chart for the spiffe-enable admission webhook for Kubernetes
+    digest: 89eb054ff9601eb5c1cb2dfc04d7e01fa4813b38447d72ca44e010747b5a6af3
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: spiffe-enable
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/spiffe-enable-0.1.9/spiffe-enable-0.1.9.tgz
+    version: 0.1.9
   - apiVersion: v2
     appVersion: v0.5.2
     created: "2026-02-06T10:11:34.420428986Z"
@@ -2636,4 +2702,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-08-03T08:17:03.361879586Z"
+generated: "2026-08-05T09:26:38.845912768Z"
