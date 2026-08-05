@@ -1,0 +1,5 @@
+agent:
+  env:
+    # Test legacy (deprecated) connect fields.
+    COFIDE_CONNECT_URL: api.connect.example.org:4321
+    COFIDE_CONNECT_TRUST_DOMAIN: connect.example.org

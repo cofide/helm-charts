@@ -1,0 +1,8 @@
+{{- if .Values.agent.env.COFIDE_CONNECT_URL }}
+
+WARNING: agent.env.COFIDE_CONNECT_URL is deprecated, use agent.env.COFIDE_CONNECT_TLS_GRPC_TARGET, agent.env.COFIDE_CONNECT_MTLS_GRPC_TARGET and agent.env.COFIDE_CONNECT_XDS_GRPC_TARGET instead.
+{{- end }}
+{{- if .Values.agent.env.COFIDE_CONNECT_TRUST_DOMAIN }}
+
+WARNING: agent.env.COFIDE_CONNECT_TRUST_DOMAIN is deprecated, use agent.env.COFIDE_CONNECT_SPIFFE_ID instead.
+{{- end }}
