@@ -14,7 +14,7 @@
         },
         "apiAddress": {
           "type": "string",
-          "description": "Address (hostname, optionally with a port) for the JWT API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is the real address clients use, not just a TLS SNI."
+          "description": "Address (hostname, optionally with a port) for the TLS API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is the real address clients use, not just a TLS SNI."
         },
         "apiServername": {
           "type": "string",
