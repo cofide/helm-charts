@@ -3,6 +3,7 @@ replicaCount: 1
 
 # Container image configuration.
 image:
+  # Container image registry. If empty, the repository is used unqualified.
   registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
   repository: cofide/credex-exchange
   pullPolicy: IfNotPresent

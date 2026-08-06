@@ -63,3 +63,27 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Full reference for an image, from a map of `registry`, `repository` and `tag`.
+Call with a dict of `image` (the map) and `defaultTag` (used when `tag` is empty).
+
+`registry` is optional: when empty the `repository` is used unqualified, so
+images can be pulled from Docker Hub.
+*/}}
+{{- define "cofide-trust-zone-operator.imageRef" -}}
+{{- $repository := .image.repository | required "A value for the image repository is required" -}}
+{{- $tag := .image.tag | default .defaultTag -}}
+{{- if .image.registry -}}
+{{- printf "%s/%s:%s" .image.registry $repository $tag -}}
+{{- else -}}
+{{- printf "%s:%s" $repository $tag -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Full image reference for the cofide-trust-zone-operator container. Defaults the tag to the chart appVersion.
+*/}}
+{{- define "cofide-trust-zone-operator.image" -}}
+{{- include "cofide-trust-zone-operator.imageRef" (dict "image" .Values.trustZoneOperator.manager.image "defaultTag" .Chart.AppVersion) -}}
+{{- end }}

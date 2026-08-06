@@ -66,7 +66,7 @@ spec:
           value: {{ quote .Values.trustZoneOperator.manager.env.spiffeEndpointSocket }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ if .Values.trustZoneOperator.manager.image.registry }}{{ .Values.trustZoneOperator.manager.image.registry }}/{{ end }}{{ .Values.trustZoneOperator.manager.image.repository }}:{{ .Values.trustZoneOperator.manager.image.tag | default .Chart.AppVersion }}
+        image: "{{ include "cofide-trust-zone-operator.image" . }}"
         imagePullPolicy: {{ .Values.trustZoneOperator.manager.imagePullPolicy }}
         livenessProbe:
           httpGet:

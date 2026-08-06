@@ -125,3 +125,27 @@ or as an entry in extraJWKSSources. Empty otherwise.
 true
 {{- end -}}
 {{- end -}}
+
+{{/*
+Full reference for an image, from a map of `registry`, `repository` and `tag`.
+Call with a dict of `image` (the map) and `defaultTag` (used when `tag` is empty).
+
+`registry` is optional: when empty the `repository` is used unqualified, so
+images can be pulled from Docker Hub.
+*/}}
+{{- define "cofide-credex.imageRef" -}}
+{{- $repository := .image.repository | required "A value for the image repository is required" -}}
+{{- $tag := .image.tag | default .defaultTag -}}
+{{- if .image.registry -}}
+{{- printf "%s/%s:%s" .image.registry $repository $tag -}}
+{{- else -}}
+{{- printf "%s:%s" $repository $tag -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Full image reference for the cofide-credex container. Defaults the tag to the chart appVersion.
+*/}}
+{{- define "cofide-credex.image" -}}
+{{- include "cofide-credex.imageRef" (dict "image" .Values.image "defaultTag" .Chart.AppVersion) -}}
+{{- end }}

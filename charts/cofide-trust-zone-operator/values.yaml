@@ -154,7 +154,7 @@ trustZoneOperator:
   # Configuration for the manager container.
   manager:
     image:
-      # Container image registry.
+      # Container image registry. If empty, the repository is used unqualified.
       registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
       # Container image repository.
       repository: cofide/trust-zone-operator

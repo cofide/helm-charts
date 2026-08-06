@@ -281,7 +281,7 @@
               "properties": {
                 "registry": {
                   "type": "string",
-                  "description": "Container image registry."
+                  "description": "Container image registry. If empty, the repository is used unqualified."
                 },
                 "repository": {
                   "type": "string",
@@ -292,7 +292,7 @@
                   "description": "Container image tag. Defaults to the chart appVersion if empty."
                 }
               },
-              "required": ["registry", "repository"]
+              "required": ["repository"]
             },
             "imagePullPolicy": {
               "type": "string",
