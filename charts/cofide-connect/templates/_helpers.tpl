@@ -62,7 +62,7 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Address (hostname, optionally with a port) for the JWT API endpoint (connect.<urlBase> by default).
+Address (hostname, optionally with a port) for the TLS API endpoint (connect.<urlBase> by default).
 */}}
 {{- define "cofide-connect.apiAddress" -}}
 {{- if .Values.connect.apiAddress -}}
