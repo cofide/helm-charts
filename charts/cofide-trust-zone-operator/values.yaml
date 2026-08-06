@@ -158,11 +158,10 @@ trustZoneOperator:
       registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
       # Container image repository.
       repository: cofide/trust-zone-operator
+      # Image pull policy.
+      pullPolicy: IfNotPresent
       # Container image tag. Defaults to the chart appVersion if empty.
       tag: ""
-
-    # Image pull policy.
-    imagePullPolicy: IfNotPresent
 
     # Additional arguments to pass to the manager binary. The chart appends --health-probe-bind-address,
     # --connect-url, --connect-trust-domain, --gateway-namespace, --gateway-base-domain,

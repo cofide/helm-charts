@@ -287,17 +287,17 @@
                   "type": "string",
                   "description": "Container image repository."
                 },
+                "pullPolicy": {
+                  "type": "string",
+                  "description": "Image pull policy.",
+                  "enum": ["Always", "IfNotPresent", "Never"]
+                },
                 "tag": {
                   "type": "string",
                   "description": "Container image tag. Defaults to the chart appVersion if empty."
                 }
               },
-              "required": ["repository"]
-            },
-            "imagePullPolicy": {
-              "type": "string",
-              "description": "Image pull policy.",
-              "enum": ["Always", "IfNotPresent", "Never"]
+              "required": ["repository", "pullPolicy"]
             },
             "env": {
               "type": "object",
@@ -319,7 +319,7 @@
               "description": "Security context for the manager container."
             }
           },
-          "required": ["image", "imagePullPolicy", "env"]
+          "required": ["image", "env"]
         },
         "podSecurityContext": {
           "type": "object",

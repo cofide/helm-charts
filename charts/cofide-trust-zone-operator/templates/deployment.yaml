@@ -1,3 +1,6 @@
+{{- if .Values.trustZoneOperator.manager.imagePullPolicy -}}
+{{- fail "trustZoneOperator.manager.imagePullPolicy has moved to trustZoneOperator.manager.image.pullPolicy" -}}
+{{- end -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -67,7 +70,7 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: "{{ include "cofide-trust-zone-operator.image" . }}"
-        imagePullPolicy: {{ .Values.trustZoneOperator.manager.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.trustZoneOperator.manager.image.pullPolicy }}
         livenessProbe:
           httpGet:
             path: /healthz
