@@ -1,0 +1,17 @@
+ui:
+  hostname: ui.connect.example.org
+  connectUrl: https://api.connect.example.org
+  oauth:
+    clientId: cofide-connect-ui
+    issuer: https://idp.example.org
+
+image:
+  # Test an unqualified repository, pulled from Docker Hub.
+  registry: ""
+  repository: cofide/connect-ui
+
+envoy:
+  image:
+    # Test a repository that already includes a registry host, which takes
+    # precedence over image.registry.
+    repository: mirror.example.org/envoyproxy/envoy

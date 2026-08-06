@@ -24,6 +24,42 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Full reference for an image, from a map of `registry`, `repository` and `tag`.
+Call with a dict of `image` (the map) and `defaultTag` (used when `tag` is empty).
+
+Prefer `registry` + `repository`, matching the other Cofide charts. For backwards
+compatibility, a `repository` that already includes a registry host (its first
+path segment looks like a hostname, e.g. `example.com/cofide/connect-ui` or
+`localhost:5000/connect-ui`) is used as-is and `registry` is ignored.
+*/}}
+{{- define "cofide-connect-ui.imageRef" -}}
+{{- $repository := .image.repository | required "A value for the image repository is required" -}}
+{{- $tag := .image.tag | default .defaultTag -}}
+{{- $host := splitList "/" $repository | first -}}
+{{- if or (contains "." $host) (contains ":" $host) (eq $host "localhost") -}}
+{{- printf "%s:%s" $repository $tag -}}
+{{- else if .image.registry -}}
+{{- printf "%s/%s:%s" .image.registry $repository $tag -}}
+{{- else -}}
+{{- printf "%s:%s" $repository $tag -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Full image reference for the UI container. Defaults the tag to the chart appVersion.
+*/}}
+{{- define "cofide-connect-ui.image" -}}
+{{- include "cofide-connect-ui.imageRef" (dict "image" .Values.image "defaultTag" .Chart.AppVersion) -}}
+{{- end }}
+
+{{/*
+Full image reference for the Envoy sidecar.
+*/}}
+{{- define "cofide-connect-ui.envoyImage" -}}
+{{- include "cofide-connect-ui.imageRef" (dict "image" .Values.envoy.image "defaultTag" "") -}}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "cofide-connect-ui.chart" -}}
