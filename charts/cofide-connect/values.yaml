@@ -25,20 +25,20 @@ connect:
   # TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Only needs to be
   # set explicitly if the SNI presented by clients differs from apiAddress's hostname (e.g. behind a
   # proxy that terminates a different SNI). Only used for Envoy's filter_chain_match.
-  apiServername: ""
-  # Additional endpoints Envoy will accept for the JWT API, alongside apiAddress/apiServername.
+  apiServerName: ""
+  # Additional endpoints Envoy will accept for the JWT API, alongside apiAddress/apiServerName.
   # Useful when the same Connect instance is reachable under more than one public hostname. Each entry
   # is an object with:
   #  address: (required) hostname, optionally with a port, used for the OAuth audience, the
   #    oauth-protected-resource "resource" value, and :authority/Host matching - a real address, not
   #    just a TLS SNI.
-  #  servername: (optional) TLS SNI Envoy matches for this endpoint. Defaults to address with any
+  #  serverName: (optional) TLS SNI Envoy matches for this endpoint. Defaults to address with any
   #    port stripped. Only used for Envoy's filter_chain_match.
   # For example:
   #  apiExtraEndpoints:
   #  - address: connect2.example.com:8443
   #  - address: connect3.example.com
-  #    servername: connect3-sni.example.com
+  #    serverName: connect3-sni.example.com
   apiExtraEndpoints: []
   # TLS SNI for the SPIFFE mTLS endpoint. Defaults to connect-agent.<urlBase>. Only used for
   # Envoy's filter_chain_match - there is no HTTP-layer use of this value.

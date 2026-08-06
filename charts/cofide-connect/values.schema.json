@@ -16,13 +16,13 @@
           "type": "string",
           "description": "Address (hostname, optionally with a port) for the TLS API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is the real address clients use, not just a TLS SNI."
         },
-        "apiServername": {
+        "apiServerName": {
           "type": "string",
           "description": "TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Only used for Envoy's filter_chain_match."
         },
         "apiExtraEndpoints": {
           "type": "array",
-          "description": "Additional endpoints Envoy will accept for the TLS API, alongside apiAddress/apiServername.",
+          "description": "Additional endpoints Envoy will accept for the TLS API, alongside apiAddress/apiServerName.",
           "items": {
             "type": "object",
             "additionalProperties": false,
@@ -32,7 +32,7 @@
                 "type": "string",
                 "description": "Address (hostname, optionally with a port) for this additional TLS API endpoint. Used for the OAuth audience, oauth-protected-resource 'resource' value, and :authority/Host matching."
               },
-              "servername": {
+              "serverName": {
                 "type": "string",
                 "description": "TLS SNI Envoy matches for this endpoint. Defaults to address with any port stripped. Only used for Envoy's filter_chain_match."
               }

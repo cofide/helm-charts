@@ -138,9 +138,9 @@ data:
                   - h2
                   - http/1.1
                 server_names:
-                  - {{ include "cofide-connect.apiServername" . }}
+                  - {{ include "cofide-connect.apiServerName" . }}
                   {{- range .Values.connect.apiExtraEndpoints }}
-                  - {{ if .servername }}{{ .servername }}{{ else }}{{ regexReplaceAll ":[0-9]+$" .address "" }}{{ end }}
+                  - {{ if .serverName }}{{ .serverName }}{{ else }}{{ regexReplaceAll ":[0-9]+$" .address "" }}{{ end }}
                   {{- end }}
               transport_socket:
                 name: envoy.transport_sockets.tls

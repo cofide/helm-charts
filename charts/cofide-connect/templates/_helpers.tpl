@@ -76,9 +76,9 @@ connect.{{ .Values.connect.urlBase }}
 TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Used only for
 Envoy's filter_chain_match - there is no HTTP-layer use of this value.
 */}}
-{{- define "cofide-connect.apiServername" -}}
-{{- if .Values.connect.apiServername -}}
-{{- .Values.connect.apiServername -}}
+{{- define "cofide-connect.apiServerName" -}}
+{{- if .Values.connect.apiServerName -}}
+{{- .Values.connect.apiServerName -}}
 {{- else -}}
 {{- regexReplaceAll ":[0-9]+$" (include "cofide-connect.apiAddress" .) "" -}}
 {{- end -}}
