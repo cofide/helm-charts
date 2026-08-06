@@ -73,7 +73,7 @@ connect.{{ .Values.connect.urlBase }}
 {{- end }}
 
 {{/*
-TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Used only for
+TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Used only for
 Envoy's filter_chain_match - there is no HTTP-layer use of this value.
 */}}
 {{- define "cofide-connect.apiServername" -}}
