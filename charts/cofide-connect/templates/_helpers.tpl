@@ -61,10 +61,60 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Address (hostname, optionally with a port) for the TLS API endpoint (connect.<urlBase> by default).
+*/}}
+{{- define "cofide-connect.apiAddress" -}}
+{{- if .Values.connect.apiAddress -}}
+{{- .Values.connect.apiAddress -}}
+{{- else -}}
+connect.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
+{{/*
+TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Used only for
+Envoy's filter_chain_match - there is no HTTP-layer use of this value.
+*/}}
+{{- define "cofide-connect.apiServerName" -}}
+{{- if .Values.connect.apiServerName -}}
+{{- .Values.connect.apiServerName -}}
+{{- else -}}
+{{- regexReplaceAll ":[0-9]+$" (include "cofide-connect.apiAddress" .) "" -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+TLS SNI for the SPIFFE mTLS endpoint (connect-agent.<urlBase> by default). Used only for Envoy's
+filter_chain_match - there is no HTTP-layer use of this value.
+*/}}
+{{- define "cofide-connect.mtlsServerName" -}}
+{{- if .Values.connect.mtlsServerName -}}
+{{- .Values.connect.mtlsServerName -}}
+{{- else -}}
+connect-agent.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
+{{/*
+TLS SNI for the XDS/ADS endpoint (xds.<urlBase> by default). Used only for Envoy's
+filter_chain_match - there is no HTTP-layer use of this value.
+*/}}
+{{- define "cofide-connect.xdsServerName" -}}
+{{- if .Values.connect.xdsServerName -}}
+{{- .Values.connect.xdsServerName -}}
+{{- else -}}
+xds.{{ .Values.connect.urlBase }}
+{{- end -}}
+{{- end }}
+
 {{- define "cofide-connect.envoy.auth.audiences" -}}
 {{- if gt (len .Values.envoy.auth.audiences) 0 }}
 {{- toYaml .Values.envoy.auth.audiences }}
 {{- else -}}
-- https://connect.{{ .Values.connect.urlBase }}
+- https://{{ include "cofide-connect.apiAddress" . }}
+{{- range .Values.connect.apiExtraEndpoints }}
+- https://{{ .address }}
+{{- end }}
 {{- end }}
 {{- end }}

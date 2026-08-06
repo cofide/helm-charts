@@ -14,18 +14,52 @@ image:
   tag: ""
 
 connect:
-  # Base URL for envoy.
+  # Deprecated: use apiAddress, mtlsServerName, and xdsServerName instead. urlBase will be removed in a future release.
+  # Used to construct default endpoint hostnames (connect.<urlBase>, connect-agent.<urlBase>, xds.<urlBase>) when the explicit hostname/SNI values are not set.
   urlBase: ""
+  # Address (hostname, optionally with a port, e.g. "connect.example.com" or "connect.example.com:8443")
+  # for the TLS API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and the
+  # "resource" value in the oauth-protected-resource metadata, so this is the real address clients use,
+  # not just a TLS SNI.
+  apiAddress: ""
+  # TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Only needs to be
+  # set explicitly if the SNI presented by clients differs from apiAddress's hostname (e.g. behind a
+  # proxy that terminates a different SNI). Only used for Envoy's filter_chain_match.
+  apiServerName: ""
+  # Additional endpoints Envoy will accept for the TLS API, alongside apiAddress/apiServerName.
+  # Useful when the same Connect instance is reachable under more than one public hostname. Each entry
+  # is an object with:
+  #  address: (required) hostname, optionally with a port, used for the OAuth audience, the
+  #    oauth-protected-resource "resource" value, and :authority/Host matching - a real address, not
+  #    just a TLS SNI.
+  #  serverName: (optional) TLS SNI Envoy matches for this endpoint. Defaults to address with any
+  #    port stripped. Only used for Envoy's filter_chain_match.
+  # For example:
+  #  apiExtraEndpoints:
+  #  - address: connect2.example.com:8443
+  #  - address: connect3.example.com
+  #    serverName: connect3-sni.example.com
+  apiExtraEndpoints: []
+  # TLS SNI for the SPIFFE mTLS endpoint. Defaults to connect-agent.<urlBase>. Only used for
+  # Envoy's filter_chain_match - there is no HTTP-layer use of this value.
+  mtlsServerName: ""
+  # Additional SNIs Envoy will accept for the SPIFFE mTLS endpoint, alongside mtlsServerName.
+  mtlsExtraServerNames: []
+  # TLS SNI for the XDS/ADS endpoint. Defaults to xds.<urlBase>. Only used for Envoy's
+  # filter_chain_match - there is no HTTP-layer use of this value.
+  xdsServerName: ""
+  # Additional SNIs Envoy will accept for the XDS/ADS endpoint, alongside xdsServerName.
+  xdsExtraServerNames: []
   # Allowed origins for CORS requests.
   allowedOrigins: []
   # Host and port the API server listens on internally.
-  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for connect.{{ .Values.connect.urlBase }} and connect-agent.{{ .Values.connect.urlBase }} SNI hostname matches.
+  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for the TLS API and SPIFFE mTLS SNI hostname matches.
   # Healthchecks are also served on this port.
   insecureServerAddress:
     host: ""
     port: 51106
   # Host and port the Aggregated Discovery Service listens on internally (used by workload clusters to get federated services).
-  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for xds.{{ .Values.connect.urlBase }} SNI hostname matches.
+  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for the XDS/ADS SNI hostname match.
   adsServerAddress:
     host: ""
     port: 18000
@@ -180,7 +214,7 @@ envoy:
     # JWKS URI of the IdP in use. Only http and https schemes are supported.
     jwksUri: ""
     # Name of secret in the same namespace containing the TLS private key and cert to be used with the domain Connect is exposed on.
-    # This certificate must be valid for connect.{{ .Values.connect.urlBase }}, connect-agent.{{ .Values.connect.urlBase }} and xds.{{ .Values.connect.urlBase }}.
+    # This certificate must be valid for the TLS API hostname (connect.<urlBase>, or apiAddress if set). The mTLS and XDS endpoints use SPIFFE SVIDs obtained from SPIRE, not this secret.
     tlsSecretName: ""
     # Audiences set in tokens from the IdP. If empty, defaults to `["https://connect.{{ .Values.connect.urlBase }}"]`
     audiences: []

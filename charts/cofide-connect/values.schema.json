@@ -10,7 +10,56 @@
       "properties": {
         "urlBase": {
           "type": "string",
-          "description": "The base URL for the Connect service."
+          "description": "Deprecated: use apiAddress, mtlsServerName, and xdsServerName instead. urlBase will be removed in a future release. Used to construct default endpoint hostnames/SNIs when the explicit values are not set."
+        },
+        "apiAddress": {
+          "type": "string",
+          "description": "Address (hostname, optionally with a port) for the TLS API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and oauth-protected-resource 'resource' value, so this is the real address clients use, not just a TLS SNI."
+        },
+        "apiServerName": {
+          "type": "string",
+          "description": "TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Only used for Envoy's filter_chain_match."
+        },
+        "apiExtraEndpoints": {
+          "type": "array",
+          "description": "Additional endpoints Envoy will accept for the TLS API, alongside apiAddress/apiServerName.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["address"],
+            "properties": {
+              "address": {
+                "type": "string",
+                "description": "Address (hostname, optionally with a port) for this additional TLS API endpoint. Used for the OAuth audience, oauth-protected-resource 'resource' value, and :authority/Host matching."
+              },
+              "serverName": {
+                "type": "string",
+                "description": "TLS SNI Envoy matches for this endpoint. Defaults to address with any port stripped. Only used for Envoy's filter_chain_match."
+              }
+            }
+          }
+        },
+        "mtlsServerName": {
+          "type": "string",
+          "description": "TLS SNI for the SPIFFE mTLS endpoint. Defaults to connect-agent.<urlBase>. Only used for Envoy's filter_chain_match."
+        },
+        "mtlsExtraServerNames": {
+          "type": "array",
+          "description": "Additional SNIs Envoy will accept for the SPIFFE mTLS endpoint, alongside mtlsServerName.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "xdsServerName": {
+          "type": "string",
+          "description": "TLS SNI for the XDS/ADS endpoint. Defaults to xds.<urlBase>. Only used for Envoy's filter_chain_match."
+        },
+        "xdsExtraServerNames": {
+          "type": "array",
+          "description": "Additional SNIs Envoy will accept for the XDS/ADS endpoint, alongside xdsServerName.",
+          "items": {
+            "type": "string"
+          }
         },
         "allowedOrigins": {
           "type": "array",
@@ -485,7 +534,6 @@
         }
       },
       "required": [
-        "urlBase",
         "allowedOrigins",
         "insecureServerAddress",
         "adsServerAddress",
@@ -500,6 +548,10 @@
         "initialRBAC",
         "audit",
         "extraEnv"
+      ],
+      "anyOf": [
+        { "required": ["urlBase"] },
+        { "required": ["apiAddress", "mtlsServerName", "xdsServerName"] }
       ]
     },
     "service": {
