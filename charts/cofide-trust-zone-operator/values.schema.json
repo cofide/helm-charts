@@ -30,13 +30,31 @@
       "properties": {
         "url": {
           "type": "string",
-          "description": "URL of the Connect instance. Required for Connect integration.",
-          "minLength": 1
+          "description": "DEPRECATED: use mtlsGrpcTarget instead. URL of the Connect instance."
+        },
+        "mtlsGrpcTarget": {
+          "type": "string",
+          "description": "gRPC target for Connect's mTLS endpoint, used by the operator itself. One of mtlsGrpcTarget or url is required."
+        },
+        "mtlsServerName": {
+          "type": "string",
+          "description": "Optional SNI override to use when verifying Connect's mTLS endpoint."
+        },
+        "tlsGrpcTarget": {
+          "type": "string",
+          "description": "gRPC target for Connect's plain TLS endpoint, passed through to the SPIRE servers deployed via the generated TrustZoneServer resources."
+        },
+        "tlsServerName": {
+          "type": "string",
+          "description": "Optional SNI override for the plain TLS endpoint, passed through to the deployed SPIRE servers."
         },
         "trustDomain": {
           "type": "string",
-          "description": "Trust domain of the Connect instance. Required for Connect integration.",
-          "minLength": 1
+          "description": "DEPRECATED: use spiffeId instead. Trust domain of the Connect instance."
+        },
+        "spiffeId": {
+          "type": "string",
+          "description": "SPIFFE ID of the Connect instance. One of spiffeId or trustDomain is required."
         },
         "cluster": {
           "type": "object",
