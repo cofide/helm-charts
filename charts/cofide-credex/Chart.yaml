@@ -2,8 +2,8 @@ apiVersion: v2
 name: cofide-credex
 description: Helm chart to deploy Cofide Credex
 type: application
-version: 0.8.0
-appVersion: "v0.17.1"
+version: 0.8.1
+appVersion: "v0.17.2"
 maintainers:
   - name: Cofide
     url: https://cofide.io
