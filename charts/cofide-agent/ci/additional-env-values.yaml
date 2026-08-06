@@ -1,0 +1,8 @@
+agent:
+  env:
+    # Test that additional (non-schema-defined) string env vars are permitted.
+    COFIDE_CONNECT_TLS_GRPC_TARGET: connect.example.org:8443
+    COFIDE_CONNECT_MTLS_GRPC_TARGET: connect.example.org:8444
+    COFIDE_CONNECT_XDS_GRPC_TARGET: connect.example.org:8445
+    COFIDE_CONNECT_SPIFFE_ID: spiffe://example.org/connect
+    CUSTOM_ENV_VAR: some-value
