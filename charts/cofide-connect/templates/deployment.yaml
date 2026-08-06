@@ -89,8 +89,8 @@ spec:
               mountPath: "/app/data"
             {{- end }}
         - name: envoy-sidecar
-          image: {{ .Values.envoy.image }}
-          imagePullPolicy: {{ .Values.envoy.imagePullPolicy }}
+          image: "{{ include "cofide-connect.envoyImage" . }}"
+          imagePullPolicy: {{ include "cofide-connect.envoyImagePullPolicy" . }}
           command: ["envoy"]
           args:
             - -c

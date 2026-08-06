@@ -142,3 +142,30 @@ Full image reference for the cofide-connect container. Defaults the tag to the c
 {{- define "cofide-connect.image" -}}
 {{- include "cofide-connect.imageRef" (dict "image" .Values.image "defaultTag" .Chart.AppVersion) -}}
 {{- end }}
+
+{{/*
+Full image reference for the Envoy sidecar.
+
+For backwards compatibility, `envoy.image` may still be set to a full image
+reference string (with the pull policy in `envoy.imagePullPolicy`) instead of a
+map of `registry`, `repository`, `pullPolicy` and `tag`.
+*/}}
+{{- define "cofide-connect.envoyImage" -}}
+{{- if kindIs "string" .Values.envoy.image -}}
+{{- .Values.envoy.image -}}
+{{- else -}}
+{{- include "cofide-connect.imageRef" (dict "image" .Values.envoy.image "defaultTag" "") -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Pull policy for the Envoy sidecar. Prefers `envoy.image.pullPolicy`, falling
+back to the deprecated `envoy.imagePullPolicy`.
+*/}}
+{{- define "cofide-connect.envoyImagePullPolicy" -}}
+{{- if kindIs "string" .Values.envoy.image -}}
+{{- .Values.envoy.imagePullPolicy | default "IfNotPresent" -}}
+{{- else -}}
+{{- .Values.envoy.image.pullPolicy | default .Values.envoy.imagePullPolicy | default "IfNotPresent" -}}
+{{- end -}}
+{{- end }}
