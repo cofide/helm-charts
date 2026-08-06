@@ -30,7 +30,7 @@
             "properties": {
               "address": {
                 "type": "string",
-                "description": "Address (hostname, optionally with a port) for this additional JWT API endpoint. Used for the OAuth audience, oauth-protected-resource 'resource' value, and :authority/Host matching."
+                "description": "Address (hostname, optionally with a port) for this additional TLS API endpoint. Used for the OAuth audience, oauth-protected-resource 'resource' value, and :authority/Host matching."
               },
               "servername": {
                 "type": "string",
