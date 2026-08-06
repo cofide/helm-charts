@@ -18,7 +18,7 @@
         },
         "apiServerName": {
           "type": "string",
-          "description": "TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Only used for Envoy's filter_chain_match."
+          "description": "TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Only used for Envoy's filter_chain_match."
         },
         "apiExtraEndpoints": {
           "type": "array",

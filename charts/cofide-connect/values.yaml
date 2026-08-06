@@ -22,11 +22,11 @@ connect:
   # "resource" value in the oauth-protected-resource metadata, so this is the real address clients use,
   # not just a TLS SNI.
   apiAddress: ""
-  # TLS SNI for the JWT API endpoint. Defaults to apiAddress with any port stripped. Only needs to be
+  # TLS SNI for the TLS API endpoint. Defaults to apiAddress with any port stripped. Only needs to be
   # set explicitly if the SNI presented by clients differs from apiAddress's hostname (e.g. behind a
   # proxy that terminates a different SNI). Only used for Envoy's filter_chain_match.
   apiServerName: ""
-  # Additional endpoints Envoy will accept for the JWT API, alongside apiAddress/apiServerName.
+  # Additional endpoints Envoy will accept for the TLS API, alongside apiAddress/apiServerName.
   # Useful when the same Connect instance is reachable under more than one public hostname. Each entry
   # is an object with:
   #  address: (required) hostname, optionally with a port, used for the OAuth audience, the
@@ -53,7 +53,7 @@ connect:
   # Allowed origins for CORS requests.
   allowedOrigins: []
   # Host and port the API server listens on internally.
-  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for the JWT API and SPIFFE mTLS SNI hostname matches.
+  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for the TLS API and SPIFFE mTLS SNI hostname matches.
   # Healthchecks are also served on this port.
   insecureServerAddress:
     host: ""
@@ -214,7 +214,7 @@ envoy:
     # JWKS URI of the IdP in use. Only http and https schemes are supported.
     jwksUri: ""
     # Name of secret in the same namespace containing the TLS private key and cert to be used with the domain Connect is exposed on.
-    # This certificate must be valid for the JWT API hostname (connect.<urlBase>, or apiAddress if set). The mTLS and XDS endpoints use SPIFFE SVIDs obtained from SPIRE, not this secret.
+    # This certificate must be valid for the TLS API hostname (connect.<urlBase>, or apiAddress if set). The mTLS and XDS endpoints use SPIFFE SVIDs obtained from SPIRE, not this secret.
     tlsSecretName: ""
     # Audiences set in tokens from the IdP. If empty, defaults to `["https://connect.{{ .Values.connect.urlBase }}"]`
     audiences: []
