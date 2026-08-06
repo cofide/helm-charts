@@ -3,10 +3,16 @@
 # Declare variables to be passed into your templates.
 
 observer:
-  # URL of Cofide Connect API. Required.
-  connectURL:
-  # SPIFFE trust domain of Cofide Connect API. Required.
-  connectTrustDomain:
+  # DEPRECATED: use connectMTLSGRPCTarget instead. URL of Cofide Connect API.
+  connectURL: ""
+  # gRPC target (https://grpc.io/docs/guides/custom-name-resolution) for Cofide Connect's mTLS endpoint. One of connectMTLSGRPCTarget or connectURL is required.
+  connectMTLSGRPCTarget: ""
+  # Optional TLS server name override to use when verifying Cofide Connect's mTLS endpoint.
+  connectMTLSServerName: ""
+  # DEPRECATED: use connectSPIFFEID instead. SPIFFE trust domain of Cofide Connect API.
+  connectTrustDomain: ""
+  # SPIFFE ID of Cofide Connect API. One of connectSPIFFEID or connectTrustDomain is required.
+  connectSPIFFEID: ""
   # Controls whether periodic resync is active (default: false).
   resyncEnabled: false
   # Sets the resync interval as a Go duration string (default: 10m).

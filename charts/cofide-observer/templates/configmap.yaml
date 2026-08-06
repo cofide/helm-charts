@@ -3,7 +3,16 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}
 data:
-  CONNECT_URL: {{ required "Connect URL is required" .Values.observer.connectURL }}
-  CONNECT_TRUST_DOMAIN: {{ required "Connect Trust Domain is required" .Values.observer.connectTrustDomain }}
+  {{- if and (not .Values.observer.connectMTLSGRPCTarget) (not .Values.observer.connectURL) }}
+    {{- fail "One of observer.connectMTLSGRPCTarget or observer.connectURL must be set" }}
+  {{- end }}
+  {{- if and (not .Values.observer.connectSPIFFEID) (not .Values.observer.connectTrustDomain) }}
+    {{- fail "One of observer.connectSPIFFEID or observer.connectTrustDomain must be set" }}
+  {{- end }}
+  CONNECT_MTLS_GRPC_TARGET: {{ .Values.observer.connectMTLSGRPCTarget | quote }}
+  CONNECT_MTLS_SERVER_NAME: {{ .Values.observer.connectMTLSServerName | quote }}
+  CONNECT_URL: {{ .Values.observer.connectURL | quote }}
+  CONNECT_SPIFFE_ID: {{ .Values.observer.connectSPIFFEID | quote }}
+  CONNECT_TRUST_DOMAIN: {{ .Values.observer.connectTrustDomain | quote }}
   RESYNC_ENABLED: {{ .Values.observer.resyncEnabled | quote }}
   RESYNC_PERIOD: {{ .Values.observer.resyncPeriod | quote }}
