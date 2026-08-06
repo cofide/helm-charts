@@ -191,25 +191,30 @@ data:
                               max_age: "7200"
                           routes:
                             # Per RFC 9728, "resource" must be the URI the client actually fetched this
-                            # document from, so we generate one route per accepted hostname, matching on
-                            # the :authority header, each with its own static body.
+                            # document from, so we generate one route per accepted address, matching on
+                            # the :authority header, each with its own static body. This is an exact
+                            # match, so addresses should normally be given without a port (443 is the
+                            # default for https and most clients omit it from :authority/Host). If some
+                            # client insists on sending the port explicitly anyway, add a second address
+                            # entry with ":443" appended rather than putting the port on apiAddress
+                            # itself - the only side effect is a redundant SNI entry and OAuth audience.
                             {{- $apiAddresses := list (include "cofide-connect.apiAddress" $) }}
                             {{- range $.Values.connect.apiExtraEndpoints }}
                             {{- $apiAddresses = append $apiAddresses .address }}
                             {{- end }}
-                            {{- range $hostname := $apiAddresses }}
+                            {{- range $address := $apiAddresses }}
                             - match:
                                 path: "/.well-known/oauth-protected-resource"
                                 headers:
                                   - name: ":authority"
                                     string_match:
-                                      exact: {{ $hostname }}
+                                      exact: {{ $address }}
                               direct_response:
                                 status: 200
                                 body:
                                   inline_string: |
                                     {
-                                      "resource": "https://{{ $hostname }}",
+                                      "resource": "https://{{ $address }}",
                                       "authorization_servers": ["{{ $.Values.envoy.auth.issuer }}"],
                                       "scopes_supported": {{ $.Values.envoy.auth.scopesSupported | toJson }},
                                       "bearer_methods_supported": ["header"]
@@ -224,7 +229,7 @@ data:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.PerRouteConfig
                                   disabled: true
                             {{- end }}
-                            # Fallback for requests whose :authority doesn't match any accepted hostname
+                            # Fallback for requests whose :authority doesn't match any accepted address
                             # (e.g. mismatched SNI/Host). Keeps the endpoint responding rather than 404ing.
                             - match:
                                 path: "/.well-known/oauth-protected-resource"
