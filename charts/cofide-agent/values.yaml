@@ -17,8 +17,24 @@ agent:
     AGENT_PROFILE: kubernetes
     AGENT_TOKEN: ""
     CLUSTER_ID: ""
+    # gRPC target (https://grpc.io/docs/guides/custom-name-resolution/) for Cofide Connect's mTLS endpoint, used for API calls after registration.
+    COFIDE_CONNECT_MTLS_GRPC_TARGET: ""
+    # Optional TLS server name override to use when verifying Cofide Connect's mTLS endpoint.
+    COFIDE_CONNECT_MTLS_SERVER_NAME: ""
+    # SPIFFE ID of Cofide Connect, used for both the mTLS and xDS connections.
+    COFIDE_CONNECT_SPIFFE_ID: ""
+    # gRPC target (https://grpc.io/docs/guides/custom-name-resolution/) for Cofide Connect's plain TLS endpoint, used when this agent registers the trust zone.
+    COFIDE_CONNECT_TLS_GRPC_TARGET: ""
+    # Optional TLS server name override to use when verifying Cofide Connect's plain TLS endpoint.
+    COFIDE_CONNECT_TLS_SERVER_NAME: ""
+    # DEPRECATED: use COFIDE_CONNECT_SPIFFE_ID instead.
     COFIDE_CONNECT_TRUST_DOMAIN: ""
+    # DEPRECATED: use COFIDE_CONNECT_TLS_GRPC_TARGET, COFIDE_CONNECT_MTLS_GRPC_TARGET and COFIDE_CONNECT_XDS_GRPC_TARGET instead.
     COFIDE_CONNECT_URL: ""
+    # gRPC target (https://grpc.io/docs/guides/custom-name-resolution/) for Cofide Connect's xDS server, used to fetch federated services config.
+    COFIDE_CONNECT_XDS_GRPC_TARGET: ""
+    # Optional TLS server name override to use when verifying Cofide Connect's xDS server.
+    COFIDE_CONNECT_XDS_SERVER_NAME: ""
     MANAGEMENT_ZONE: false
     OIDC_ENDPOINT_ENABLED: true
     TRUST_DOMAIN: ""

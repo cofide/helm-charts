@@ -1,0 +1,10 @@
+agent:
+  env:
+    # Test new TLS/mTLS/xDS connect fields.
+    COFIDE_CONNECT_TLS_GRPC_TARGET: connect.example.org:8443
+    COFIDE_CONNECT_TLS_SERVER_NAME: connect.example.org
+    COFIDE_CONNECT_MTLS_GRPC_TARGET: connect.example.org:8444
+    COFIDE_CONNECT_MTLS_SERVER_NAME: connect.example.org
+    COFIDE_CONNECT_XDS_GRPC_TARGET: connect.example.org:8445
+    COFIDE_CONNECT_XDS_SERVER_NAME: connect.example.org
+    COFIDE_CONNECT_SPIFFE_ID: spiffe://example.org/connect

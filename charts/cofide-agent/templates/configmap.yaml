@@ -3,6 +3,12 @@ kind: ConfigMap
 metadata:
   name: cofide-agent
 data:
+  {{- if and (not .Values.agent.env.COFIDE_CONNECT_URL) (or (not .Values.agent.env.COFIDE_CONNECT_TLS_GRPC_TARGET) (not .Values.agent.env.COFIDE_CONNECT_MTLS_GRPC_TARGET) (not .Values.agent.env.COFIDE_CONNECT_XDS_GRPC_TARGET)) }}
+    {{- fail "Either agent.env.COFIDE_CONNECT_URL or all of agent.env.COFIDE_CONNECT_TLS_GRPC_TARGET, agent.env.COFIDE_CONNECT_MTLS_GRPC_TARGET and agent.env.COFIDE_CONNECT_XDS_GRPC_TARGET must be set" }}
+  {{- end }}
+  {{- if and (not .Values.agent.env.COFIDE_CONNECT_SPIFFE_ID) (not .Values.agent.env.COFIDE_CONNECT_TRUST_DOMAIN) }}
+    {{- fail "One of agent.env.COFIDE_CONNECT_SPIFFE_ID or agent.env.COFIDE_CONNECT_TRUST_DOMAIN must be set" }}
+  {{- end }}
 {{- range $key, $value := .Values.agent.env }}
   {{ $key }}: {{ $value | quote }}
 {{- end }}
