@@ -18,7 +18,7 @@ connect:
   # Used to construct default endpoint hostnames (connect.<urlBase>, connect-agent.<urlBase>, xds.<urlBase>) when the explicit hostname/SNI values are not set.
   urlBase: ""
   # Address (hostname, optionally with a port, e.g. "connect.example.com" or "connect.example.com:8443")
-  # for the JWT API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and the
+  # for the TLS API endpoint. Defaults to connect.<urlBase>. Also used as the OAuth audience and the
   # "resource" value in the oauth-protected-resource metadata, so this is the real address clients use,
   # not just a TLS SNI.
   apiAddress: ""
