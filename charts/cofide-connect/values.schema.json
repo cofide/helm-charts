@@ -22,7 +22,7 @@
         },
         "apiExtraEndpoints": {
           "type": "array",
-          "description": "Additional endpoints Envoy will accept for the JWT API, alongside apiAddress/apiServername.",
+          "description": "Additional endpoints Envoy will accept for the TLS API, alongside apiAddress/apiServername.",
           "items": {
             "type": "object",
             "additionalProperties": false,
