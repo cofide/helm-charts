@@ -7,6 +7,7 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/.
 image:
+  # Container image registry. If empty, the repository is used unqualified.
   registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
   repository: cofide/connect-api
   pullPolicy: IfNotPresent
@@ -205,9 +206,20 @@ connect:
   extraEnv: []
 
 envoy:
-  # Pinned to a specific non-floating version
-  image: "envoyproxy/envoy:v1.33.14"
-  imagePullPolicy: IfNotPresent
+  # For backwards compatibility, image may instead be set to a full reference
+  # string (with the pull policy in envoy.imagePullPolicy). Helm then logs
+  # "cannot overwrite table with non table for cofide-connect.envoy.image"
+  # because it discards the default map below in favour of the string; the
+  # string is still honoured. Prefer the map form to avoid the warning.
+  image:
+    # Container image registry. If empty, the repository is used unqualified.
+    registry: docker.io
+    # Container image repository.
+    repository: envoyproxy/envoy
+    # Image pull policy.
+    pullPolicy: IfNotPresent
+    # Pinned to a specific non-floating version.
+    tag: v1.33.14
   auth:
     # Issuer of the IdP in use.
     issuer: ""

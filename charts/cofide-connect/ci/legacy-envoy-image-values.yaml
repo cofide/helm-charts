@@ -1,0 +1,17 @@
+connect:
+  urlBase: example.org
+
+envoy:
+  # Test the deprecated flat string form of envoy.image, retained for backwards
+  # compatibility with releases prior to the registry/repository/tag split.
+  #
+  # The registry and tag deliberately differ from the chart defaults so the
+  # rendered image proves the override was applied rather than silently
+  # dropped. Helm logs "cannot overwrite table with non table" here: it is
+  # discarding the default image map in favour of this string, as intended.
+  image: "mirror.example.org/envoyproxy/envoy:v1.32.0"
+  imagePullPolicy: Always
+  auth:
+    issuer: https://idp.example.org
+    jwksUri: https://idp.example.org/.well-known/jwks.json
+    tlsSecretName: connect-tls

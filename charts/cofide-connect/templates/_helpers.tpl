@@ -118,3 +118,54 @@ xds.{{ .Values.connect.urlBase }}
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Full reference for an image, from a map of `registry`, `repository` and `tag`.
+Call with a dict of `image` (the map) and `defaultTag` (used when `tag` is empty).
+
+`registry` is optional: when empty the `repository` is used unqualified, so
+images can be pulled from Docker Hub.
+*/}}
+{{- define "cofide-connect.imageRef" -}}
+{{- $repository := .image.repository | required "A value for the image repository is required" -}}
+{{- $tag := .image.tag | default .defaultTag -}}
+{{- if .image.registry -}}
+{{- printf "%s/%s:%s" .image.registry $repository $tag -}}
+{{- else -}}
+{{- printf "%s:%s" $repository $tag -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Full image reference for the cofide-connect container. Defaults the tag to the chart appVersion.
+*/}}
+{{- define "cofide-connect.image" -}}
+{{- include "cofide-connect.imageRef" (dict "image" .Values.image "defaultTag" .Chart.AppVersion) -}}
+{{- end }}
+
+{{/*
+Full image reference for the Envoy sidecar.
+
+For backwards compatibility, `envoy.image` may still be set to a full image
+reference string (with the pull policy in `envoy.imagePullPolicy`) instead of a
+map of `registry`, `repository`, `pullPolicy` and `tag`.
+*/}}
+{{- define "cofide-connect.envoyImage" -}}
+{{- if kindIs "string" .Values.envoy.image -}}
+{{- .Values.envoy.image -}}
+{{- else -}}
+{{- include "cofide-connect.imageRef" (dict "image" .Values.envoy.image "defaultTag" "") -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Pull policy for the Envoy sidecar. Prefers `envoy.image.pullPolicy`, falling
+back to the deprecated `envoy.imagePullPolicy`.
+*/}}
+{{- define "cofide-connect.envoyImagePullPolicy" -}}
+{{- if kindIs "string" .Values.envoy.image -}}
+{{- .Values.envoy.imagePullPolicy | default "IfNotPresent" -}}
+{{- else -}}
+{{- .Values.envoy.image.pullPolicy | default .Values.envoy.imagePullPolicy | default "IfNotPresent" -}}
+{{- end -}}
+{{- end }}

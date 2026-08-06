@@ -59,7 +59,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ include "cofide-connect.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
             grpc:
@@ -89,8 +89,8 @@ spec:
               mountPath: "/app/data"
             {{- end }}
         - name: envoy-sidecar
-          image: {{ .Values.envoy.image }}
-          imagePullPolicy: {{ .Values.envoy.imagePullPolicy }}
+          image: "{{ include "cofide-connect.envoyImage" . }}"
+          imagePullPolicy: {{ include "cofide-connect.envoyImagePullPolicy" . }}
           command: ["envoy"]
           args:
             - -c

@@ -28,6 +28,10 @@ spec:
       annotations:
         checksum/envoy-config: {{ include (print $.Template.BasePath "/configmap-envoy.yaml") . | sha256sum }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       securityContext:
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- with .Values.nodeSelector }}
@@ -55,7 +59,7 @@ spec:
             secretName: {{ .Values.envoy.tlsSecretName }}
       containers:
         - name: envoy-sidecar
-          image: "{{ .Values.envoy.image.repository }}:{{ .Values.envoy.image.tag }}"
+          image: "{{ include "cofide-connect-ui.envoyImage" . }}"
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           command: ["envoy"]
           args: ["-c", "/etc/envoy/envoy.yaml", "--service-node", "$(POD_NAME)", "--service-cluster", "$(POD_NAMESPACE)"]
@@ -86,7 +90,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         - name: cofide-connect-ui
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ include "cofide-connect-ui.image" . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             runAsNonRoot: true

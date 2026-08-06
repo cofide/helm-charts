@@ -1,0 +1,10 @@
+ui:
+  # Hostname the UI is served on. Required.
+  hostname: ui.connect.example.org
+  # URL of the Cofide Connect API. Required.
+  connectUrl: https://api.connect.example.org
+  oauth:
+    # OAuth client ID for the UI. Required.
+    clientId: cofide-connect-ui
+    # Issuer of the IdP in use. Required.
+    issuer: https://idp.example.org

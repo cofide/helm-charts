@@ -1,6 +1,7 @@
 replicaCount: 1
 
 image:
+  # Container image registry. If empty, the repository is used unqualified.
   registry: ghcr.io
   repository: cofide/spiffe-enable
   pullPolicy: IfNotPresent
