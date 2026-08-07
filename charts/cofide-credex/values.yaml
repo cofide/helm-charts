@@ -73,7 +73,7 @@ credex:
     targetSPIFFEID: ""
   # Audit configuration.
   audit:
-    # Audit backend type. Supported values: "log" (logging to stdout), "connect" (sending to Cofide Connect service; requires setting credex.connectURL).
+    # Audit backend type. Supported values: "log" (logging to stdout), "connect" (sending to Cofide Connect service; requires setting credex.connectURL or credex.connectMTLSGRPCTarget).
     backend: connect
   # Trusted issuers for token exchange. Each entry generates a numbered set of
   # TRUSTED_ISSUER_n / TRUSTED_ISSUER_JWKS_URL_n / TRUSTED_ISSUER_ALLOWED_AUDIENCES_n env vars.
@@ -81,14 +81,23 @@ credex:
   # - issuer: ""
   #   jwksURL: ""
   #   allowedAudiences: []
-  # Path to a YAML file containing exchange policies. Mutually exclusive with connectURL.
-  # One of policyConfigFile or connectURL must be set when enableOAuthAS is true.
+  # Path to a YAML file containing exchange policies. Mutually exclusive with connectURL/connectMTLSGRPCTarget.
+  # One of policyConfigFile, connectURL or connectMTLSGRPCTarget must be set when enableOAuthAS is true.
   policyConfigFile: ""
-  # Host:port of the Cofide Connect service used as the exchange policy store.
-  # One of policyConfigFile or connectURL must be set when enableOAuthAS is true.
+  # DEPRECATED: use connectMTLSGRPCTarget instead. Host:port of the Cofide Connect service used
+  # as the exchange policy store and/or audit backend.
   connectURL: ""
-  # SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set.
+  # gRPC target (https://grpc.io/docs/guides/custom-name-resolution) for Cofide Connect's mTLS
+  # endpoint, used as the exchange policy store and/or audit backend. One of policyConfigFile,
+  # connectURL or connectMTLSGRPCTarget must be set when enableOAuthAS is true.
+  connectMTLSGRPCTarget: ""
+  # Optional TLS SNI override to use when verifying Cofide Connect's mTLS endpoint.
+  connectMTLSServerName: ""
+  # DEPRECATED: use connectSPIFFEID instead. SPIFFE trust domain of the Cofide Connect service.
+  # Required when connectURL is set.
   connectTrustDomain: ""
+  # SPIFFE ID of the Cofide Connect service. Required when connectMTLSGRPCTarget is set.
+  connectSPIFFEID: ""
   # PEM-encoded CA certificate. When non-empty, creates a cofide-credex-extra-ca ConfigMap
   # and mounts it at /etc/ssl/certs/extra-ca.crt.
   extraCA: ""

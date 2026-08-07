@@ -8,3 +8,11 @@ To view logs:
 
 To access the service within the cluster:
   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "cofide-credex.fullname" . }} 8080:{{ .Values.service.port }}
+{{- if .Values.credex.connectURL }}
+
+WARNING: credex.connectURL is deprecated, use credex.connectMTLSGRPCTarget instead.
+{{- end }}
+{{- if .Values.credex.connectTrustDomain }}
+
+WARNING: credex.connectTrustDomain is deprecated, use credex.connectSPIFFEID instead.
+{{- end }}

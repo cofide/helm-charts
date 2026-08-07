@@ -44,8 +44,20 @@ data:
   {{- with .Values.credex.connectURL }}
   CONNECT_URL: {{ . | quote }}
   {{- end }}
+  {{- if and .Values.credex.connectMTLSGRPCTarget (not .Values.credex.connectSPIFFEID) (not .Values.credex.connectTrustDomain) }}
+  {{- fail "credex.connectSPIFFEID (or the deprecated credex.connectTrustDomain) must be set when credex.connectMTLSGRPCTarget is set" }}
+  {{- end }}
+  {{- with .Values.credex.connectMTLSGRPCTarget }}
+  CONNECT_MTLS_GRPC_TARGET: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.credex.connectMTLSServerName }}
+  CONNECT_MTLS_SERVER_NAME: {{ . | quote }}
+  {{- end }}
   {{- with .Values.credex.connectTrustDomain }}
   CONNECT_TRUST_DOMAIN: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.credex.connectSPIFFEID }}
+  CONNECT_SPIFFE_ID: {{ . | quote }}
   {{- end }}
   {{- range $i, $issuer := .Values.credex.trustedIssuers }}
   {{ printf "TRUSTED_ISSUER_%d" (add1 $i) }}: {{ $issuer.issuer | quote }}

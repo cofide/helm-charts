@@ -192,7 +192,7 @@
           "properties": {
             "backend": {
               "type": "string",
-              "description": "Audit backend type. Supported values: \"log\" (logging to stdout), \"connect\" (sending to Cofide Connect service; requires setting credex.connectURL).",
+              "description": "Audit backend type. Supported values: \"log\" (logging to stdout), \"connect\" (sending to Cofide Connect service; requires setting credex.connectURL or credex.connectMTLSGRPCTarget).",
               "enum": ["log", "connect"]
             }
           },
@@ -226,15 +226,27 @@
         },
         "policyConfigFile": {
           "type": "string",
-          "description": "Path to a YAML file containing exchange policies. Mutually exclusive with connectURL. One of policyConfigFile or connectURL must be set when enableOAuthAS is true."
+          "description": "Path to a YAML file containing exchange policies. Mutually exclusive with connectURL/connectMTLSGRPCTarget. One of policyConfigFile, connectURL or connectMTLSGRPCTarget must be set when enableOAuthAS is true."
         },
         "connectURL": {
           "type": "string",
-          "description": "Host:port of the Cofide Connect service used as the exchange policy store. Mutually exclusive with policyConfigFile. One of policyConfigFile or connectURL must be set when enableOAuthAS is true."
+          "description": "DEPRECATED: use connectMTLSGRPCTarget instead. Host:port of the Cofide Connect service used as the exchange policy store and/or audit backend. Mutually exclusive with policyConfigFile."
+        },
+        "connectMTLSGRPCTarget": {
+          "type": "string",
+          "description": "gRPC target for Cofide Connect's mTLS endpoint, used as the exchange policy store and/or audit backend. Mutually exclusive with policyConfigFile. One of policyConfigFile, connectURL or connectMTLSGRPCTarget must be set when enableOAuthAS is true."
+        },
+        "connectMTLSServerName": {
+          "type": "string",
+          "description": "Optional TLS SNI override to use when verifying Cofide Connect's mTLS endpoint."
         },
         "connectTrustDomain": {
           "type": "string",
-          "description": "SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set."
+          "description": "DEPRECATED: use connectSPIFFEID instead. SPIFFE trust domain of the Cofide Connect service. Required when connectURL is set."
+        },
+        "connectSPIFFEID": {
+          "type": "string",
+          "description": "SPIFFE ID of the Cofide Connect service. Required when connectMTLSGRPCTarget is set."
         },
         "extraCA": {
           "type": "string",
@@ -296,7 +308,8 @@
             "required": ["issuerURL"],
             "anyOf": [
               { "properties": { "policyConfigFile": { "type": "string", "minLength": 1 } } },
-              { "properties": { "connectURL": { "type": "string", "minLength": 1 } } }
+              { "properties": { "connectURL": { "type": "string", "minLength": 1 } } },
+              { "properties": { "connectMTLSGRPCTarget": { "type": "string", "minLength": 1 } } }
             ]
           }
         },
