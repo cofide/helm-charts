@@ -1406,6 +1406,20 @@ entries:
     version: 0.1.0
   cofide-trust-zone-operator:
   - apiVersion: v2
+    appVersion: 0.2.1
+    created: "2026-08-10T14:57:38.733748292Z"
+    description: Helm chart to deploy the Cofide Trust Zone Operator to a Kubernetes
+      cluster
+    digest: 03107ec8a09628128d977a3f5c371091ee02888c0ae209abcaa3cbe33e49da8a
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-trust-zone-operator
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-trust-zone-operator-0.2.0/cofide-trust-zone-operator-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     appVersion: 0.1.0
     created: "2026-03-23T12:12:47.285303332Z"
     description: Helm chart to deploy the Cofide Trust Zone Operator to a Kubernetes
@@ -2781,4 +2795,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-08-10T14:57:16.25677594Z"
+generated: "2026-08-10T14:57:38.734144004Z"
