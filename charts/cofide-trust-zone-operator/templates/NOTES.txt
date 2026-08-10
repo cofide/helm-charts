@@ -5,9 +5,17 @@ Verify the operator is running:
   kubectl get deployment {{ include "cofide-trust-zone-operator.fullname" . }} -n {{ .Release.Namespace }}
 
 NOTE: The operator requires the CRDs from the cofide-tzaas-crds chart to be installed separately before use.
-{{- if or (not .Values.connect.url) (not .Values.connect.trustDomain) }}
+{{- if or (and (not .Values.connect.url) (not .Values.connect.mtlsGrpcTarget)) (and (not .Values.connect.trustDomain) (not .Values.connect.spiffeId)) }}
 
-WARNING: Connect integration is not configured. Set connect.url and connect.trustDomain to enable it.
+WARNING: Connect integration is not configured. Set connect.mtlsGrpcTarget and connect.spiffeId to enable it.
+{{- end }}
+{{- if .Values.connect.url }}
+
+WARNING: connect.url is deprecated, use connect.mtlsGrpcTarget and connect.tlsGrpcTarget instead.
+{{- end }}
+{{- if .Values.connect.trustDomain }}
+
+WARNING: connect.trustDomain is deprecated, use connect.spiffeId instead.
 {{- end }}
 {{- if not .Values.gateway.baseDomain }}
 

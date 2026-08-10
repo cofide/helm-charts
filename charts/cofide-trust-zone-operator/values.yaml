@@ -33,10 +33,20 @@ operator:
 
 # Connect control plane configuration.
 connect:
-  # URL of the Connect instance.
+  # DEPRECATED: use connect.mtlsGrpcTarget and connect.tlsGrpcTarget instead. URL of the Connect instance.
   url: ""
-  # Trust domain of the Connect instance.
+  # gRPC target (https://grpc.io/docs/guides/custom-name-resolution) for Connect's mTLS endpoint, used by the operator itself. One of connect.mtlsGrpcTarget or connect.url is recommended.
+  mtlsGrpcTarget: ""
+  # Optional TLS server name override to use when verifying Connect's mTLS endpoint.
+  mtlsServerName: ""
+  # gRPC target for Connect's plain TLS endpoint, passed through to the SPIRE servers deployed via the generated TrustZoneServer resources.
+  tlsGrpcTarget: ""
+  # Optional TLS server name override for the plain TLS endpoint, passed through to the deployed SPIRE servers.
+  tlsServerName: ""
+  # DEPRECATED: use connect.spiffeId instead. Trust domain of the Connect instance.
   trustDomain: ""
+  # SPIFFE ID of the Connect instance. One of connect.spiffeId or connect.trustDomain is recommended.
+  spiffeId: ""
   # URL of the Connect bundle endpoint.
   bundleUrl: ""
   # Configuration identifying the cluster this operator manages.
@@ -165,8 +175,9 @@ trustZoneOperator:
     imagePullPolicy: IfNotPresent
 
     # Additional arguments to pass to the manager binary. The chart appends --health-probe-bind-address,
-    # --connect-url, --connect-trust-domain, --gateway-namespace, --gateway-base-domain,
-    # --leader-elect (if leaderElection.enabled), --metrics-bind-address/--metrics-secure
+    # --connect-url, --connect-trust-domain, --connect-mtls-grpc-target, --connect-mtls-server-name,
+    # --connect-spiffe-id, --connect-tls-grpc-target, --connect-tls-server-name, --gateway-namespace,
+    # --gateway-base-domain, --leader-elect (if leaderElection.enabled), --metrics-bind-address/--metrics-secure
     # (if metrics.enabled), and --metrics-cert-path (if metrics.tls.enabled and metrics.tls.certSecretName is set) automatically.
     args: []
 

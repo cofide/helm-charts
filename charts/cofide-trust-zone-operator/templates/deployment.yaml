@@ -38,6 +38,21 @@ spec:
       {{- if .Values.connect.trustDomain }}
       {{- $args = append $args (printf "--connect-trust-domain=%s" .Values.connect.trustDomain) }}
       {{- end }}
+      {{- if .Values.connect.mtlsGrpcTarget }}
+      {{- $args = append $args (printf "--connect-mtls-grpc-target=%s" .Values.connect.mtlsGrpcTarget) }}
+      {{- end }}
+      {{- if .Values.connect.mtlsServerName }}
+      {{- $args = append $args (printf "--connect-mtls-server-name=%s" .Values.connect.mtlsServerName) }}
+      {{- end }}
+      {{- if .Values.connect.spiffeId }}
+      {{- $args = append $args (printf "--connect-spiffe-id=%s" .Values.connect.spiffeId) }}
+      {{- end }}
+      {{- if .Values.connect.tlsGrpcTarget }}
+      {{- $args = append $args (printf "--connect-tls-grpc-target=%s" .Values.connect.tlsGrpcTarget) }}
+      {{- end }}
+      {{- if .Values.connect.tlsServerName }}
+      {{- $args = append $args (printf "--connect-tls-server-name=%s" .Values.connect.tlsServerName) }}
+      {{- end }}
       {{- if .Values.connect.bundleUrl }}
       {{- $args = append $args (printf "--connect-bundle-url=%s" .Values.connect.bundleUrl) }}
       {{- end }}

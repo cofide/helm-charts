@@ -1,0 +1,13 @@
+connect:
+  # Test new mTLS/TLS gRPC target / SPIFFE ID connect fields.
+  mtlsGrpcTarget: connect.example.org:8443
+  mtlsServerName: connect.example.org
+  spiffeId: spiffe://example.org/connect
+  tlsGrpcTarget: connect.example.org:8444
+  tlsServerName: connect.example.org
+
+gateway:
+  # Base domain for Gateway API TLSRoutes. Required.
+  baseDomain: example.org
+  # Name of the GatewayClass to use. Required.
+  className: eg
