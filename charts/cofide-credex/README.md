@@ -31,8 +31,8 @@ When the local signer is not in use (`credex.signing.method=spire` and `local` i
 helm install cofide-credex cofide/cofide-credex \
   --namespace cofide \
   --set credex.issuerURL=https://credex.example.org \
-  --set credex.connectURL=connect.example.org:443 \
-  --set credex.connectTrustDomain=example.org
+  --set credex.connectMTLSGRPCTarget=connect.example.org:8443 \
+  --set credex.connectSPIFFEID=spiffe://example.org/connect
 ```
 
 ## Configuration
@@ -43,9 +43,12 @@ helm install cofide-credex cofide/cofide-credex \
 |---|---|---|
 | `credex.issuerURL` | Issuer URL advertised in the OAuth AS metadata | Yes |
 | `credex.accessTokenLifetime` | Token lifetime, e.g. `5m`, `1h`. Defaults to 1 minute | No |
-| `credex.policyConfigFile` | Path to a local policy config file. Mutually exclusive with `connectURL` | One of |
-| `credex.connectURL` | Host:port of the Cofide Connect service used as the policy store. Mutually exclusive with `policyConfigFile` | One of |
-| `credex.connectTrustDomain` | SPIFFE trust domain of the Cofide Connect service. Required when `connectURL` is set | Conditional |
+| `credex.policyConfigFile` | Path to a local policy config file. Mutually exclusive with `connectURL`/`connectMTLSGRPCTarget` | One of |
+| `credex.connectMTLSGRPCTarget` | gRPC target for Cofide Connect's mTLS endpoint, used as the policy store and/or audit backend. Mutually exclusive with `policyConfigFile` | One of |
+| `credex.connectMTLSServerName` | Optional TLS SNI override to use when verifying Cofide Connect's mTLS endpoint | No |
+| `credex.connectSPIFFEID` | SPIFFE ID of the Cofide Connect service. Required when `connectMTLSGRPCTarget` is set | Conditional |
+| `credex.connectURL` | DEPRECATED: use `connectMTLSGRPCTarget` instead. Host:port of the Cofide Connect service used as the policy store. Mutually exclusive with `policyConfigFile` | One of |
+| `credex.connectTrustDomain` | DEPRECATED: use `connectSPIFFEID` instead. SPIFFE trust domain of the Cofide Connect service. Required when `connectURL` is set | Conditional |
 
 ### Signing Keys
 
