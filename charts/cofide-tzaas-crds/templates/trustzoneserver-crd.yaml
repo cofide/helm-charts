@@ -71,20 +71,57 @@ spec:
                       API trust bundle
                     minLength: 1
                     type: string
+                  mtlsGrpcTarget:
+                    description: |-
+                      mtlsGrpcTarget is the gRPC target (e.g. host:port, or a full target URI such as dns:///host:port)
+                      used to dial the Connect API over mTLS
+                    minLength: 1
+                    type: string
+                  mtlsServerName:
+                    description: |-
+                      mtlsServerName overrides the TLS server name (SNI/authority) sent when connecting to the Connect API over mTLS.
+                      If unset, the default authority derived from mtlsGrpcTarget is used.
+                    minLength: 1
+                    type: string
+                  spiffeID:
+                    description: spiffeID is the expected SPIFFE ID of the Connect
+                      API server
+                    minLength: 1
+                    type: string
+                  tlsGrpcTarget:
+                    description: |-
+                      tlsGrpcTarget is the gRPC target (e.g. host:port, or a full target URI such as dns:///host:port)
+                      used to dial the Connect API over webPKI TLS
+                    minLength: 1
+                    type: string
+                  tlsServerName:
+                    description: |-
+                      tlsServerName overrides the TLS server name (SNI/authority) sent when connecting to the Connect API over webPKI TLS.
+                      If unset, the default authority derived from tlsGrpcTarget is used.
+                    minLength: 1
+                    type: string
                   trustDomain:
-                    description: trustDomain is the trust domain of the Connect API
+                    description: |-
+                      trustDomain is the trust domain of the Connect API
+
+                      Deprecated: use spiffeID instead.
                     minLength: 1
                     type: string
                   url:
-                    description: url is the URL used by the TrustZone server to connect
-                      to the Connect control plane
+                    description: |-
+                      url is the URL used by the TrustZone server to connect to the Connect control plane
+
+                      Deprecated: use tlsGrpcTarget and mtlsGrpcTarget instead.
                     minLength: 1
                     type: string
                 required:
                 - bundleEndpointURL
-                - trustDomain
-                - url
                 type: object
+                x-kubernetes-validations:
+                - message: either tlsGrpcTarget and mtlsGrpcTarget or url (deprecated)
+                    and spiffeID or trustDomain (deprecated) must be set
+                  rule: (has(self.url) || (has(self.tlsGrpcTarget) && has(self.mtlsGrpcTarget)))
+                    && (has(self.trustDomain) || has(self.spiffeID))
               helmValues:
                 description: helmValues is a map of additional values to be passed to
                   the Helm chart
