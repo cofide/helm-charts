@@ -1409,6 +1409,19 @@ entries:
   cofide-tzaas-crds:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2026-08-10T14:56:53.168719292Z"
+    description: Helm chart to install CRDs for the Cofide Trust Zone Operator
+    digest: 7bcb6209fad9df13e0d68a5f0a3b5c0df6f11a7053e1f41f98a23c0fb9244c6b
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-tzaas-crds
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-tzaas-crds-0.2.0/cofide-tzaas-crds-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2026-03-23T12:12:47.425670118Z"
     description: Helm chart to install CRDs for the Cofide Trust Zone Operator
     digest: da21cb15ca88871d235e0387c12e888ee378d91572b8182289d86e58f4a0187d
@@ -2755,4 +2768,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-08-06T13:27:54.622876671Z"
+generated: "2026-08-10T14:56:53.168998419Z"
