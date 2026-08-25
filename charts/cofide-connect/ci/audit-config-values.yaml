@@ -1,4 +1,5 @@
 connect:
+  trustDomain: example.org
   audit:
     sinks:
       connectDatastore:

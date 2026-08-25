@@ -1,1 +1,2 @@
-# Currently no values are required to be set.
+connect:
+  trustDomain: example.org

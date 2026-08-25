@@ -99,7 +99,57 @@ data:
     connect_psat_audience: {{ .Values.connect.connectPSATAudience }}
     connect_trust_domain: {{ .Values.connect.trustDomain }}
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
-    telemetry_enabled: {{ .Values.connect.telemetryEnabled | toString }}
+    {{- with .Values.connect.telemetry }}
+    {{- if .enabled }}
+      {{- $authMethodsEnabled := 0 }}
+      {{- range list .auth.spiffeMtls.enabled .auth.spiffeJwt.enabled .auth.k8sPSAT.enabled .auth.insecure.enabled }}
+      {{- if . }}
+        {{- $authMethodsEnabled = add $authMethodsEnabled 1 }}
+      {{- end }}
+      {{- end }}
+      {{- if ne $authMethodsEnabled 1 }}
+        {{- fail (printf "connect.telemetry.auth must enable exactly one authentication method (found %d)" $authMethodsEnabled) }}
+      {{- end }}
+      {{- $collectorSpiffeId := .auth.spiffeMtls.collectorSpiffeId }}
+      {{- if .auth.spiffeMtls.enabled }}
+        {{- $collectorSpiffeId = $collectorSpiffeId | default (printf "spiffe://%s/ns/otel-collector/sa/otel-collector-opentelemetry-collector" $.Values.connect.trustDomain) }}
+      {{- end }}
+    telemetry:
+      enabled: {{ .enabled | toString }}
+      auth:
+        spiffe_mtls:
+          enabled: {{ .auth.spiffeMtls.enabled }}
+          collector_spiffe_id: {{ $collectorSpiffeId | quote }}
+        spiffe_jwt:
+          enabled: {{ .auth.spiffeJwt.enabled }}
+          audience: {{ .auth.spiffeJwt.audience | quote }}
+          tls:
+            ca_file: {{ .auth.spiffeJwt.tls.caFile | quote }}
+            server_name: {{ .auth.spiffeJwt.tls.serverName | quote }}
+            insecure_skip_verify: {{ .auth.spiffeJwt.tls.insecureSkipVerify }}
+        k8s_psat:
+          enabled: {{ .auth.k8sPSAT.enabled }}
+          token_path: {{ .auth.k8sPSAT.tokenPath | quote }}
+          tls:
+            ca_file: {{ .auth.k8sPSAT.tls.caFile | quote }}
+            server_name: {{ .auth.k8sPSAT.tls.serverName | quote }}
+            insecure_skip_verify: {{ .auth.k8sPSAT.tls.insecureSkipVerify }}
+        insecure:
+          enabled: {{ .auth.insecure.enabled }}
+    {{/*
+    Map deprecated telemetry config into new structure for backwards compatibility
+    iff old telemetryEnabled field is supplied but new config isn't (i.e. old chart
+    values used with newer chart version).
+    */}}
+    {{- else if $.Values.connect.telemetryEnabled }}
+    telemetry:
+      enabled: true
+      auth:
+        spiffe_mtls:
+          enabled: true
+          collector_spiffe_id: {{ printf "spiffe://%s/ns/otel-collector/sa/otel-collector-opentelemetry-collector" $.Values.connect.trustDomain | quote }}
+    {{- end }}
+    {{- end }}
     authz_policy_engine: {{ .Values.connect.authzPolicyEngine }}
     initial_rbac:
       version: {{ .Values.connect.initialRBAC.version }}

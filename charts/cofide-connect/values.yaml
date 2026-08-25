@@ -172,12 +172,53 @@ connect:
       connMaxIdleTime: "1m"
   # Expected audience from OIDC token from Cofide SPIRE server in workload clusters.
   connectPSATAudience: ""
-  # Trust domain of in-cluster SPIRE server.
+  # Trust domain of the in-cluster SPIRE server. Required.
   trustDomain: ""
   # URL trust bundle store is available at.
   connectTrustBundleStoreURL: ""
   # Whether to enable the open telemetry metrics server - exposed on port 4317.
+  # Deprecated: Use telemetry.enabled instead.
   telemetryEnabled: false
+  # Telemetry configuration for exporting metrics and traces to an OTel Collector.
+  telemetry:
+    # Whether to enable telemetry export.
+    enabled: false
+    # Exactly one authentication method must be enabled when telemetry is enabled.
+    auth:
+      # SPIFFE mTLS authentication using Connect's own SPIFFE SVID.
+      spiffeMtls:
+        enabled: false
+        # Overrides the target OTel collector's SPIFFE ID. When empty, defaults to
+        # spiffe://<trustDomain>/ns/otel-collector/sa/otel-collector-opentelemetry-collector
+        # assuming the OTel Collector Helm release and namespace are both "otel-collector".
+        collectorSpiffeId: ""
+      # SPIFFE JWT-SVID bearer token authentication over TLS.
+      spiffeJwt:
+        enabled: false
+        # JWT-SVID audience.
+        audience: ""
+        tls:
+          # PEM CA bundle used to verify the collector certificate. Empty uses system roots.
+          caFile: ""
+          # Overrides the SNI / verification hostname.
+          serverName: ""
+          # Disables server certificate verification. Do not use in production.
+          insecureSkipVerify: false
+      # Kubernetes service-account bearer token authentication over TLS.
+      k8sPSAT:
+        enabled: false
+        # Path to the Kubernetes service-account token file.
+        tokenPath: /var/run/secrets/kubernetes.io/serviceaccount/token
+        tls:
+          # PEM CA bundle used to verify the collector certificate. Empty uses system roots.
+          caFile: ""
+          # Overrides the SNI / verification hostname.
+          serverName: ""
+          # Disables server certificate verification. Do not use in production.
+          insecureSkipVerify: false
+      # Unauthenticated plaintext connections. Local development only; never use in production.
+      insecure:
+        enabled: false
   # Authz policy engine to use. Valid values: opa, none. "none" disables authz and is not suitable for production.
   authzPolicyEngine: "opa"
   # Initial RBAC configuration to bootstrap the server with. The initial configuration can be changed later through the API.
