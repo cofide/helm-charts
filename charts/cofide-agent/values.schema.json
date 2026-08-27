@@ -65,11 +65,13 @@
               "description": "Optional SNI override to use when calling Cofide Connect's xDS server."
             },
             "MANAGEMENT_ZONE": {
-              "type": "boolean",
+              "type": ["boolean", "string"],
+              "enum": [true, false, "true", "false"],
               "description": "Whether this agent is running in the management zone."
             },
             "OIDC_ENDPOINT_ENABLED": {
-              "type": "boolean",
+              "type": ["boolean", "string"],
+              "enum": [true, false, "true", "false"],
               "description": "Whether the agent's OIDC discovery endpoint is enabled."
             },
             "TRUST_DOMAIN": {

@@ -1,0 +1,6 @@
+agent:
+  env:
+    # Test that quoted "true"/"false" strings are accepted for boolean env vars, since
+    # callers that generate this file (e.g. cofidectl) write all env vars as strings.
+    MANAGEMENT_ZONE: "true"
+    OIDC_ENDPOINT_ENABLED: "false"
