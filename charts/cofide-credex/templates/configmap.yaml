@@ -1,3 +1,4 @@
+{{- include "cofide-credex.validateConfig" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,8 +8,25 @@ metadata:
 data:
   {{- if .Values.credex.telemetry.enabled }}
   TELEMETRY_ENABLED: {{ .Values.credex.telemetry.enabled | toString | quote }}
-  TELEMETRY_TARGET_SPIFFE_ID: {{ .Values.credex.telemetry.targetSPIFFEID | quote }}
   OTEL_SERVICE_NAME: "credex"
+  {{- if .Values.credex.telemetry.auth.spiffeMtls.enabled }}
+  TELEMETRY_AUTH_MODE: "spiffe-mtls"
+  TELEMETRY_TARGET_SPIFFE_ID: {{ .Values.credex.telemetry.auth.spiffeMtls.collectorSpiffeId | quote }}
+  {{- else if .Values.credex.telemetry.auth.spiffeJwt.enabled }}
+  TELEMETRY_AUTH_MODE: "spiffe-jwt"
+  TELEMETRY_SPIFFE_JWT_AUDIENCE: {{ .Values.credex.telemetry.auth.spiffeJwt.audience | quote }}
+  TELEMETRY_TLS_CA_FILE: {{ .Values.credex.telemetry.auth.spiffeJwt.tls.caFile | quote }}
+  TELEMETRY_TLS_SERVER_NAME: {{ .Values.credex.telemetry.auth.spiffeJwt.tls.serverName | quote }}
+  TELEMETRY_TLS_INSECURE_SKIP_VERIFY: {{ .Values.credex.telemetry.auth.spiffeJwt.tls.insecureSkipVerify | toString | quote }}
+  {{- else if .Values.credex.telemetry.auth.k8sPSAT.enabled }}
+  TELEMETRY_AUTH_MODE: "k8s-sa"
+  TELEMETRY_K8S_SA_TOKEN_PATH: {{ .Values.credex.telemetry.auth.k8sPSAT.tokenPath | quote }}
+  TELEMETRY_TLS_CA_FILE: {{ .Values.credex.telemetry.auth.k8sPSAT.tls.caFile | quote }}
+  TELEMETRY_TLS_SERVER_NAME: {{ .Values.credex.telemetry.auth.k8sPSAT.tls.serverName | quote }}
+  TELEMETRY_TLS_INSECURE_SKIP_VERIFY: {{ .Values.credex.telemetry.auth.k8sPSAT.tls.insecureSkipVerify | toString | quote }}
+  {{- else if .Values.credex.telemetry.auth.insecure.enabled }}
+  TELEMETRY_AUTH_MODE: "insecure"
+  {{- end }}
   {{- end }}
   AUDIT_BACKEND: {{ .Values.credex.audit.backend | quote }}
   ENABLE_OAUTH_AS: {{ .Values.credex.enableOAuthAS | toString | quote }}
@@ -43,9 +61,6 @@ data:
   {{- end }}
   {{- with .Values.credex.connectURL }}
   CONNECT_URL: {{ . | quote }}
-  {{- end }}
-  {{- if and .Values.credex.connectMTLSGRPCTarget (not .Values.credex.connectSPIFFEID) (not .Values.credex.connectTrustDomain) }}
-  {{- fail "credex.connectSPIFFEID (or the deprecated credex.connectTrustDomain) must be set when credex.connectMTLSGRPCTarget is set" }}
   {{- end }}
   {{- with .Values.credex.connectMTLSGRPCTarget }}
   CONNECT_MTLS_GRPC_TARGET: {{ . | quote }}

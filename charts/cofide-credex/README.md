@@ -97,6 +97,19 @@ When `credex.tls.enabled` is set to `true`, the chart automatically adjusts seve
 
 These defaults are only applied if the respective values (e.g., `service.port`) are left at their chart-level default values. Explicit overrides in your `values.yaml` will always take precedence.
 
+### OTel Telemetry
+
+Set `credex.telemetry.enabled: true` to export metrics and traces to the OTel Collector. Exactly one authentication method must be enabled.
+
+| Value | Description |
+|---|---|
+| `credex.telemetry.auth.spiffeMtls` | SPIFFE X.509-SVID mTLS. Set `collectorSpiffeId` to the target collector SPIFFE ID. |
+| `credex.telemetry.auth.spiffeJwt` | SPIFFE JWT-SVID bearer authentication over TLS. Set `audience` and the optional `tls` settings. |
+| `credex.telemetry.auth.k8sPSAT` | Kubernetes service-account bearer authentication over TLS. Set `tokenPath` and the optional `tls` settings. |
+| `credex.telemetry.auth.insecure` | Unauthenticated plaintext transport for local development only. |
+
+For bearer modes, `tls.caFile`, `tls.serverName`, and `tls.insecureSkipVerify` map to the corresponding collector TLS settings. The chart maps these structured values to Credex's `TELEMETRY_*` environment variables.
+
 ### Trusted Issuers
 
 External JWT issuers accepted for token exchange are configured as a list:

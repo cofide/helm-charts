@@ -65,12 +65,46 @@ credex:
   serverDebug: false
   # Enable policy matching debug logging.
   policyDebug: false
-  # Telemetry config (OpenTelemetry-based).
+  # Telemetry configuration for exporting metrics and traces to an OTel Collector.
   telemetry:
-    # Whether to enable pushing of metrics and traces telemetry data (via OpenTelemetry SDK).
+    # Whether to enable telemetry export (default: false).
     enabled: false
-    # SPIFFE ID of the target OTel service (e.g., OTel collector service). Required when telemetry.enabled is true.
+    # DEPRECATED: Set telemetry.auth.spiffeMtls.enabled=true and use telemetry.auth.spiffeMtls.collectorSpiffeId instead.
     targetSPIFFEID: ""
+    # Exactly one authentication method must be enabled when telemetry is enabled.
+    auth:
+      # SPIFFE mTLS authentication using Credex's own SPIFFE SVID.
+      spiffeMtls:
+        enabled: false
+        # SPIFFE ID of the target OTel collector.
+        collectorSpiffeId: ""
+      # SPIFFE JWT-SVID bearer token authentication over TLS.
+      spiffeJwt:
+        enabled: false
+        # JWT-SVID audience.
+        audience: ""
+        tls:
+          # PEM CA bundle used to verify the collector certificate. Empty uses system roots.
+          caFile: ""
+          # Overrides the SNI / verification hostname.
+          serverName: ""
+          # Disables server certificate verification. Do not use in production.
+          insecureSkipVerify: false
+      # Kubernetes service-account bearer token authentication over TLS.
+      k8sPSAT:
+        enabled: false
+        # Path to the Kubernetes service-account token file.
+        tokenPath: /var/run/secrets/kubernetes.io/serviceaccount/token
+        tls:
+          # PEM CA bundle used to verify the collector certificate. Empty uses system roots.
+          caFile: ""
+          # Overrides the SNI / verification hostname.
+          serverName: ""
+          # Disables server certificate verification. Do not use in production.
+          insecureSkipVerify: false
+      # Unauthenticated plaintext connections. Local development only; never use in production.
+      insecure:
+        enabled: false
   # Audit configuration.
   audit:
     # Audit backend type. Supported values: "log" (logging to stdout), "connect" (sending to Cofide Connect service; requires setting credex.connectURL or credex.connectMTLSGRPCTarget).
