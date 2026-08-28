@@ -125,3 +125,33 @@ or as an entry in extraJWKSSources. Empty otherwise.
 true
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate telemetry authentication configuration.
+*/}}
+{{- define "cofide-credex.validateTelemetryAuth" -}}
+{{- if .Values.credex.telemetry.enabled }}
+{{- $authMethodsEnabled := 0 }}
+{{- range list .Values.credex.telemetry.auth.spiffeMtls.enabled .Values.credex.telemetry.auth.spiffeJwt.enabled .Values.credex.telemetry.auth.k8sPSAT.enabled .Values.credex.telemetry.auth.insecure.enabled }}
+{{- if . }}
+{{- $authMethodsEnabled = add $authMethodsEnabled 1 }}
+{{- end }}
+{{- end }}
+{{- if ne $authMethodsEnabled 1 }}
+{{- fail (printf "credex.telemetry.auth must enable exactly one authentication method (found %d)" $authMethodsEnabled) }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Validate app configuration.
+*/}}
+{{- define "cofide-credex.validateConfig" -}}
+{{- if .Values.credex.telemetry.targetSPIFFEID }}
+{{- fail "credex.telemetry.targetSPIFFEID is deprecated; set credex.telemetry.auth.spiffeMtls.enabled=true and move the value to credex.telemetry.auth.spiffeMtls.collectorSpiffeId" }}
+{{- end }}
+{{- include "cofide-credex.validateTelemetryAuth" . }}
+{{- if and .Values.credex.connectMTLSGRPCTarget (not .Values.credex.connectSPIFFEID) (not .Values.credex.connectTrustDomain) }}
+{{- fail "credex.connectSPIFFEID (or the deprecated credex.connectTrustDomain) must be set when credex.connectMTLSGRPCTarget is set" }}
+{{- end }}
+{{- end -}}
