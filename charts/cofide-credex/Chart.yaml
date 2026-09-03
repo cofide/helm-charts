@@ -2,8 +2,8 @@ apiVersion: v2
 name: cofide-credex
 description: Helm chart to deploy Cofide Credex
 type: application
-version: 0.9.2
-appVersion: "v0.19.1"
+version: 0.10.0
+appVersion: "v0.19.1" # TODO: Update this to include configurable OTel auth
 maintainers:
   - name: Cofide
     url: https://cofide.io
