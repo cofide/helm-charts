@@ -413,10 +413,31 @@
                     },
                     "collectorSpiffeId": {
                       "type": "string",
-                      "description": "Overrides the target collector SPIFFE ID. When empty, defaults to spiffe://<trustDomain>/ns/otel-collector/sa/otel-collector-opentelemetry-collector, assuming the OTel Collector Helm release and namespace are both otel-collector."
+                      "description": "SPIFFE ID of the target OTel collector. Required when spiffeMtls.enabled is true."
                     }
                   },
-                  "required": ["enabled", "collectorSpiffeId"]
+                  "required": ["enabled"],
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "enabled": {
+                            "const": true
+                          }
+                        },
+                        "required": ["enabled"]
+                      },
+                      "then": {
+                        "properties": {
+                          "collectorSpiffeId": {
+                            "type": "string",
+                            "pattern": "^spiffe://"
+                          }
+                        },
+                        "required": ["collectorSpiffeId"]
+                      }
+                    }
+                  ]
                 },
                 "spiffeJwt": {
                   "type": "object",
@@ -428,7 +449,7 @@
                     },
                     "audience": {
                       "type": "string",
-                      "description": "JWT-SVID audience."
+                      "description": "JWT-SVID audience. Required and must be non-empty when spiffeJwt.enabled is true."
                     },
                     "tls": {
                       "type": "object",
@@ -445,13 +466,34 @@
                         },
                         "insecureSkipVerify": {
                           "type": "boolean",
-                          "description": "Disables server certificate verification. Do not use in production."
+                          "description": "Disables server certificate verification. For usage in development environments where the collector may not have a trusted certificated."
                         }
                       },
                       "required": ["caFile", "serverName", "insecureSkipVerify"]
                     }
                   },
-                  "required": ["enabled", "audience", "tls"]
+                  "required": ["enabled", "tls"],
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "enabled": {
+                            "const": true
+                          }
+                        },
+                        "required": ["enabled"]
+                      },
+                      "then": {
+                        "properties": {
+                          "audience": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": ["audience"]
+                      }
+                    }
+                  ]
                 },
                 "k8sPSAT": {
                   "type": "object",
@@ -480,7 +522,7 @@
                         },
                         "insecureSkipVerify": {
                           "type": "boolean",
-                          "description": "Disables server certificate verification. Do not use in production."
+                          "description": "Disables server certificate verification. For usage in development environments where the collector may not have a trusted certificated."
                         }
                       },
                       "required": ["caFile", "serverName", "insecureSkipVerify"]
@@ -491,7 +533,7 @@
                 "insecure": {
                   "type": "object",
                   "additionalProperties": false,
-                  "description": "Unauthenticated plain text connections. Local development only; never use in production.",
+                  "description": "Unauthenticated plain text connections. For development environments where the collector does not require authentication.",
                   "properties": {
                     "enabled": {
                       "type": "boolean"
@@ -660,6 +702,7 @@
         "connectPSATAudience",
         "trustDomain",
         "connectTrustBundleStoreURL",
+        "telemetryEnabled",
         "telemetry",
         "authzPolicyEngine",
         "initialRBAC",

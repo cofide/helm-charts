@@ -110,16 +110,12 @@ data:
       {{- if ne $authMethodsEnabled 1 }}
         {{- fail (printf "connect.telemetry.auth must enable exactly one authentication method (found %d)" $authMethodsEnabled) }}
       {{- end }}
-      {{- $collectorSpiffeId := .auth.spiffeMtls.collectorSpiffeId }}
-      {{- if .auth.spiffeMtls.enabled }}
-        {{- $collectorSpiffeId = $collectorSpiffeId | default (printf "spiffe://%s/ns/otel-collector/sa/otel-collector-opentelemetry-collector" $.Values.connect.trustDomain) }}
-      {{- end }}
     telemetry:
-      enabled: {{ .enabled | toString }}
+      enabled: {{ .enabled }}
       auth:
         spiffe_mtls:
           enabled: {{ .auth.spiffeMtls.enabled }}
-          collector_spiffe_id: {{ $collectorSpiffeId | quote }}
+          collector_spiffe_id: {{ .auth.spiffeMtls.collectorSpiffeId | quote }}
         spiffe_jwt:
           enabled: {{ .auth.spiffeJwt.enabled }}
           audience: {{ .auth.spiffeJwt.audience | quote }}

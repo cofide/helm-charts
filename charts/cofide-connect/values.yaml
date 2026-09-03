@@ -188,14 +188,12 @@ connect:
       # SPIFFE mTLS authentication using Connect's own SPIFFE SVID.
       spiffeMtls:
         enabled: false
-        # Overrides the target OTel collector's SPIFFE ID. When empty, defaults to
-        # spiffe://<trustDomain>/ns/otel-collector/sa/otel-collector-opentelemetry-collector
-        # assuming the OTel Collector Helm release and namespace are both "otel-collector".
+        # SPIFFE ID of the target OTel collector. Required when spiffeMtls.enabled is true.
         collectorSpiffeId: ""
       # SPIFFE JWT-SVID bearer token authentication over TLS.
       spiffeJwt:
         enabled: false
-        # JWT-SVID audience.
+        # JWT-SVID audience. Required and must be non-empty when spiffeJwt.enabled is true.
         audience: ""
         tls:
           # PEM CA bundle used to verify the collector certificate. Empty uses system roots.
