@@ -378,7 +378,8 @@
         },
         "trustDomain": {
           "type": "string",
-          "description": "The trust domain of the Connect trust zone."
+          "minLength": 1,
+          "description": "The trust domain of the Connect trust zone. Required."
         },
         "connectTrustBundleStoreURL": {
           "type": "string",
@@ -386,7 +387,165 @@
         },
         "telemetryEnabled": {
           "type": "boolean",
-          "description": "Flag to enable/disable telemetry."
+          "description": "Deprecated: Use telemetry.enabled instead."
+        },
+        "telemetry": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Telemetry configuration for exporting metrics and traces to an OTel Collector.",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether to enable telemetry export."
+            },
+            "auth": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Configuration for how Connect authenticates to the OTel Collector. Exactly one method must be enabled when telemetry is enabled.",
+              "properties": {
+                "spiffeMtls": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "SPIFFE mTLS authentication using Connect's own SPIFFE SVID.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "collectorSpiffeId": {
+                      "type": "string",
+                      "description": "SPIFFE ID of the target OTel collector. Required when spiffeMtls.enabled is true."
+                    }
+                  },
+                  "required": ["enabled"],
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "enabled": {
+                            "const": true
+                          }
+                        },
+                        "required": ["enabled"]
+                      },
+                      "then": {
+                        "properties": {
+                          "collectorSpiffeId": {
+                            "type": "string",
+                            "pattern": "^spiffe://"
+                          }
+                        },
+                        "required": ["collectorSpiffeId"]
+                      }
+                    }
+                  ]
+                },
+                "spiffeJwt": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "SPIFFE JWT-SVID bearer token authentication over TLS.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "audience": {
+                      "type": "string",
+                      "description": "JWT-SVID audience. Required and must be non-empty when spiffeJwt.enabled is true."
+                    },
+                    "tls": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "description": "Controls verification of the collector's TLS server certificate.",
+                      "properties": {
+                        "caFile": {
+                          "type": "string",
+                          "description": "PEM CA bundle used to verify the collector certificate. Empty uses system roots."
+                        },
+                        "serverName": {
+                          "type": "string",
+                          "description": "Overrides the SNI / verification hostname."
+                        },
+                        "insecureSkipVerify": {
+                          "type": "boolean",
+                          "description": "Disables server certificate verification. For usage in development environments where the collector may not have a trusted certificated."
+                        }
+                      },
+                      "required": ["caFile", "serverName", "insecureSkipVerify"]
+                    }
+                  },
+                  "required": ["enabled", "tls"],
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "enabled": {
+                            "const": true
+                          }
+                        },
+                        "required": ["enabled"]
+                      },
+                      "then": {
+                        "properties": {
+                          "audience": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": ["audience"]
+                      }
+                    }
+                  ]
+                },
+                "k8sPSAT": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Kubernetes service-account bearer token authentication over TLS.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "tokenPath": {
+                      "type": "string",
+                      "description": "Path to the Kubernetes service-account token file."
+                    },
+                    "tls": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "description": "Controls verification of the collector's TLS server certificate.",
+                      "properties": {
+                        "caFile": {
+                          "type": "string",
+                          "description": "PEM CA bundle used to verify the collector certificate. Empty uses system roots."
+                        },
+                        "serverName": {
+                          "type": "string",
+                          "description": "Overrides the SNI / verification hostname."
+                        },
+                        "insecureSkipVerify": {
+                          "type": "boolean",
+                          "description": "Disables server certificate verification. For usage in development environments where the collector may not have a trusted certificated."
+                        }
+                      },
+                      "required": ["caFile", "serverName", "insecureSkipVerify"]
+                    }
+                  },
+                  "required": ["enabled", "tokenPath", "tls"]
+                },
+                "insecure": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Unauthenticated plain text connections. For development environments where the collector does not require authentication.",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["enabled"]
+                }
+              },
+              "required": ["spiffeMtls", "spiffeJwt", "k8sPSAT", "insecure"]
+            }
+          },
+          "required": ["enabled", "auth"]
         },
         "authzPolicyEngine": {
           "type": "string",
@@ -544,6 +703,7 @@
         "trustDomain",
         "connectTrustBundleStoreURL",
         "telemetryEnabled",
+        "telemetry",
         "authzPolicyEngine",
         "initialRBAC",
         "audit",
