@@ -97,6 +97,23 @@ When `credex.tls.enabled` is set to `true`, the chart automatically adjusts seve
 
 These defaults are only applied if the respective values (e.g., `service.port`) are left at their chart-level default values. Explicit overrides in your `values.yaml` will always take precedence.
 
+### OTel Telemetry
+
+Set `credex.telemetry.enabled: true` to export metrics and traces to an OTel Collector or OTel-compatible backend. Exactly one authentication method must be enabled.
+
+| Value | Description |
+|---|---|
+| `credex.telemetry.collectorEndpoint` | OTLP endpoint of the OTel Collector, e.g. `https://otel-collector.observability:4317`. Sets the standard `OTEL_EXPORTER_OTLP_ENDPOINT` variable. Required when telemetry is enabled. |
+| `credex.telemetry.serviceName` | Service name reported to the OTel Collector. Sets the standard `OTEL_SERVICE_NAME` variable. Defaults to `credex`. |
+| `credex.telemetry.auth.spiffeMtls` | SPIFFE X.509-SVID mTLS. Set `collectorSpiffeId` to the target collector SPIFFE ID. |
+| `credex.telemetry.auth.spiffeJwt` | SPIFFE JWT-SVID bearer authentication over TLS. Set `audience` and the optional `tls` settings. |
+| `credex.telemetry.auth.k8sPSAT` | Kubernetes service-account bearer authentication over TLS. Set `tokenPath` and the optional `tls` settings. |
+| `credex.telemetry.auth.insecure` | Unauthenticated plaintext transport for local development only. |
+
+For bearer modes, `tls.caFile`, `tls.serverName`, and `tls.insecureSkipVerify` map to the corresponding collector TLS settings. The chart maps these structured values to Credex's `TELEMETRY_*` environment variables.
+
+Any other OpenTelemetry SDK settings can be supplied via `credex.extraEnv` using the standard `OTEL_*` environment variables listed in the [OTel documentation](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/)..
+
 ### Trusted Issuers
 
 External JWT issuers accepted for token exchange are configured as a list:
