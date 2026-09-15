@@ -163,6 +163,14 @@
               "type": "boolean",
               "description": "Whether to enable telemetry export."
             },
+            "collectorEndpoint": {
+              "type": "string",
+              "description": "OTLP endpoint of the OTel Collector to export metrics and traces to. Sets the standard OTEL_EXPORTER_OTLP_ENDPOINT variable. Required when telemetry is enabled."
+            },
+            "serviceName": {
+              "type": "string",
+              "description": "Service name reported to the OTel Collector. Sets the standard OTEL_SERVICE_NAME variable."
+            },
             "targetSPIFFEID": {
               "type": "string",
               "description": "DEPRECATED: use telemetry.auth.spiffeMtls.collectorSpiffeId instead. Configurations setting this value fail during templating so they can be migrated explicitly."
@@ -272,7 +280,19 @@
               "required": ["spiffeMtls", "spiffeJwt", "k8sPSAT", "insecure"]
             }
           },
-          "required": ["enabled", "auth"]
+          "required": ["enabled", "auth"],
+          "if": {
+            "properties": {
+              "enabled": { "const": true }
+            },
+            "required": ["enabled"]
+          },
+          "then": {
+            "properties": {
+              "collectorEndpoint": { "minLength": 1 }
+            },
+            "required": ["collectorEndpoint"]
+          }
         },
         "audit": {
           "type": "object",

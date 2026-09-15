@@ -8,7 +8,8 @@ metadata:
 data:
   {{- if .Values.credex.telemetry.enabled }}
   TELEMETRY_ENABLED: {{ .Values.credex.telemetry.enabled | toString | quote }}
-  OTEL_SERVICE_NAME: "credex"
+  OTEL_SERVICE_NAME: {{ .Values.credex.telemetry.serviceName | quote }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.credex.telemetry.collectorEndpoint | quote }}
   {{- if .Values.credex.telemetry.auth.spiffeMtls.enabled }}
   TELEMETRY_AUTH_MODE: "spiffe-mtls"
   TELEMETRY_TARGET_SPIFFE_ID: {{ .Values.credex.telemetry.auth.spiffeMtls.collectorSpiffeId | quote }}
