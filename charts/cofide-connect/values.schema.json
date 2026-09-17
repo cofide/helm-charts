@@ -398,6 +398,10 @@
               "type": "boolean",
               "description": "Whether to enable telemetry export."
             },
+            "collectorEndpoint": {
+              "type": "string",
+              "description": "OTLP endpoint of the OTel Collector to export metrics and traces to. Sets the standard OTEL_EXPORTER_OTLP_ENDPOINT variable. Required when telemetry is enabled."
+            },
             "auth": {
               "type": "object",
               "additionalProperties": false,

@@ -46,6 +46,7 @@ spec:
                 fieldPath: "status.hostIP"
           {{- /* Default env vars - overwritten if same name provided in connect.extraEnv. */ -}}
           {{- $envVars := dict
+              "OTEL_EXPORTER_OTLP_ENDPOINT" (dict "value" .Values.connect.telemetry.collectorEndpoint)
               "OTEL_EXPORTER_OTLP_PROTOCOL" (dict "value" "grpc")
               "OTEL_METRIC_EXPORT_INTERVAL" (dict "value" "60000")
               "OTEL_SERVICE_NAME" (dict "value" "connect")
