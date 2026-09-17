@@ -101,6 +101,9 @@ data:
     connect_trust_bundle_store_url: {{ .Values.connect.connectTrustBundleStoreURL }}
     {{- with .Values.connect.telemetry }}
     {{- if .enabled }}
+      {{- if not .collectorEndpoint }}
+        {{- fail "connect.telemetry.collectorEndpoint must be non-empty when connect.telemetry.enabled is true" }}
+      {{- end }}
       {{- $authMethodsEnabled := 0 }}
       {{- range list .auth.spiffeMtls.enabled .auth.spiffeJwt.enabled .auth.k8sPSAT.enabled .auth.insecure.enabled }}
       {{- if . }}
