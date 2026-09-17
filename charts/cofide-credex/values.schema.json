@@ -280,19 +280,7 @@
               "required": ["spiffeMtls", "spiffeJwt", "k8sPSAT", "insecure"]
             }
           },
-          "required": ["enabled", "auth"],
-          "if": {
-            "properties": {
-              "enabled": { "const": true }
-            },
-            "required": ["enabled"]
-          },
-          "then": {
-            "properties": {
-              "collectorEndpoint": { "minLength": 1 }
-            },
-            "required": ["collectorEndpoint"]
-          }
+          "required": ["enabled", "auth"]
         },
         "audit": {
           "type": "object",

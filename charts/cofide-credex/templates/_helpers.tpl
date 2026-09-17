@@ -147,6 +147,9 @@ Validate telemetry authentication configuration.
 Validate app configuration.
 */}}
 {{- define "cofide-credex.validateConfig" -}}
+{{- if and .Values.credex.telemetry.enabled (not .Values.credex.telemetry.collectorEndpoint) }}
+{{- fail "credex.telemetry.collectorEndpoint must be non-empty when credex.telemetry.enabled is true" }}
+{{- end }}
 {{- if .Values.credex.telemetry.targetSPIFFEID }}
 {{- fail "credex.telemetry.targetSPIFFEID is deprecated; set credex.telemetry.auth.spiffeMtls.enabled=true and move the value to credex.telemetry.auth.spiffeMtls.collectorSpiffeId" }}
 {{- end }}
