@@ -1,0 +1,32 @@
+# The observer manager always runs leader election, so that a single replica
+# reconciles Pods and publishes workloads regardless of the replica count. The
+# replicas contend for a Lease in this namespace, and controller-runtime records
+# the election as events.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "cofide-observer.fullname" . }}-leader-election
+  labels:
+    {{- include "cofide-observer.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cofide-observer.fullname" . }}-leader-election
+  labels:
+    {{- include "cofide-observer.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "cofide-observer.fullname" . }}-leader-election
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "cofide-observer.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
