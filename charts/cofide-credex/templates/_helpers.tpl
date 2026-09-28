@@ -127,6 +127,27 @@ true
 {{- end -}}
 
 {{/*
+Directory where the OTel collector's projected k8s service account token is mounted.
+*/}}
+{{- define "cofide-credex.otelTokenDir" -}}
+/var/run/secrets/tokens
+{{- end }}
+
+{{/*
+Filename of the OTel collector's projected k8s service account token within its mount directory.
+*/}}
+{{- define "cofide-credex.otelTokenFilename" -}}
+otel-token
+{{- end }}
+
+{{/*
+Full path to the OTel collector's projected k8s service account token.
+*/}}
+{{- define "cofide-credex.otelTokenPath" -}}
+{{ include "cofide-credex.otelTokenDir" . }}/{{ include "cofide-credex.otelTokenFilename" . }}
+{{- end }}
+
+{{/*
 Validate telemetry authentication configuration.
 */}}
 {{- define "cofide-credex.validateTelemetryAuth" -}}

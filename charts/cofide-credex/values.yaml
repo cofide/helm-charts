@@ -101,8 +101,8 @@ credex:
       # Kubernetes service-account bearer token authentication over TLS.
       k8sPSAT:
         enabled: false
-        # Path to the Kubernetes service-account token file.
-        tokenPath: /var/run/secrets/kubernetes.io/serviceaccount/token
+        # PSAT audience - must match expected audience in OTel collector config
+        audience: otel-collector
         tls:
           # PEM CA bundle used to verify the collector certificate. Empty uses system roots.
           caFile: ""

@@ -128,7 +128,7 @@ data:
             insecure_skip_verify: {{ .auth.spiffeJwt.tls.insecureSkipVerify }}
         k8s_psat:
           enabled: {{ .auth.k8sPSAT.enabled }}
-          token_path: {{ .auth.k8sPSAT.tokenPath | quote }}
+          token_path: {{ include "cofide-connect.otelTokenPath" $ | quote }}
           tls:
             ca_file: {{ .auth.k8sPSAT.tls.caFile | quote }}
             server_name: {{ .auth.k8sPSAT.tls.serverName | quote }}
