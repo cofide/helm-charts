@@ -114,6 +114,10 @@ spec:
               mountPath: {{ .Values.credex.spireAgentAdminSocket | trimPrefix "unix://" | dir }}
               readOnly: true
             {{- end }}
+            {{- if .Values.credex.telemetry.auth.k8sPSAT.enabled }}
+            - mountPath: /var/run/secrets/tokens/
+              name: otel-collector-token
+            {{- end }}
       volumes:
         {{- if (include "cofide-credex.usesLocalSigning" .) }}
         - name: oauth-private-key
@@ -143,6 +147,17 @@ spec:
           hostPath:
             path: {{ . }}
             type: DirectoryOrCreate
+        {{- end }}
+        {{- with .Values.credex.telemetry.auth.k8sPSAT }}
+        {{ if .enabled }}
+        - name: otel-collector-token
+          projected:
+            sources:
+            - serviceAccountToken:
+                path: otel-token
+                expirationSeconds: 7200
+                audience: {{ .audience | quote }}
+        {{- end }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

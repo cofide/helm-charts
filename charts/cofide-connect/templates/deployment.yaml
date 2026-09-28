@@ -87,6 +87,10 @@ spec:
               mountPath: /spiffe-workload-api
             - name: connect-config
               mountPath: /app/config
+            {{- if .Values.connect.telemetry.auth.k8sPSAT.enabled }}
+            - mountPath: /var/run/secrets/tokens/
+              name: otel-collector-token
+            {{- end }}
         - name: envoy-sidecar
           image: {{ .Values.envoy.image }}
           imagePullPolicy: {{ .Values.envoy.imagePullPolicy }}
@@ -151,6 +155,17 @@ spec:
         - name: envoy-tls
           secret:
             secretName: {{ .Values.envoy.auth.tlsSecretName }}
+        {{- with .Values.connect.telemetry.auth.k8sPSAT }}
+        {{ if .enabled }}
+        - name: otel-collector-token
+          projected:
+            sources:
+            - serviceAccountToken:
+                path: otel-token
+                expirationSeconds: 7200
+                audience: {{ .audience | quote }}
+        {{- end }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -21,7 +21,7 @@ data:
   TELEMETRY_TLS_INSECURE_SKIP_VERIFY: {{ .Values.credex.telemetry.auth.spiffeJwt.tls.insecureSkipVerify | toString | quote }}
   {{- else if .Values.credex.telemetry.auth.k8sPSAT.enabled }}
   TELEMETRY_AUTH_MODE: "k8s-sa"
-  TELEMETRY_K8S_SA_TOKEN_PATH: {{ .Values.credex.telemetry.auth.k8sPSAT.tokenPath | quote }}
+  TELEMETRY_K8S_SA_TOKEN_PATH: "/var/run/secrets/tokens/otel-token"
   TELEMETRY_TLS_CA_FILE: {{ .Values.credex.telemetry.auth.k8sPSAT.tls.caFile | quote }}
   TELEMETRY_TLS_SERVER_NAME: {{ .Values.credex.telemetry.auth.k8sPSAT.tls.serverName | quote }}
   TELEMETRY_TLS_INSECURE_SKIP_VERIFY: {{ .Values.credex.telemetry.auth.k8sPSAT.tls.insecureSkipVerify | toString | quote }}

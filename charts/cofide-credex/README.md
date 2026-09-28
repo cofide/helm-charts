@@ -107,7 +107,7 @@ Set `credex.telemetry.enabled: true` to export metrics and traces to an OTel Col
 | `credex.telemetry.serviceName` | Service name reported to the OTel Collector. Sets the standard `OTEL_SERVICE_NAME` variable. Defaults to `credex`. |
 | `credex.telemetry.auth.spiffeMtls` | SPIFFE X.509-SVID mTLS. Set `collectorSpiffeId` to the target collector SPIFFE ID. |
 | `credex.telemetry.auth.spiffeJwt` | SPIFFE JWT-SVID bearer authentication over TLS. Set `audience` and the optional `tls` settings. |
-| `credex.telemetry.auth.k8sPSAT` | Kubernetes service-account bearer authentication over TLS. Set `tokenPath` and the optional `tls` settings. |
+| `credex.telemetry.auth.k8sPSAT` | Kubernetes service-account bearer authentication over TLS. Set `audience` and the optional `tls` settings. |
 | `credex.telemetry.auth.insecure` | Unauthenticated plaintext transport for local development only. |
 
 For bearer modes, `tls.caFile`, `tls.serverName`, and `tls.insecureSkipVerify` map to the corresponding collector TLS settings. The chart maps these structured values to Credex's `TELEMETRY_*` environment variables.

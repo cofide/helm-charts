@@ -507,9 +507,9 @@
                     "enabled": {
                       "type": "boolean"
                     },
-                    "tokenPath": {
+                    "audience": {
                       "type": "string",
-                      "description": "Path to the Kubernetes service-account token file."
+                      "description": "Audience to request for the Kubernetes service account JWT."
                     },
                     "tls": {
                       "type": "object",
@@ -532,7 +532,7 @@
                       "required": ["caFile", "serverName", "insecureSkipVerify"]
                     }
                   },
-                  "required": ["enabled", "tokenPath", "tls"]
+                  "required": ["enabled", "audience", "tls"]
                 },
                 "insecure": {
                   "type": "object",
