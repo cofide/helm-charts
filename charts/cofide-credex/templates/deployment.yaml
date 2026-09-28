@@ -115,7 +115,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.credex.telemetry.auth.k8sPSAT.enabled }}
-            - mountPath: /var/run/secrets/tokens/
+            - mountPath: {{ include "cofide-credex.otelTokenDir" . }}/
               name: otel-collector-token
             {{- end }}
       volumes:
@@ -154,7 +154,7 @@ spec:
           projected:
             sources:
             - serviceAccountToken:
-                path: otel-token
+                path: {{ include "cofide-credex.otelTokenFilename" . }}
                 expirationSeconds: 7200
                 audience: {{ .audience | quote }}
         {{- end }}

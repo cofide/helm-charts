@@ -108,6 +108,27 @@ xds.{{ .Values.connect.urlBase }}
 {{- end -}}
 {{- end }}
 
+{{/*
+Directory where the OTel collector's projected k8s service account token is mounted.
+*/}}
+{{- define "cofide-connect.otelTokenDir" -}}
+/var/run/secrets/tokens
+{{- end }}
+
+{{/*
+Filename of the OTel collector's projected k8s service account token within its mount directory.
+*/}}
+{{- define "cofide-connect.otelTokenFilename" -}}
+otel-token
+{{- end }}
+
+{{/*
+Full path to the OTel collector's projected k8s service account token.
+*/}}
+{{- define "cofide-connect.otelTokenPath" -}}
+{{ include "cofide-connect.otelTokenDir" . }}/{{ include "cofide-connect.otelTokenFilename" . }}
+{{- end }}
+
 {{- define "cofide-connect.envoy.auth.audiences" -}}
 {{- if gt (len .Values.envoy.auth.audiences) 0 }}
 {{- toYaml .Values.envoy.auth.audiences }}
