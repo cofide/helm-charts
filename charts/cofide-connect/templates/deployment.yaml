@@ -91,6 +91,10 @@ spec:
             - mountPath: {{ include "cofide-connect.otelTokenDir" . }}/
               name: otel-collector-token
             {{- end }}
+            {{- if and .Values.connect.audit.sinks.otlp.enabled .Values.connect.audit.sinks.otlp.auth.k8sPSAT.enabled }}
+            - mountPath: {{ include "cofide-connect.auditOTLPTokenDir" . }}/
+              name: audit-otlp-token
+            {{- end }}
         - name: envoy-sidecar
           image: {{ .Values.envoy.image }}
           imagePullPolicy: {{ .Values.envoy.imagePullPolicy }}
@@ -165,6 +169,15 @@ spec:
                 expirationSeconds: 7200
                 audience: {{ .audience | quote }}
         {{- end }}
+        {{- end }}
+        {{- if and .Values.connect.audit.sinks.otlp.enabled .Values.connect.audit.sinks.otlp.auth.k8sPSAT.enabled }}
+        - name: audit-otlp-token
+          projected:
+            sources:
+            - serviceAccountToken:
+                path: {{ include "cofide-connect.auditOTLPTokenFilename" . }}
+                expirationSeconds: 7200
+                audience: {{ .Values.connect.audit.sinks.otlp.auth.k8sPSAT.audience | quote }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -182,6 +182,60 @@ data:
               {{- end }}
             {{- else }} []
             {{- end }}
+        {{- with .Values.connect.audit.sinks.otlp }}
+        {{- if .enabled }}
+          {{- if not .endpoint }}
+            {{- fail "connect.audit.sinks.otlp.endpoint must be non-empty when connect.audit.sinks.otlp.enabled is true" }}
+          {{- end }}
+          {{- $authMethodsEnabled := 0 }}
+          {{- range list .auth.spiffeMtls.enabled .auth.spiffeJwt.enabled .auth.k8sPSAT.enabled .auth.insecure.enabled }}
+          {{- if . }}
+            {{- $authMethodsEnabled = add $authMethodsEnabled 1 }}
+          {{- end }}
+          {{- end }}
+          {{- if ne $authMethodsEnabled 1 }}
+            {{- fail (printf "connect.audit.sinks.otlp.auth must enable exactly one authentication method (found %d)" $authMethodsEnabled) }}
+          {{- end }}
+        otlp:
+          enabled: true
+          endpoint: {{ .endpoint | quote }}
+          export_timeout: {{ .exportTimeout | quote }}
+          enabled_events:
+            {{- if .enabledEvents }}
+              {{- range .enabledEvents }}
+            - {{ . | quote }}
+              {{- end }}
+            {{- else }} []
+            {{- end }}
+          disabled_events:
+            {{- if .disabledEvents }}
+              {{- range .disabledEvents }}
+            - {{ . | quote }}
+              {{- end }}
+            {{- else }} []
+            {{- end }}
+          auth:
+            spiffe_mtls:
+              enabled: {{ .auth.spiffeMtls.enabled }}
+              collector_spiffe_id: {{ .auth.spiffeMtls.collectorSpiffeId | quote }}
+            spiffe_jwt:
+              enabled: {{ .auth.spiffeJwt.enabled }}
+              audience: {{ .auth.spiffeJwt.audience | quote }}
+              tls:
+                ca_file: {{ .auth.spiffeJwt.tls.caFile | quote }}
+                server_name: {{ .auth.spiffeJwt.tls.serverName | quote }}
+                insecure_skip_verify: {{ .auth.spiffeJwt.tls.insecureSkipVerify }}
+            k8s_psat:
+              enabled: {{ .auth.k8sPSAT.enabled }}
+              token_path: {{ include "cofide-connect.auditOTLPTokenPath" $ | quote }}
+              tls:
+                ca_file: {{ .auth.k8sPSAT.tls.caFile | quote }}
+                server_name: {{ .auth.k8sPSAT.tls.serverName | quote }}
+                insecure_skip_verify: {{ .auth.k8sPSAT.tls.insecureSkipVerify }}
+            insecure:
+              enabled: {{ .auth.insecure.enabled }}
+        {{- end }}
+        {{- end }}
 {{- if ne $datastoreUsed 1 }}
 {{- fail (printf "You must enable exactly one datastore. There are %d enabled." $datastoreUsed) }}
 {{- end }}
