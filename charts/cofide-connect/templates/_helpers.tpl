@@ -129,6 +129,28 @@ Full path to the OTel collector's projected k8s service account token.
 {{ include "cofide-connect.otelTokenDir" . }}/{{ include "cofide-connect.otelTokenFilename" . }}
 {{- end }}
 
+{{/*
+Directory in which the projected k8s service account token for the audit event OTLP endpoint is mounted.
+It is separate from the OTel collector's token, because the two tokens may have different audiences.
+*/}}
+{{- define "cofide-connect.auditOTLPTokenDir" -}}
+/var/run/secrets/audit-otlp-tokens
+{{- end }}
+
+{{/*
+Filename of the audit event OTLP endpoint's projected k8s service account token within its mount directory.
+*/}}
+{{- define "cofide-connect.auditOTLPTokenFilename" -}}
+audit-otlp-token
+{{- end }}
+
+{{/*
+Full path to the audit event OTLP endpoint's projected k8s service account token.
+*/}}
+{{- define "cofide-connect.auditOTLPTokenPath" -}}
+{{ include "cofide-connect.auditOTLPTokenDir" . }}/{{ include "cofide-connect.auditOTLPTokenFilename" . }}
+{{- end }}
+
 {{- define "cofide-connect.envoy.auth.audiences" -}}
 {{- if gt (len .Values.envoy.auth.audiences) 0 }}
 {{- toYaml .Values.envoy.auth.audiences }}

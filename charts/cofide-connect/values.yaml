@@ -247,6 +247,58 @@ connect:
         # DisabledEvents is subtracted from the resolved enabledEvents list.
         # Examples: trust_zone_deletion, cluster_deletion.
         disabledEvents: []
+      # Export of audit events to an OTLP endpoint as OTel events. Events are written to a
+      # transactional outbox when they are recorded in the Connect datastore, and are exported
+      # asynchronously with retries, so an unavailable endpoint does not lose events.
+      otlp:
+        # Whether to export audit events.
+        enabled: false
+        # Host and port of the OTLP gRPC endpoint to export audit events to,
+        # e.g. "audit-collector.observability:4317". Required when enabled.
+        endpoint: ""
+        # Bound on each attempt to export an audit event. Failed attempts are retried.
+        exportTimeout: 10s
+        # EnabledEvents is the list of event types to export. Use "all" to export every event type
+        # enabled for the connectDatastore sink. Any other event type listed here must also be
+        # enabled for the connectDatastore sink.
+        enabledEvents: ["all"]
+        # DisabledEvents is subtracted from the resolved enabledEvents list.
+        disabledEvents: []
+        # Exactly one authentication method must be enabled when audit event export is enabled.
+        # The methods are the same as for connect.telemetry.auth.
+        auth:
+          # SPIFFE mTLS authentication using Connect's own SPIFFE SVID.
+          spiffeMtls:
+            enabled: false
+            # SPIFFE ID of the target OTLP endpoint. Required when spiffeMtls.enabled is true.
+            collectorSpiffeId: ""
+          # SPIFFE JWT-SVID bearer token authentication over TLS.
+          spiffeJwt:
+            enabled: false
+            # JWT-SVID audience. Required and must be non-empty when spiffeJwt.enabled is true.
+            audience: ""
+            tls:
+              # PEM CA bundle used to verify the endpoint certificate. Empty uses system roots.
+              caFile: ""
+              # Overrides the SNI / verification hostname.
+              serverName: ""
+              # Disables server certificate verification. Do not use in production.
+              insecureSkipVerify: false
+          # Kubernetes service-account bearer token authentication over TLS.
+          k8sPSAT:
+            enabled: false
+            # PSAT audience - must match the audience expected by the OTLP endpoint.
+            audience: audit-collector
+            tls:
+              # PEM CA bundle used to verify the endpoint certificate. Empty uses system roots.
+              caFile: ""
+              # Overrides the SNI / verification hostname.
+              serverName: ""
+              # Disables server certificate verification. Do not use in production.
+              insecureSkipVerify: false
+          # Unauthenticated plaintext connections. Local development only; never use in production.
+          insecure:
+            enabled: false
   # Additional environment variables to pass to connect api binary.
   # For example:
   #  extraEnv:

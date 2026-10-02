@@ -1,0 +1,14 @@
+connect:
+  trustDomain: example.org
+  audit:
+    sinks:
+      otlp:
+        enabled: true
+        endpoint: audit-collector.observability:4317
+        enabledEvents:
+          - all
+        disabledEvents:
+          - token_exchange
+        auth:
+          k8sPSAT:
+            enabled: true
