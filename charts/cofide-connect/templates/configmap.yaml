@@ -135,6 +135,9 @@ data:
             insecure_skip_verify: {{ .auth.k8sPSAT.tls.insecureSkipVerify }}
         insecure:
           enabled: {{ .auth.insecure.enabled }}
+      metrics:
+        identities:
+          poll_interval: {{ .metrics.identities.pollInterval | quote }}
     {{/*
     Map deprecated telemetry config into new structure for backwards compatibility
     iff old telemetryEnabled field is supplied but new config isn't (i.e. old chart
