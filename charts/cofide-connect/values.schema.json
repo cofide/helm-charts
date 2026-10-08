@@ -547,6 +547,25 @@
                 }
               },
               "required": ["spiffeMtls", "spiffeJwt", "k8sPSAT", "insecure"]
+            },
+            "metrics": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Metrics that Connect computes from its own data and exports with its other telemetry.",
+              "properties": {
+                "identities": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "The metric reporting the number of identities in each trust zone.",
+                  "properties": {
+                    "pollInterval": {
+                      "type": "string",
+                      "pattern": "^(0|([0-9]+(\\.[0-9]+)?(ns|us|µs|ms|s|m|h))+)$",
+                      "description": "How often Connect counts the identities in every trust zone, as a duration such as \"5m\". \"0s\" disables the metric."
+                    }
+                  }
+                }
+              }
             }
           },
           "required": ["enabled", "auth"]
