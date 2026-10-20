@@ -265,6 +265,15 @@ data:
                       - name: envoy.filters.http.cors
                         typed_config:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.cors.v3.Cors
+                      # Connect API trusts these headers as the authenticated user. Strip any supplied by
+                      # callers before jwt_authn, which sets them from the validated token.
+                      - name: envoy.filters.http.header_mutation
+                        typed_config:
+                          '@type': type.googleapis.com/envoy.extensions.filters.http.header_mutation.v3.HeaderMutation
+                          mutations:
+                            request_mutations:
+                              - remove: x-jwt-claim-sub
+                              - remove: x-jwt-claims
                       - name: envoy.filters.http.jwt_authn
                         typed_config:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
