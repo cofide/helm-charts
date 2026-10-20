@@ -161,7 +161,8 @@ data:
                     '@type': type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                     stat_prefix: grpc_json
                     codec_type: AUTO
-                    forward_client_cert_details: ALWAYS_FORWARD_ONLY
+                    # Connect API trusts XFCC as a workload identity. Never forward it from callers here.
+                    forward_client_cert_details: SANITIZE
                     route_config:
                       name: local_route
                       request_headers_to_remove:
@@ -264,6 +265,15 @@ data:
                       - name: envoy.filters.http.cors
                         typed_config:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.cors.v3.Cors
+                      # Connect API trusts these headers as the authenticated user. Strip any supplied by
+                      # callers before jwt_authn, which sets them from the validated token.
+                      - name: envoy.filters.http.header_mutation
+                        typed_config:
+                          '@type': type.googleapis.com/envoy.extensions.filters.http.header_mutation.v3.HeaderMutation
+                          mutations:
+                            request_mutations:
+                              - remove: x-jwt-claim-sub
+                              - remove: x-jwt-claims
                       - name: envoy.filters.http.jwt_authn
                         typed_config:
                           '@type': type.googleapis.com/envoy.extensions.filters.http.jwt_authn.v3.JwtAuthentication
@@ -378,6 +388,9 @@ data:
                       name: mtls_route
                       request_headers_to_remove:
                         - x-source-ip
+                        # Connect API trusts these as the authenticated user. Nothing on this chain sets them.
+                        - x-jwt-claim-sub
+                        - x-jwt-claims
                       {{- if or .Values.envoy.proxyProtocol.enabled (eq .Values.service.externalTrafficPolicy "Local") }}
                       request_headers_to_add:
                         - header:
