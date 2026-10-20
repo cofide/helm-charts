@@ -10,6 +10,7 @@ data:
   config.yaml: |
     insecure_server_address: {{ .Values.connect.insecureServerAddress.host }}:{{ .Values.connect.insecureServerAddress.port }}
     ads_server_address: {{ .Values.connect.adsServerAddress.host }}:{{ .Values.connect.adsServerAddress.port }}
+    health_server_address: {{ .Values.connect.healthServerAddress.host }}:{{ .Values.connect.healthServerAddress.port }}
     spiffe_endpoint_socket: {{ .Values.connect.spiffeEndpointSocket }}
     trust_bundle_store_backend:
       {{- with .Values.connect.trustBundleStoreBackend.s3 }}
