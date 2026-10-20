@@ -388,6 +388,9 @@ data:
                       name: mtls_route
                       request_headers_to_remove:
                         - x-source-ip
+                        # Connect API trusts these as the authenticated user. Nothing on this chain sets them.
+                        - x-jwt-claim-sub
+                        - x-jwt-claims
                       {{- if or .Values.envoy.proxyProtocol.enabled (eq .Values.service.externalTrafficPolicy "Local") }}
                       request_headers_to_add:
                         - header:
