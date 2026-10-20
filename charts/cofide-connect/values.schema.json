@@ -96,6 +96,20 @@
           },
           "required": ["host", "port"]
         },
+        "healthServerAddress": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Address for the gRPC health check endpoint used by the liveness and readiness probes.",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            }
+          },
+          "required": ["host", "port"]
+        },
         "spiffeEndpointSocket": {
           "type": "string",
           "description": "SPIFFE endpoint socket path/URL."
@@ -700,6 +714,7 @@
         "allowedOrigins",
         "insecureServerAddress",
         "adsServerAddress",
+        "healthServerAddress",
         "spiffeEndpointSocket",
         "trustBundleStoreBackend",
         "datastore",

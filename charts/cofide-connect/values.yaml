@@ -60,16 +60,23 @@ connect:
   # Allowed origins for CORS requests.
   allowedOrigins: []
   # Host and port the API server listens on internally.
-  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for the TLS API and SPIFFE mTLS SNI hostname matches.
-  # Healthchecks are also served on this port.
+  # This is the port the envoy-sidecar sends requests to for the TLS API and SPIFFE mTLS SNI hostname matches.
+  # The server does not use TLS, so it listens on the loopback address and is reachable only through the envoy-sidecar.
   insecureServerAddress:
-    host: ""
+    host: "127.0.0.1"
     port: 51106
   # Host and port the Aggregated Discovery Service listens on internally (used by workload clusters to get federated services).
-  # This port is not exposed on the pod itself, it is the port the envoy-sidecar sends requests to for the XDS/ADS SNI hostname match.
+  # This is the port the envoy-sidecar sends requests to for the XDS/ADS SNI hostname match.
+  # The server does not use TLS, so it listens on the loopback address and is reachable only through the envoy-sidecar.
   adsServerAddress:
-    host: ""
+    host: "127.0.0.1"
     port: 18000
+  # Host and port of the server that serves only the gRPC health checking protocol.
+  # The liveness and readiness probes use this port. Kubernetes gRPC probes connect to the pod IP,
+  # so the host must not be a loopback address.
+  healthServerAddress:
+    host: ""
+    port: 8081
   # Workload API exposed by in-cluster SPIRE.
   spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
   # Configuration of the trust bundle store backend to use. Only one backend may be enabled.

@@ -64,16 +64,22 @@ spec:
           {{- end }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: health
+              containerPort: {{ .Values.connect.healthServerAddress.port }}
+          # The liveness service does not depend on the datastore, so a datastore outage makes
+          # the pod unready without restarting the container.
           livenessProbe:
             grpc:
-              port: {{ .Values.connect.insecureServerAddress.port }}
+              port: {{ .Values.connect.healthServerAddress.port }}
+              service: liveness
             initialDelaySeconds: 10
             periodSeconds: 15
             failureThreshold: 3
             timeoutSeconds: 5
           readinessProbe:
             grpc:
-              port: {{ .Values.connect.insecureServerAddress.port }}
+              port: {{ .Values.connect.healthServerAddress.port }}
             initialDelaySeconds: 10
             periodSeconds: 15
             failureThreshold: 3
