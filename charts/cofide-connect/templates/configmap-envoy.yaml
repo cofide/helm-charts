@@ -161,7 +161,8 @@ data:
                     '@type': type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                     stat_prefix: grpc_json
                     codec_type: AUTO
-                    forward_client_cert_details: ALWAYS_FORWARD_ONLY
+                    # Connect API trusts XFCC as a workload identity. Never forward it from callers here.
+                    forward_client_cert_details: SANITIZE
                     route_config:
                       name: local_route
                       request_headers_to_remove:
