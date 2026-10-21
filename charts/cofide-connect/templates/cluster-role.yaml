@@ -5,7 +5,10 @@ metadata:
 rules:
   - apiGroups: ["spire.spiffe.io"]
     resources: ["clusterfederatedtrustdomains"]
-    verbs: ["*"]
+    verbs: ["get", "create", "update", "delete"]
   - apiGroups: ["spire.spiffe.io"]
     resources: ["clusterspiffeids"]
-    verbs: ["*"]
+    {{- with .Values.rbac.clusterSpiffeIdName }}
+    resourceNames: [{{ . | quote }}]
+    {{- end }}
+    verbs: ["get", "update"]
