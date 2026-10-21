@@ -304,6 +304,11 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+rbac:
+  # Name of the ClusterSPIFFEID that Connect is permitted to get and update.
+  # If empty, access is granted to all ClusterSPIFFEIDs.
+  clusterSpiffeIdName: ""
+
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
   # Specifies whether a service account should be created

@@ -733,6 +733,17 @@
         { "required": ["apiAddress", "mtlsServerName", "xdsServerName"] }
       ]
     },
+    "rbac": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "RBAC settings for the Connect ClusterRole.",
+      "properties": {
+        "clusterSpiffeIdName": {
+          "type": "string",
+          "description": "Name of the ClusterSPIFFEID that Connect may get and update. If empty, access is granted to all ClusterSPIFFEIDs."
+        }
+      }
+    },
     "service": {
       "type": "object",
       "additionalProperties": false,
