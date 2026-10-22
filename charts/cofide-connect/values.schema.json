@@ -760,7 +760,7 @@
       "properties": {
         "clusterSpiffeIdName": {
           "type": "string",
-          "description": "Name of the ClusterSPIFFEID that Connect may get and update. If empty, access is granted to all ClusterSPIFFEIDs."
+          "description": "Name of the ClusterSPIFFEID that Connect federates with each trust zone, and may get and update. If empty, Connect uses its built-in default name (spire-mgmt-spire-namespace-connect) and access is granted to all ClusterSPIFFEIDs."
         }
       }
     },
