@@ -263,7 +263,7 @@ connect:
 
 envoy:
   # Pinned to a specific non-floating version
-  image: "envoyproxy/envoy:v1.33.14"
+  image: "envoyproxy/envoy:v1.40.2"
   imagePullPolicy: IfNotPresent
   auth:
     # Issuer of the IdP in use.
