@@ -2,8 +2,8 @@ apiVersion: v2
 name: cofide-trust-zone-operator
 description: Helm chart to deploy the Cofide Trust Zone Operator to a Kubernetes cluster
 type: application
-version: 0.2.0
-appVersion: "0.2.1"
+version: 0.3.0
+appVersion: "0.3.0"
 
 maintainers:
   - name: Cofide
