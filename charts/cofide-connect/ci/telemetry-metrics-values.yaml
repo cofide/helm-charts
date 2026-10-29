@@ -1,0 +1,11 @@
+connect:
+  trustDomain: example.org
+  telemetry:
+    enabled: true
+    collectorEndpoint: https://otel-collector.observability:4317
+    auth:
+      insecure:
+        enabled: true
+    metrics:
+      identities:
+        pollInterval: 30s
