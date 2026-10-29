@@ -228,6 +228,13 @@ connect:
       # Unauthenticated plaintext connections. Local development only; never use in production.
       insecure:
         enabled: false
+    # Metrics that Connect computes from its own data and exports when telemetry is enabled.
+    metrics:
+      # Metric reporting the number of identities in each trust zone.
+      identities:
+        # How often the metric is computed, as a Go duration string (e.g. "30s", "1m").
+        # Must be at least 5s, or "0s" to disable the metric.
+        pollInterval: "0s"
   # Authz policy engine to use. Valid values: opa, none. "none" disables authz and is not suitable for production.
   authzPolicyEngine: "opa"
   # Initial RBAC configuration to bootstrap the server with. The initial configuration can be changed later through the API.

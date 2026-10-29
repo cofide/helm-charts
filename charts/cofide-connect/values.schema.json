@@ -561,9 +561,29 @@
                 }
               },
               "required": ["spiffeMtls", "spiffeJwt", "k8sPSAT", "insecure"]
+            },
+            "metrics": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Metrics that Connect computes from its own data and exports when telemetry is enabled.",
+              "properties": {
+                "identities": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "description": "Metric reporting the number of identities in each trust zone.",
+                  "properties": {
+                    "pollInterval": {
+                      "type": "string",
+                      "description": "How often the metric is computed, as a Go duration string (e.g. \"30s\", \"1m\"). Must be at least 5s, or \"0s\" to disable the metric."
+                    }
+                  },
+                  "required": ["pollInterval"]
+                }
+              },
+              "required": ["identities"]
             }
           },
-          "required": ["enabled", "auth"]
+          "required": ["enabled", "auth", "metrics"]
         },
         "authzPolicyEngine": {
           "type": "string",
