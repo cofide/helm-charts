@@ -294,6 +294,9 @@ envoy:
     # send PROXY protocol headers - see the service.annotations example values.
     enabled: false
   logLevel: "info"
+  # Maximum number of active downstream connections Envoy accepts across all listeners. Envoy
+  # rejects new connections once this limit is reached.
+  maxDownstreamConnections: 50000
   securityContext: {}
   resources: {}
   readinessProbe:

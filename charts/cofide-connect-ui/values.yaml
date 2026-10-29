@@ -54,4 +54,7 @@ envoy:
     pullPolicy: IfNotPresent
   configMapName: connect-ui-envoy-config
   tlsSecretName: envoy-tls
+  # Maximum number of active downstream connections Envoy accepts across all listeners. Envoy
+  # rejects new connections once this limit is reached.
+  maxDownstreamConnections: 50000
   resources: {}

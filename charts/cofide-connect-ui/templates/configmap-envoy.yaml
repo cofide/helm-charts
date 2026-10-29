@@ -1,3 +1,7 @@
+{{- $maxConns := .Values.envoy.maxDownstreamConnections -}}
+{{- if not (and (or (kindIs "float64" $maxConns) (kindIs "int64" $maxConns)) (ge (int64 $maxConns) 1)) -}}
+{{- fail "A value for .Values.envoy.maxDownstreamConnections must be a positive integer" -}}
+{{- end -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -98,11 +102,23 @@ data:
                           address: 127.0.0.1
                           port_value: 8080
     admin:
-      access_log_path: /dev/stdout
+      # Keep the admin API reachable when the downstream connection limit is reached.
+      ignore_global_conn_limit: true
+      access_log:
+        - name: envoy.access_loggers.file
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog
+            path: /dev/stdout
       address:
         socket_address:
           address: 127.0.0.1
           port_value: 9901
+    overload_manager:
+      resource_monitors:
+        - name: envoy.resource_monitors.global_downstream_max_connections
+          typed_config:
+            '@type': type.googleapis.com/envoy.extensions.resource_monitors.downstream_connections.v3.DownstreamConnectionsConfig
+            max_active_downstream_connections: {{ .Values.envoy.maxDownstreamConnections | int64 }}
 
   # envoy-sds.yaml is a Secret Discovery Service (SDS) configuration file.
   # This is used as an SDS dynamic configuration source, supporting automatic
