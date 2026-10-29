@@ -800,6 +800,11 @@
             }
           },
           "required": ["enabled"]
+        },
+        "maxDownstreamConnections": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of active downstream connections Envoy accepts across all listeners."
         }
       }
     }
