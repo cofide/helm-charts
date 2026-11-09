@@ -130,6 +130,10 @@ connect:
       connectionString: ""
       # For databases that support mTLS this is the SPIFFE ID that Connect will expect to be presented
       remoteSPIFFEID: ""
+      # Maximum number of open connections in the pool per Connect instance. 0 uses Connect's default of 20.
+      # Total DB connections = maxOpenConns × number of Connect replicas (plus one more during a rolling update),
+      # which must stay within the database's max_connections, after reserved superuser connections and other clients.
+      maxOpenConns: 0
     cloudSQL:
       # True to enable Google CloudSQL as the datastore
       enabled: false

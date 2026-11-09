@@ -60,6 +60,9 @@ data:
         enabled: {{ .enabled }}
         connection_string: {{ .connectionString | quote }}
         remote_spiffe_id: {{ .remoteSPIFFEID | quote }}
+        {{- with .maxOpenConns }}
+        max_open_conns: {{ . }}
+        {{- end }}
       {{- end }}
       {{- with .Values.connect.datastore.cloudSQL }}
       {{- if .enabled }}

@@ -248,9 +248,14 @@
                 "remoteSPIFFEID": {
                   "type": "string",
                   "description": "SPIFFE ID for the remote SQL server."
+                },
+                "maxOpenConns": {
+                  "type": "integer",
+                  "description": "Maximum number of open connections in the pool per Connect instance. 0 uses Connect's default.",
+                  "minimum": 0
                 }
               },
-              "required": ["enabled", "connectionString", "remoteSPIFFEID"]
+              "required": ["enabled", "connectionString", "remoteSPIFFEID", "maxOpenConns"]
             },
             "cloudSQL": {
               "type": "object",
