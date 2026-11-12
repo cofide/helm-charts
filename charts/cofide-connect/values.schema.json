@@ -112,7 +112,7 @@
         },
         "spiffeEndpointSocket": {
           "type": "string",
-          "description": "SPIFFE endpoint socket URL. The spiffeWorkloadApi.volume is mounted in the Connect container at the directory containing the socket, so the socket must be at the root of the volume."
+          "description": "SPIFFE endpoint socket URL."
         },
         "trustBundleStoreBackend": {
           "type": "object",
@@ -807,7 +807,7 @@
       "properties": {
         "spiffeEndpointSocketPath": {
           "type": "string",
-          "description": "Path of the SPIFFE Workload API socket within the Envoy container. The spiffeWorkloadApi.volume is mounted in the Envoy container at the directory containing the socket, so the socket must be at the root of the volume."
+          "description": "Path of the SPIFFE Workload API socket within the Envoy container."
         },
         "proxyProtocol": {
           "type": "object",
