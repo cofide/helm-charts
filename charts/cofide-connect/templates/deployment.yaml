@@ -90,7 +90,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: spiffe-workload-api
-              mountPath: /spiffe-workload-api
+              mountPath: {{ .Values.connect.spiffeEndpointSocket | trimPrefix "unix://" | dir }}
             - name: connect-config
               mountPath: /app/config
             {{- if .Values.connect.telemetry.auth.k8sPSAT.enabled }}
@@ -119,7 +119,7 @@ spec:
             - name: envoy-config
               mountPath: /etc/envoy
             - name: spiffe-workload-api
-              mountPath: /spiffe-workload-api
+              mountPath: {{ .Values.envoy.spiffeEndpointSocketPath | dir }}
             - name: envoy-tls
               mountPath: /etc/envoy/tls
               readOnly: true
@@ -152,9 +152,7 @@ spec:
               - key: config.yaml
                 path: config.yaml
         - name: spiffe-workload-api
-          csi:
-            driver: "csi.spiffe.io"
-            readOnly: true
+          {{- toYaml .Values.spiffeWorkloadApi.volume | nindent 10 }}
         - name: envoy-config
           configMap:
             name: connect-api-envoy-config

@@ -478,7 +478,7 @@ data:
                   - endpoint:
                       address:
                         pipe:
-                          path: /spiffe-workload-api/spire-agent.sock
+                          path: {{ .Values.envoy.spiffeEndpointSocketPath }}
         - name: jwks_cluster
           connect_timeout: 30.0s
           type: LOGICAL_DNS

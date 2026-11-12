@@ -77,7 +77,8 @@ connect:
   healthServerAddress:
     host: ""
     port: 8081
-  # Workload API exposed by in-cluster SPIRE.
+  # Workload API exposed by in-cluster SPIRE. The spiffeWorkloadApi.volume is mounted in the Connect
+  # container at the directory containing the socket, so the socket must be at the root of the volume.
   spiffeEndpointSocket: unix:///spiffe-workload-api/spire-agent.sock
   # Configuration of the trust bundle store backend to use. Only one backend may be enabled.
   trustBundleStoreBackend:
@@ -272,10 +273,24 @@ connect:
   #    value: 'some value'
   extraEnv: []
 
+# Volume providing the SPIFFE Workload API socket, shared by the Connect and Envoy containers
+# (the volume name is fixed). Each container mounts it at the directory containing its socket, so the
+# socket must be at the root of the volume.
+# To use a different source, null out the default, e.g. csi: null.
+spiffeWorkloadApi:
+  volume:
+    csi:
+      driver: "csi.spiffe.io"
+      readOnly: true
+
 envoy:
   # Pinned to a specific non-floating version
   image: "envoyproxy/envoy:v1.40.2"
   imagePullPolicy: IfNotPresent
+  # Path of the SPIFFE Workload API socket within the Envoy container. The spiffeWorkloadApi.volume is
+  # mounted in the Envoy container at the directory containing the socket, so the socket must be at the
+  # root of the volume.
+  spiffeEndpointSocketPath: /spiffe-workload-api/spire-agent.sock
   auth:
     # Issuer of the IdP in use.
     issuer: ""
