@@ -1397,6 +1397,19 @@ entries:
     version: 0.1.0
   cofide-credex:
   - apiVersion: v2
+    appVersion: v0.24.0
+    created: "2026-11-17T14:04:34.18982575Z"
+    description: Helm chart to deploy Cofide Credex
+    digest: 3b3bd44210c007cf80c1ef46153b1796e343b3f612d4dc62d1454351292f7cd5
+    maintainers:
+    - name: Cofide
+      url: https://cofide.io
+    name: cofide-credex
+    type: application
+    urls:
+    - https://github.com/cofide/helm-charts/releases/download/cofide-credex-0.12.0/cofide-credex-0.12.0.tgz
+    version: 0.12.0
+  - apiVersion: v2
     appVersion: v0.23.1
     created: "2026-10-21T09:26:36.594323555Z"
     description: Helm chart to deploy Cofide Credex
@@ -3633,4 +3646,4 @@ entries:
     urls:
     - https://github.com/cofide/spiffe-helm-charts-hardened/releases/download/spire-nested-0.26.0/spire-nested-0.26.0.tgz
     version: 0.26.0
-generated: "2026-11-12T15:12:30.765295301Z"
+generated: "2026-11-17T14:04:34.190065441Z"
