@@ -260,6 +260,10 @@ data:
                               route:
                                 cluster: connect_service
                             - match:
+                                prefix: /cofide.
+                              route:
+                                cluster: connect_service
+                            - match:
                                 prefix: /grpc.health.v1.Health
                               route:
                                 cluster: connect_service
@@ -311,6 +315,10 @@ data:
                               requires: {}
                             - match:
                                 prefix: /proto.connect
+                              requires:
+                                provider_name: ory-oauth
+                            - match:
+                                prefix: /cofide.
                               requires:
                                 provider_name: ory-oauth
                       - name: envoy.filters.http.router
@@ -406,6 +414,10 @@ data:
                           routes:
                             - match:
                                 prefix: /proto.connect
+                              route:
+                                cluster: connect_service
+                            - match:
+                                prefix: /cofide.
                               route:
                                 cluster: connect_service
                     http_filters:
