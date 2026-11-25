@@ -1,0 +1,4 @@
+cofideCloudObserver:
+  connectAPI:
+    grpcTarget: dns:///api.connect.example.org:4321
+    spiffeID: spiffe://connect.example.org/ns/connect/sa/connect

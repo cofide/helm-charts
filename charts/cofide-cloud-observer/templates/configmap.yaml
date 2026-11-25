@@ -1,0 +1,41 @@
+{{- if not .Values.cofideCloudObserver.connectAPI.grpcTarget }}
+  {{- fail "cofideCloudObserver.connectAPI.grpcTarget must be set" }}
+{{- end }}
+{{- if not .Values.cofideCloudObserver.connectAPI.spiffeID }}
+  {{- fail "cofideCloudObserver.connectAPI.spiffeID must be set" }}
+{{- end }}
+{{- if not .Values.cofideCloudObserver.connectAPI.configSyncInterval }}
+  {{- fail "cofideCloudObserver.connectAPI.configSyncInterval must be set" }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "cofide-cloud-observer.fullname" . }}
+  labels:
+    {{- include "cofide-cloud-observer.labels" . | nindent 4 }}
+data:
+  config.yml: |
+    connect_api:
+      grpc_target: {{ .Values.cofideCloudObserver.connectAPI.grpcTarget | quote }}
+      {{- with .Values.cofideCloudObserver.connectAPI.serverNameOverride }}
+      server_name_override: {{ . | quote }}
+      {{- end }}
+      spiffe_id: {{ .Values.cofideCloudObserver.connectAPI.spiffeID | quote }}
+      config_sync_interval: {{ .Values.cofideCloudObserver.connectAPI.configSyncInterval | quote }}
+    {{- with .Values.cofideCloudObserver.defaultSTSRegion }}
+    default_sts_region: {{ . | quote }}
+    {{- end }}
+    health:
+      enabled: {{ .Values.cofideCloudObserver.health.enabled }}
+      port: {{ .Values.cofideCloudObserver.health.port }}
+    {{- with .Values.cofideCloudObserver.leaderElection }}
+    leader_election:
+      enabled: {{ .enabled }}
+      {{- if .enabled }}
+      lease_name: {{ .leaseName | quote }}
+      namespace: {{ .namespace | default $.Release.Namespace | quote }}
+      lease_duration: {{ .leaseDuration | quote }}
+      renew_deadline: {{ .renewDeadline | quote }}
+      retry_period: {{ .retryPeriod | quote }}
+      {{- end }}
+    {{- end }}

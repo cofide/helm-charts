@@ -1,0 +1,127 @@
+cofideCloudObserver:
+  connectAPI:
+    # gRPC target (https://grpc.io/docs/guides/custom-name-resolution) for Cofide Connect's mTLS endpoint. Required.
+    grpcTarget: ""
+    # Optional server name (SNI) used by Envoy to select the filter chain. Not used for verification.
+    serverNameOverride: ""
+    # SPIFFE ID of Cofide Connect API. Required.
+    spiffeID: ""
+    # Interval between config syncs with Connect, as a Go duration string. Must be greater than 0.
+    configSyncInterval: 1m
+  # Default AWS STS region used when assuming roles. Omit to use the application default.
+  defaultSTSRegion: ""
+  # HTTP server serving the /livez and /readyz endpoints used by the probes below. Plain HTTP, as the
+  # kubelet cannot present a SPIFFE identity.
+  health:
+    enabled: true
+    port: 8080
+  leaderElection:
+    # Ensures only one replica is active at a time.
+    enabled: true
+    # Name of the Lease the replicas contend for.
+    leaseName: cofide-cloud-observer
+    # Namespace of the Lease. Defaults to the release namespace.
+    namespace: ""
+    # Lease timings as Go duration strings.
+    leaseDuration: 15s
+    renewDeadline: 10s
+    retryPeriod: 2s
+    # The identity of each replica is set to the pod name via an environment variable, as it must be
+    # unique per replica.
+
+# Number of replicas. With leader election enabled, only one replica is active at a time.
+replicaCount: 1
+
+image:
+  registry: 010438484483.dkr.ecr.eu-west-1.amazonaws.com
+  repository: cofide/cofide-cloud-observer
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# Secrets for pulling the image from a private registry.
+imagePullSecrets: []
+# Override the chart name and the fully qualified app name.
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created.
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account.
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template.
+  name: ""
+
+# Additional annotations to add to the pod.
+podAnnotations: {}
+# Additional labels to add to the pod.
+podLabels: {}
+
+# Pod-level security context.
+podSecurityContext: {}
+
+# Container-level security context.
+securityContext: {}
+
+# Liveness and readiness probes. Only applied when cofideCloudObserver.health.enabled is true, and
+# refer to the container's "health" port. Liveness does not depend on Connect or the clouds being
+# reachable.
+livenessProbe:
+  httpGet:
+    path: /livez
+    port: health
+  initialDelaySeconds: 10
+  periodSeconds: 15
+  failureThreshold: 3
+  timeoutSeconds: 5
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: health
+  initialDelaySeconds: 10
+  periodSeconds: 15
+  failureThreshold: 3
+  timeoutSeconds: 5
+
+# Additional environment variables to set on the container. An entry with the same name as a
+# variable set by the chart replaces it.
+extraEnv: []
+  # - name: FOO
+  #   value: bar
+
+# Additional sources (ConfigMaps / Secrets) to populate environment variables from.
+extraEnvFrom: []
+  # - secretRef:
+  #     name: my-secret
+
+# Container resource requests and limits.
+resources: {}
+
+# Volume providing the SPIFFE Workload API socket (the volume name is fixed).
+# To use a different source, null out the default, e.g. csi: null.
+spiffeWorkloadApi:
+  volume:
+    csi:
+      driver: "csi.spiffe.io"
+      readOnly: true
+  # Where the volume is mounted in the container. Must contain socketPath.
+  mountPath: /spiffe-workload-api
+  # Path of the Workload API socket within the container. Exposed to the application as
+  # SPIFFE_ENDPOINT_SOCKET.
+  socketPath: /spiffe-workload-api/spire-agent.sock
+
+# Additional volumes to add to the pod.
+extraVolumes: []
+
+# Additional volume mounts to add to the container.
+extraVolumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

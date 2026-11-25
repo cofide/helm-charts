@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cofide-cloud-observer.fullname" . }}
+  labels:
+    {{- include "cofide-cloud-observer.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "cofide-cloud-observer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cofide-cloud-observer.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "cofide-cloud-observer.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -config
+            - /app/config/config.yml
+          {{- /* Default env vars - overwritten if same name provided in extraEnv. */ -}}
+          {{- $envVars := dict
+              "COFIDE_CLOUD_OBSERVER_LEADER_ELECTION__IDENTITY" (dict "valueFrom" (dict "fieldRef" (dict "fieldPath" "metadata.name")))
+              "SPIFFE_ENDPOINT_SOCKET" (dict "value" (printf "unix://%s" .Values.spiffeWorkloadApi.socketPath))
+          }}
+          {{- range .Values.extraEnv }}
+            {{- $envVars = set $envVars .name (omit . "name") }}
+          {{- end }}
+          env:
+          {{- range $key, $env := $envVars }}
+            - name: {{ $key }}
+              {{- toYaml $env | nindent 14 }}
+          {{- end }}
+          {{- with .Values.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cofideCloudObserver.health.enabled }}
+          ports:
+            - name: health
+              containerPort: {{ .Values.cofideCloudObserver.health.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+            - name: spiffe-workload-api
+              mountPath: {{ .Values.spiffeWorkloadApi.mountPath }}
+              readOnly: true
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "cofide-cloud-observer.fullname" . }}
+            items:
+              - key: config.yml
+                path: config.yml
+        - name: spiffe-workload-api
+          {{- toYaml .Values.spiffeWorkloadApi.volume | nindent 10 }}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
