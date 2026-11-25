@@ -1,0 +1,34 @@
+{{- if .Values.cofideCloudObserver.leaderElection.enabled }}
+# The replicas contend for a Lease in the leader election namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "cofide-cloud-observer.fullname" . }}-leader-election
+  namespace: {{ .Values.cofideCloudObserver.leaderElection.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "cofide-cloud-observer.labels" . | nindent 4 }}
+rules:
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["create"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    resourceNames: [{{ .Values.cofideCloudObserver.leaderElection.leaseName | quote }}]
+    verbs: ["get", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cofide-cloud-observer.fullname" . }}-leader-election
+  namespace: {{ .Values.cofideCloudObserver.leaderElection.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "cofide-cloud-observer.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "cofide-cloud-observer.fullname" . }}-leader-election
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "cofide-cloud-observer.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

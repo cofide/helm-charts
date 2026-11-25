@@ -1,0 +1,15 @@
+cofideCloudObserver:
+  connectAPI:
+    grpcTarget: dns:///api.connect.example.org:4321
+    serverNameOverride: api.connect.example.org
+    spiffeID: spiffe://connect.example.org/ns/connect/sa/connect
+    configSyncInterval: 1m
+  defaultSTSRegion: eu-west-1
+  leaderElection:
+    enabled: true
+    leaseName: my-lease
+    namespace: cofide
+    leaseDuration: 30s
+    renewDeadline: 20s
+    retryPeriod: 5s
+replicaCount: 2

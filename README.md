@@ -11,6 +11,7 @@ Helm chart mono-repo for Cofide's SPIFFE-based zero-trust infrastructure.
 | [`cofide-connect-ui`](charts/cofide-connect-ui) | Deploys the Connect UI frontend with an Envoy sidecar |
 | [`cofide-credex`](charts/cofide-credex/README.md) | Deploys Cofide Credex, an OAuth 2.0 AS and token exchange service |
 | [`cofide-observer`](charts/cofide-observer) | Deploys the Cofide Observer (monitoring/observability) |
+| [`cofide-cloud-observer`](charts/cofide-cloud-observer) | Deploys the Cofide Cloud Observer |
 | [`cofide-trust-zone-operator`](charts/cofide-trust-zone-operator) | Kubernetes operator for managing `TrustZoneServer` CRs |
 | [`cofide-tzaas-crds`](charts/cofide-tzaas-crds) | Installs the `TrustZoneServer` CRD — must be installed before `cofide-trust-zone-operator` |
 | [`spiffe-enable`](charts/spiffe-enable/README.md) | Admission webhook that automates SPIFFE workload identity injection |
